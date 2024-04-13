@@ -1,0 +1,15 @@
+{
+  "createAsyncThunk": {
+    "scope": "javascript,typescript",
+    "prefix": ["create", "createAsync", "createAsyncThunk"],
+    "body": [
+      "export const $1 = createAsyncThunk<",
+      "  void,",
+      "  {},",
+      "  ClubThunkApiConfig",
+      ">('base/$1', async ({}, { dispatch, getState }) => {",
+      "});"
+    ],
+    "description": "createAsyncThunk"
+  }
+}
