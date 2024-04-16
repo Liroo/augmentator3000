@@ -1,6 +1,6 @@
-import { ToastType } from '@/types/toast';
 import { createSelector } from 'reselect';
 import { RootState } from '../store';
+import { ToastType } from './reducer';
 
 const selectToastReducer = (state: RootState) => state.toast;
 

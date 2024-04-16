@@ -16,6 +16,7 @@ export default function ViewEditRosterTableCellSpec({ character }: Props) {
 
   return (
     <Select
+      defaultValue={character.specID}
       onChange={(value) => {
         dispatch(
           rosterModifyCharacter({

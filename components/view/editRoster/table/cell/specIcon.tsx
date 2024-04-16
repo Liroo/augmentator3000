@@ -10,14 +10,14 @@ interface Props {
 }
 
 export default function ViewEditRosterTableCellSpecIcon({ character }: Props) {
+  const ref = useRef(null);
+  const { height } = useRect(ref);
   if (!character.classID) return null;
   const characterClassObject = getClassObjectById(character.classID);
   const characterClassName = characterClassObject.name.replace(' ', '');
   const characterSpecName = characterClassObject.specs
     .find((spec) => spec.id === character.specID)
     ?.name.replace(' ', '');
-  const ref = useRef(null);
-  const { height } = useRect(ref);
 
   return (
     <div className="relative h-[30px] w-[30px] border border-black">
