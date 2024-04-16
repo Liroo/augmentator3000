@@ -6,10 +6,10 @@
       "export const $1 = createAsyncThunk<",
       "  void,",
       "  {},",
-      "  ClubThunkApiConfig",
+      "  ThunkApiConfig",
       ">('base/$1', async ({}, { dispatch, getState }) => {",
-      "});"
+      "});",
     ],
-    "description": "createAsyncThunk"
-  }
+    "description": "createAsyncThunk",
+  },
 }

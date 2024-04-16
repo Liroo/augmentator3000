@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import UIGlobal from '@/components/ui';
+import UIAntdTheme from '@/components/ui/antd/theme';
+import UILayout from '@/components/ui/layout';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
+import type { Metadata } from 'next';
+import './globals.css';
+import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
-  title: "AugAnalyzer",
-  description: "Generate note for your augmentation raid based on the raid composition",
+  title: 'AugAnalyzer',
+  description:
+    'Generate note for your augmentation raid based on the raid composition',
 };
 
 export default function RootLayout({
@@ -16,7 +19,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <UIAntdTheme>
+          <AntdRegistry>
+            <StoreProvider>
+              <UILayout>{children}</UILayout>
+              <UIGlobal />
+            </StoreProvider>
+          </AntdRegistry>
+        </UIAntdTheme>
+      </body>
     </html>
   );
 }
