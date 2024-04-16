@@ -23,29 +23,24 @@ export default function ViewEditRosterTableCellState({ character }: Props) {
   );
 
   let icon = null;
-  switch (status) {
-    case StatusEnum.Idle:
-    case StatusEnum.Pending:
-      icon = (
-        <Tooltip title="Fetching...">
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 18 }} spin />} />
-        </Tooltip>
-      );
-      break;
-    case StatusEnum.Fulfilled:
-      icon = (
-        <Tooltip title="Character has been fetch">
-          <CheckCircleOutlined style={{ fontSize: 18, color: '#52c41a' }} />
-        </Tooltip>
-      );
-      break;
-    case StatusEnum.Rejected:
-      icon = (
-        <Tooltip title="Character not found">
-          <CloseCircleOutlined style={{ fontSize: 18, color: '#f5222d' }} />{' '}
-        </Tooltip>
-      );
-      break;
+  if ([StatusEnum.Idle, StatusEnum.Pending].includes(status)) {
+    icon = (
+      <Tooltip title="Fetching...">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 18 }} spin />} />
+      </Tooltip>
+    );
+  } else if (status === StatusEnum.Fulfilled && character.canonicalID) {
+    icon = (
+      <Tooltip title="Character has been fetch">
+        <CheckCircleOutlined style={{ fontSize: 18, color: '#52c41a' }} />
+      </Tooltip>
+    );
+  } else {
+    icon = (
+      <Tooltip title="Character not found">
+        <CloseCircleOutlined style={{ fontSize: 18, color: '#f5222d' }} />{' '}
+      </Tooltip>
+    );
   }
 
   return (

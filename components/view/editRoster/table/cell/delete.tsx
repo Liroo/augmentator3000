@@ -17,7 +17,7 @@ export default function ViewEditRosterTableCellDelete({ character }: Props) {
       onClick={() => {
         dispatch(rosterRemoveCharacter(character));
       }}
-      className="cursor-pointer"
+      className="cursor-pointer select-none"
     >
       <DeleteOutlined style={{ fontSize: 18, color: '#f5222d' }} />
     </Flex>

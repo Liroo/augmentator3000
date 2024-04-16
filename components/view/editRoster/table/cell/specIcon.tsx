@@ -20,7 +20,7 @@ export default function ViewEditRosterTableCellSpecIcon({ character }: Props) {
     ?.name.replace(' ', '');
 
   return (
-    <div className="relative h-[30px] w-[30px] border border-black">
+    <div className="relative h-[22px] w-[22px] border border-black">
       <Image
         ref={ref}
         src={ActorsJpg}
