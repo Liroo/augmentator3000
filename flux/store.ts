@@ -3,7 +3,6 @@ import { persistReducer, persistStore } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import rosterSlice from './roster/reducer';
 import statusSlice from './status/reducer';
-import toastSlice from './toast/reducer';
 import wclSlice from './wcl/reducer';
 
 const createNoopStorage = () => {
@@ -34,7 +33,6 @@ export const makeStore = () => {
   const rootReducer = combineReducers({
     [statusSlice.name]: statusSlice.reducer,
     [wclSlice.name]: wclSlice.reducer,
-    [toastSlice.name]: toastSlice.reducer,
     [rosterSlice.name]: rosterSlice.reducer,
   });
 

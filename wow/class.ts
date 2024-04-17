@@ -336,3 +336,19 @@ export const getClassColor = (wowClass?: WowClass) => {
       return undefined;
   }
 };
+
+export const getSpecNameById = (specID: number | undefined) => {
+  if (!specID) return '';
+
+  const keys = Object.keys(WowClassSpec);
+
+  for (const key of keys) {
+    const spec = WowClassSpec[key as WowClass].specs.find(
+      (spec) => spec.id === specID,
+    );
+
+    if (spec) return spec.name;
+  }
+
+  return '';
+};

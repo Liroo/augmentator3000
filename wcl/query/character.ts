@@ -1,6 +1,11 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLFramgentCharacter } from '../fragment/character';
-import { WCLCharacter, WCLCharacterQuery } from '../wcl';
+import {
+  WCLCharacter,
+  WCLCharacterEncounterRankingsQuery,
+  WCLCharacterQuery,
+  WCLCharacterQueryWithSpec,
+} from '../wcl';
 
 export const WCLGetCharacter = async function (
   WCLClient: GraphQLClient,
@@ -37,7 +42,8 @@ export const WCLGetCharacter = async function (
 // Not typed yet, not used yet
 export const WCLGetCharacters = async function (
   WCLClient: GraphQLClient,
-  characters: Array<WCLCharacterQuery>,
+  characters: Array<WCLCharacterQueryWithSpec>,
+  encounterRankings: Array<WCLCharacterEncounterRankingsQuery>,
 ) {
   const query = gql`
     ${WCLFramgentCharacter}
@@ -50,12 +56,41 @@ export const WCLGetCharacters = async function (
             serverRegion: "${character.serverRegion}"
           ) {
             ...WCLFramgentCharacter
+
+            ${encounterRankings.map((encounterRanking) => {
+              return `encounterRanking_${encounterRanking.encounterID}: encounterRankings(
+                encounterID: ${encounterRanking.encounterID},
+                difficulty: ${encounterRanking.difficulty},
+                specName: "${character.specName}"
+              )`;
+            })}
           }`;
         })}
       }
     }
   `;
-  const res = await WCLClient.request(query);
+  const res = (await WCLClient.request(query)) as {
+    characterData: {
+      [characterIndex: string]: any;
+    };
+  };
 
-  return res;
+  // for each character, transform keys encounterRanking-<encounterID> to an object of encounterRankings hashed by encounterID
+  Object.keys(res.characterData).forEach((characterIndex) => {
+    const character = res.characterData[characterIndex];
+    const encounterRankings = Object.keys(character).reduce(
+      (acc, key) => {
+        if (key.startsWith('encounterRanking_')) {
+          const encounterID = parseInt(key.split('_')[1]);
+          acc[encounterID] = character[key];
+        }
+        return acc;
+      },
+      {} as Record<number, any>,
+    );
+
+    character.encounterRankings = encounterRankings;
+  });
+
+  return res.characterData as Record<string, WCLCharacter>;
 };

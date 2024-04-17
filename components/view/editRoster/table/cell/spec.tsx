@@ -22,7 +22,9 @@ export default function ViewEditRosterTableCellSpec({ character }: Props) {
           rosterModifyCharacter({
             query: character,
             character: {
-              ...character,
+              name: character.name,
+              serverSlug: character.serverSlug,
+              serverRegion: character.serverRegion,
               specID: value,
             },
           }),

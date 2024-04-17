@@ -1,6 +1,8 @@
 import { ThunkApiConfig, ThunkArg } from '@/types/thunk';
+import { WCLCharacterQueryWithSpec } from '@/wcl/wcl';
+import { getSpecNameById } from '@/wow/class';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getApi } from '../api';
+import { getApi, postApi } from '../api';
 import { setCharacter } from './reducer';
 
 export const getWCLCharacter = createAsyncThunk<
@@ -22,5 +24,34 @@ export const getWCLCharacter = createAsyncThunk<
           serverRegion,
         }),
       );
+  },
+);
+
+export const getWCLCharactersWithEncounterRankings = createAsyncThunk<
+  void,
+  {
+    encounterId: string;
+    characters: WCLCharacterQueryWithSpec[];
+  } & ThunkArg,
+  ThunkApiConfig
+>(
+  'wcl/getWCLCharactersWithEncounterRankings',
+  async ({ encounterId, characters }, { dispatch }) => {
+    const res = await postApi('/api/wcl/characters', {
+      encounterRankings: [
+        {
+          encounterID: encounterId,
+          difficulty: 5,
+        },
+      ],
+      characters: characters.map((c) => ({
+        name: c.name,
+        serverSlug: c.serverSlug,
+        serverRegion: c.serverRegion,
+        specName: getSpecNameById(c.specID),
+      })),
+    });
+
+    console.log(res);
   },
 );

@@ -10,13 +10,59 @@ export type WCLCharacterQuery = {
   serverRegion: string;
 };
 
-export interface WCLCharacterQueryWithSpec extends WCLCharacterQuery {
+export type WCLCharacterQueryWithSpec = {
   specID?: number;
-}
+  specName?: string;
+} & WCLCharacterQuery;
 
 export type WCLCharacter = {
   canonicalID: string;
   id: string;
   classID: number;
   name: string;
+  encounterRankings?: {
+    [encounterID: string]: {
+      averagePerformance: number;
+      bestAmount: number;
+      difficulty: number;
+      fastestKill: number;
+      medianPerformance: number;
+      metric: string;
+      partition: number;
+      ranks: Array<{
+        lockedIn: boolean;
+        rankPercent: number;
+        historicalPercent: number;
+        todayPercent: number;
+        rankTotalParses: number;
+        historicalTotalParses: number;
+        todayTotalParses: number;
+        guild: {
+          id: number;
+          name: string;
+          faction: number;
+        };
+        report: {
+          code: string;
+          startTime: number;
+          fightID: number;
+        };
+        duration: number;
+        startTime: number;
+        amount: number;
+        bracketData: number;
+        spec: string;
+        bestSpec: string;
+        class: number;
+        faction: number;
+      }>;
+      totalKills: number;
+      zone: number;
+    };
+  };
 } & WCLCharacterQueryWithSpec;
+
+export type WCLCharacterEncounterRankingsQuery = {
+  encounterID: number;
+  difficulty: number;
+};

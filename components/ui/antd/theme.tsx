@@ -19,6 +19,11 @@ export default function UIAntdTheme({ children }: Props) {
           },
         },
       }}
+      renderEmpty={() => (
+        <div style={{ textAlign: 'center' }}>
+          <p>Data Not Found</p>
+        </div>
+      )}
     >
       {children}
     </ConfigProvider>

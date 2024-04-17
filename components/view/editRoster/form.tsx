@@ -42,7 +42,7 @@ export default function ViewEditRosterForm() {
   return (
     <Form
       form={form}
-      name="horizontal_login"
+      name="editRoster"
       layout="inline"
       onFinish={onFinish}
       initialValues={{ serverRegion: WowRegions[0] }}
@@ -79,7 +79,6 @@ export default function ViewEditRosterForm() {
         >
           <Select
             style={{ width: 70 }}
-            defaultValue={WowRegions[0]}
             options={WowRegions.map((region) => ({
               value: region,
               label: region,

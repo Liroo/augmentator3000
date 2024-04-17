@@ -1,4 +1,3 @@
-import UIGlobal from '@/components/ui';
 import UIAntdTheme from '@/components/ui/antd/theme';
 import UILayout from '@/components/ui/layout';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
@@ -24,7 +23,6 @@ export default function RootLayout({
           <AntdRegistry>
             <StoreProvider>
               <UILayout>{children}</UILayout>
-              <UIGlobal />
             </StoreProvider>
           </AntdRegistry>
         </UIAntdTheme>
