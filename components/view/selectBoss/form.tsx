@@ -7,7 +7,7 @@ export default function ViewSelectBossForm() {
   const { analyzeByEncounterId } = useAugAnalyzer();
 
   const [form] = Form.useForm();
-  const zoneID = form.getFieldValue('zoneID');
+  const zoneID = form.getFieldValue('zoneID') || WowRaids[0].id;
   const rerender = useReducer((x) => x + 1, 0)[1];
 
   const onFinish = (values: any) => {
