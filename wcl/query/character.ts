@@ -39,7 +39,6 @@ export const WCLGetCharacter = async function (
   return res.characterData.character;
 };
 
-// Not typed yet, not used yet
 export const WCLGetCharacters = async function (
   WCLClient: GraphQLClient,
   characters: Array<WCLCharacterQueryWithSpec>,

@@ -1,12 +1,11 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLFramgentReport } from '../fragment/report';
-import { WCLReport } from '../wcl';
+import { WCLReport, WCLReportQuery } from '../wcl';
 
-// Not typed yet, not used yet
 export const WCLGetReportTableDamage = async function (
   WCLClient: GraphQLClient,
   code: string,
-  timeRanges: Array<{ startTime: number; endTime: number }>,
+  timeRanges: WCLReportQuery['timeRanges'],
   filterExpression?: string,
 ) {
   const globalTimeRange = timeRanges.reduce(
