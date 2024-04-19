@@ -10,6 +10,7 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import planSlice from './plan/reducer';
 import rosterSlice from './roster/reducer';
 import statusSlice from './status/reducer';
 import wclSlice from './wcl/reducer';
@@ -38,6 +39,7 @@ export const makeStore = () => {
     [statusSlice.name]: statusSlice.reducer,
     [wclSlice.name]: wclSlice.reducer,
     [rosterSlice.name]: rosterSlice.reducer,
+    [planSlice.name]: planSlice.reducer,
   });
 
   const persistedReducer = persistReducer(

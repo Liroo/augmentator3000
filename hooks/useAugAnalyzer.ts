@@ -36,8 +36,8 @@ export default function useAugAnalyzer() {
       if (existingRank) {
         existingRank.players.push({
           name: c.name,
-          spec: rank.spec,
-          class: rank.class,
+          serverSlug: c.serverSlug,
+          serverRegion: c.serverRegion,
         });
         return acc;
       }
@@ -49,31 +49,32 @@ export default function useAugAnalyzer() {
         players: [
           {
             name: c.name,
-            server: c.serverSlug,
+            serverSlug: c.serverSlug,
+            serverRegion: c.serverRegion,
           },
         ],
       });
       return acc;
     }, []);
 
-    const reportsQuery = reportsToAnalyze.map((r) => {
-      const timeRange: number[][] = [];
-      for (let i = 3000; i < r.endTime - r.startTime; i += 30000) {
-        timeRange.push([i, Math.min(i + 30000, r.endTime - r.startTime)]);
-      }
+    const timeRanges: number[][] = [];
+    for (let i = 3000; i < 900000; i += 15000) {
+      timeRanges.push([i, Math.min(i + 15000, 900000)]);
+    }
 
+    const reportsQuery = reportsToAnalyze.map((r) => {
       return {
         code: r.code,
-        timeRanges: timeRange.map((tr) => ({
-          startTime: r.startTime + tr[0],
-          endTime: r.startTime + tr[1],
-        })),
+        timeRanges: timeRanges
+          .map((tr) => ({
+            startTime: r.startTime + tr[0],
+            endTime: r.startTime + tr[1],
+          }))
+          .filter((tr) => tr.startTime < r.endTime),
       };
     });
 
-    const reports = await dispatch(getWCLReports({ reportsQuery })).unwrap();
-
-    console.log(reportsToAnalyze, reports);
+    dispatch(getWCLReports({ reportsQuery }));
   };
 
   return { analyzeByEncounterId };

@@ -1,3 +1,6 @@
+import { useAppDispatch, useAppSelector } from '@/flux/hooks';
+import { setEncounterForm } from '@/flux/plan/reducer';
+import { selectPlanEncounterForm } from '@/flux/plan/selector';
 import useAugAnalyzer from '@/hooks/useAugAnalyzer';
 import { WowRaids } from '@/wow/raid';
 import { Button, Flex, Form, Image, Select, Space } from 'antd';
@@ -5,9 +8,10 @@ import { useReducer } from 'react';
 
 export default function ViewSelectBossForm() {
   const { analyzeByEncounterId } = useAugAnalyzer();
+  const { zoneID, encounterID } = useAppSelector(selectPlanEncounterForm);
+  const dispatch = useAppDispatch();
 
   const [form] = Form.useForm();
-  const zoneID = form.getFieldValue('zoneID') || WowRaids[0].id;
   const rerender = useReducer((x) => x + 1, 0)[1];
 
   const onFinish = (values: any) => {
@@ -21,8 +25,8 @@ export default function ViewSelectBossForm() {
       layout="inline"
       onFinish={onFinish}
       initialValues={{
-        zoneID: WowRaids[0].id,
-        encounterID: WowRaids[0].encounters[0].id,
+        zoneID,
+        encounterID,
       }}
     >
       <Space>
@@ -47,10 +51,14 @@ export default function ViewSelectBossForm() {
                 </span>
               </Flex>
             )}
+            value={zoneID}
             onChange={(value) => {
-              form.setFieldValue(
-                'encounterID',
-                WowRaids.find((raid) => raid.id === value)?.encounters[0].id,
+              dispatch(
+                setEncounterForm({
+                  zoneID: value,
+                  encounterID: WowRaids.find((raid) => raid.id === value)
+                    ?.encounters[0].id,
+                }),
               );
               rerender();
             }}
@@ -80,6 +88,16 @@ export default function ViewSelectBossForm() {
               </Flex>
             )}
             listHeight={300}
+            value={encounterID}
+            onChange={(value) => {
+              dispatch(
+                setEncounterForm({
+                  zoneID,
+                  encounterID: value,
+                }),
+              );
+              rerender();
+            }}
           />
         </Form.Item>
         <Form.Item>

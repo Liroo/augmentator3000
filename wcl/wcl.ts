@@ -74,14 +74,12 @@ export type WCLReportQuery = {
 
 export type WCLReport = {
   code: string;
-  playerDetails: {
-    dps: Array<{
-      name: string;
-      id: number;
-      guid: number;
-      server: string;
-    }>;
-  };
+  playerDetails: Array<{
+    name: string;
+    id: number;
+    guid: number;
+    server: string;
+  }>;
   tables?: {
     [tableKey: string]: {
       startTime: number;
