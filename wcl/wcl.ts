@@ -66,3 +66,32 @@ export type WCLCharacterEncounterRankingsQuery = {
   encounterID: number;
   difficulty: number;
 };
+
+export type WCLReportQuery = {
+  code: string;
+  timeRanges: Array<{ startTime: number; endTime: number }>;
+};
+
+export type WCLReport = {
+  code: string;
+  playerDetails: {
+    dps: Array<{
+      name: string;
+      id: number;
+      guid: number;
+      server: string;
+    }>;
+  };
+  tables?: {
+    [tableKey: string]: {
+      startTime: number;
+      endTime: number;
+      entries: Array<{
+        name: string;
+        id: number;
+        guid: number;
+        total: number;
+      }>;
+    };
+  };
+};

@@ -49,7 +49,7 @@ const columns: TableColumnsType<WCLCharacter> = [
       <ViewEditRosterTableCellSpec character={character} />
     ),
   },
-  { title: 'Server', dataIndex: 'serverSlug', key: 'serverSlug', width: 150 },
+  // { title: 'Server', dataIndex: 'serverSlug', key: 'serverSlug', width: 150 },
   {
     title: '',
     key: 'delete',

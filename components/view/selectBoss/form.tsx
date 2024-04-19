@@ -1,25 +1,17 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { selectRosterListEnhanced } from '@/flux/roster/selector';
-import { getWCLCharactersWithEncounterRankings } from '@/flux/wcl/action';
+import useAugAnalyzer from '@/hooks/useAugAnalyzer';
 import { WowRaids } from '@/wow/raid';
 import { Button, Flex, Form, Image, Select, Space } from 'antd';
 import { useReducer } from 'react';
 
 export default function ViewSelectBossForm() {
-  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
-  const dispatch = useAppDispatch();
+  const { analyzeByEncounterId } = useAugAnalyzer();
 
   const [form] = Form.useForm();
   const zoneID = form.getFieldValue('zoneID');
   const rerender = useReducer((x) => x + 1, 0)[1];
 
   const onFinish = (values: any) => {
-    dispatch(
-      getWCLCharactersWithEncounterRankings({
-        encounterId: values.encounterID,
-        characters: rosterListEnhanced,
-      }),
-    );
+    analyzeByEncounterId(values.encounterID);
   };
 
   return (

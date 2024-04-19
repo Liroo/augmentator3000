@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 import * as React from 'react';
 
 interface Props {
@@ -11,6 +11,7 @@ export default function UIAntdTheme({ children }: Props) {
   return (
     <ConfigProvider
       theme={{
+        algorithm: theme.darkAlgorithm,
         components: {
           Table: {
             cellPaddingBlock: 8,

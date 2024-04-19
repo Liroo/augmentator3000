@@ -76,7 +76,7 @@ export const WCLGetCharacters = async function (
   };
 
   // for each character, transform keys encounterRanking-<encounterID> to an object of encounterRankings hashed by encounterID
-  Object.keys(res.characterData).forEach((characterIndex) => {
+  Object.keys(res.characterData).forEach((characterIndex, index) => {
     const character = res.characterData[characterIndex];
     const encounterRankings = Object.keys(character).reduce(
       (acc, key) => {
@@ -89,6 +89,8 @@ export const WCLGetCharacters = async function (
       {} as Record<number, any>,
     );
 
+    character.serverSlug = characters[index].serverSlug;
+    character.serverRegion = characters[index].serverRegion;
     character.encounterRankings = encounterRankings;
   });
 

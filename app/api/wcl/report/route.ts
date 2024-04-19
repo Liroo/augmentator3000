@@ -1,24 +1,18 @@
 import { initWCLClient } from '@/wcl';
-import { WCLGetCharacters } from '@/wcl/query/character';
+import { WCLGetReportTableDamage } from '@/wcl/query/report';
 import { z } from 'zod';
 
 export const dynamic = 'force-dynamic';
 
 const validation = z.object({
-  encounterRankings: z.array(
+  code: z.string(),
+  timeRanges: z.array(
     z.object({
-      encounterID: z.number(),
-      difficulty: z.number(),
+      startTime: z.number(),
+      endTime: z.number(),
     }),
   ),
-  characters: z.array(
-    z.object({
-      name: z.string(),
-      serverSlug: z.string(),
-      serverRegion: z.string(),
-      specName: z.string().optional(),
-    }),
-  ),
+  filterExpression: z.string().optional().default(''),
 });
 
 export async function POST(request: Request) {
@@ -37,16 +31,17 @@ export async function POST(request: Request) {
     );
   }
 
-  const { characters, encounterRankings } = queryResult.data;
+  const { code, timeRanges, filterExpression } = queryResult.data;
 
   const WCLClient = await initWCLClient();
-  const charactersWithEncounterRankings = await WCLGetCharacters(
+  const reportTableDamage = await WCLGetReportTableDamage(
     WCLClient,
-    characters,
-    encounterRankings,
+    code,
+    timeRanges,
+    filterExpression,
   );
 
   return Response.json({
-    characters: Object.values(charactersWithEncounterRankings),
+    ...reportTableDamage,
   });
 }

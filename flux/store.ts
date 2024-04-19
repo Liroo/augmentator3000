@@ -1,5 +1,14 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import rosterSlice from './roster/reducer';
 import statusSlice from './status/reducer';
@@ -24,11 +33,6 @@ const storage =
     ? createWebStorage('local')
     : createNoopStorage();
 
-const persistConfig = {
-  key: 'root',
-  storage: storage,
-};
-
 export const makeStore = () => {
   const rootReducer = combineReducers({
     [statusSlice.name]: statusSlice.reducer,
@@ -36,11 +40,20 @@ export const makeStore = () => {
     [rosterSlice.name]: rosterSlice.reducer,
   });
 
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+  const persistedReducer = persistReducer(
+    { storage, key: 'root' },
+    rootReducer,
+  );
 
   const store = configureStore({
     reducer: persistedReducer,
     devTools: process.env.NODE_ENV !== 'production',
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
   });
   const persistor = persistStore(store);
 
