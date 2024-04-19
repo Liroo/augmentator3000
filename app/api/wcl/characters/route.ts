@@ -16,7 +16,7 @@ const validation = z.object({
       name: z.string(),
       serverSlug: z.string(),
       serverRegion: z.string(),
-      specName: z.string().optional(),
+      specName: z.string().optional().default(''),
     }),
   ),
 });
