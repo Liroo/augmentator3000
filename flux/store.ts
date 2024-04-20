@@ -43,7 +43,7 @@ export const makeStore = () => {
   });
 
   const persistedReducer = persistReducer(
-    { storage, key: 'root' },
+    { storage, key: 'auganalyzer-root' },
     rootReducer,
   );
 

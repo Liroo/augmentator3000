@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
+import { selectPlanTimeRangesByKey } from '@/flux/plan/selector';
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
 import {
   getWCLCharactersWithEncounterRankings,
@@ -9,6 +10,7 @@ import { WCLCharacter } from '@/wcl/wcl';
 export default function useAugAnalyzer() {
   const dispatch = useAppDispatch();
   const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
+  const timeRanges = useAppSelector(selectPlanTimeRangesByKey());
 
   const analyzeByEncounterId = async (encounterID: number) => {
     const charactersWithEncounterRankings = await dispatch(
@@ -56,11 +58,6 @@ export default function useAugAnalyzer() {
       });
       return acc;
     }, []);
-
-    const timeRanges: number[][] = [];
-    for (let i = 3000; i < 900000; i += 15000) {
-      timeRanges.push([i, Math.min(i + 15000, 900000)]);
-    }
 
     const reportsQuery = reportsToAnalyze.map((r) => {
       return {

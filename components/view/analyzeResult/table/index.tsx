@@ -5,97 +5,73 @@ import { StatusEnum } from '@/flux/status/reducer';
 import { selectStatusByActionTypeId } from '@/flux/status/selector';
 import { getWCLReports } from '@/flux/wcl/action';
 import { selectWCLReports } from '@/flux/wcl/selector';
+import { ResultEntry } from '@/types/result';
 import { WCLCharacter } from '@/wcl/wcl';
 import { WowRealms } from '@/wow/realm';
 import { WowRegion } from '@/wow/region';
 import { Table, TableColumnsType } from 'antd';
 import { useMemo } from 'react';
+import ViewAnalyzeResultTableCellDamage from './cell/damage';
+import ViewAnalyzeResultTableCellTimer from './cell/timer';
 
-type Entries = {
-  name: string;
-  serverSlug: string;
-  total: number;
-};
-
-const timeRanges: number[][] = [];
-for (let i = 3000; i < 900000; i += 15000) {
-  timeRanges.push([i, Math.min(i + 15000, 900000)]);
-}
-
-const columns: TableColumnsType<Entries> = [
+const columns: TableColumnsType<ResultEntry> = [
   {
     title: 'Time Range',
     key: 'timeRange',
     render: (_, __, index) => (
-      <p>
-        {/* convert ms to mm:ss */}
-        {new Date(timeRanges[index][0]).toISOString().substr(14, 5)} -{' '}
-        {new Date(timeRanges[index][1]).toISOString().substr(14, 5)}
-      </p>
+      <ViewAnalyzeResultTableCellTimer timeRangesIndex={index} />
     ),
-    width: 100,
+    width: 120,
+    fixed: 'left',
   },
   {
     title: 'Best target',
     key: 'entry0',
     render: (entries) => (
-      <p>
-        {entries[0]?.name} - {entries[0]?.total}
-      </p>
+      <ViewAnalyzeResultTableCellDamage entry={entries[0]} />
     ),
-    width: 100,
+    width: 150,
   },
   {
     title: '2nd best target',
     key: 'entry1',
     render: (entries) => (
-      <p>
-        {entries[1]?.name} - {entries[1]?.total}
-      </p>
+      <ViewAnalyzeResultTableCellDamage entry={entries[1]} />
     ),
-    width: 100,
+    width: 150,
   },
   {
     title: '3rd best target',
     key: 'entry2',
     render: (entries) => (
-      <p>
-        {entries[2]?.name} - {entries[2]?.total}
-      </p>
+      <ViewAnalyzeResultTableCellDamage entry={entries[2]} />
     ),
-    width: 100,
+    width: 150,
   },
   {
     title: '4th best target',
     key: 'entry3',
     render: (entries) => (
-      <p>
-        {entries[3]?.name} - {entries[3]?.total}
-      </p>
+      <ViewAnalyzeResultTableCellDamage entry={entries[3]} />
     ),
-    width: 100,
+    width: 150,
   },
 
   {
     title: '5th best target',
     key: 'entry4',
     render: (entries) => (
-      <p>
-        {entries[4]?.name} - {entries[4]?.total}
-      </p>
+      <ViewAnalyzeResultTableCellDamage entry={entries[4]} />
     ),
-    width: 100,
+    width: 150,
   },
 
   {
     title: '6th best target',
     key: 'entry5',
     render: (entries) => (
-      <p>
-        {entries[5]?.name} - {entries[5]?.total}
-      </p>
+      <ViewAnalyzeResultTableCellDamage entry={entries[5]} />
     ),
-    width: 100,
   },
 ];
 

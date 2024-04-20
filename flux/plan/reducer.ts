@@ -6,6 +6,10 @@ export interface PlanState {
     zoneID: number;
     encounterID: number;
   };
+
+  timeRanges: {
+    [key: string]: [number, number][];
+  };
 }
 
 const initialState: PlanState = {
@@ -13,7 +17,14 @@ const initialState: PlanState = {
     zoneID: WowRaids[0].id,
     encounterID: WowRaids[0].encounters[0].id,
   },
+  timeRanges: {
+    default: [],
+  },
 };
+
+for (let i = 3000; i < 18000000; i += 30000) {
+  initialState.timeRanges.default.push([i, Math.min(i + 30000, 18000000)]);
+}
 
 const planSlice = createSlice({
   name: 'plan',
