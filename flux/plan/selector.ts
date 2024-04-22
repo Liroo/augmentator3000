@@ -13,3 +13,8 @@ export const selectPlanTimeRangesByKey = (key: string = 'default') =>
     [selectPlanState],
     (planState) => planState.timeRanges[key] || [],
   );
+
+export const selectPlanTimeRangesKeys = createSelector(
+  [selectPlanState],
+  (planState) => Object.keys(planState.timeRanges),
+);

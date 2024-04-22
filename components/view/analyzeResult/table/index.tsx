@@ -97,36 +97,42 @@ export default function ViewAnalyzeRosterTable() {
         serverRegion: string;
       }>;
     }> = rosterListEnhanced.reduce((acc: any, c: WCLCharacter) => {
-      const rank = c?.encounterRankings?.[encounterID]?.ranks?.[0];
-
-      if (!rank) return acc;
-
-      const existingRank = acc.find((r: any) => r.code === rank.report.code);
-      if (existingRank) {
-        existingRank.players.push({
-          name: c.name,
-          serverSlug: c.serverSlug,
-          serverRegion: c.serverRegion,
-        });
-        return acc;
-      }
-
-      acc.push({
-        code: rank.report.code,
-        startTime: rank.startTime - rank.report.startTime,
-        endTime: rank.startTime - rank.report.startTime + rank.duration,
-        players: [
-          {
+      const addRankToAcc = (rank: any) => {
+        const existingRank = acc.find((r: any) => r.code === rank.report.code);
+        if (existingRank) {
+          existingRank.players.push({
             name: c.name,
             serverSlug: c.serverSlug,
             serverRegion: c.serverRegion,
-          },
-        ],
-      });
+          });
+          return acc;
+        }
+
+        acc.push({
+          code: rank.report.code,
+          startTime: rank.startTime - rank.report.startTime,
+          endTime: rank.startTime - rank.report.startTime + rank.duration,
+          players: [
+            {
+              name: c.name,
+              serverSlug: c.serverSlug,
+              serverRegion: c.serverRegion,
+            },
+          ],
+        });
+      };
+      const rank0 = c?.encounterRankings?.[encounterID]?.ranks?.[0];
+      const rank1 = c?.encounterRankings?.[encounterID]?.ranks?.[1];
+      const rank2 = c?.encounterRankings?.[encounterID]?.ranks?.[2];
+
+      if (rank0) addRankToAcc(rank0);
+      if (rank1) addRankToAcc(rank1);
+      if (rank2) addRankToAcc(rank2);
+
       return acc;
     }, []);
 
-    const table: any = [];
+    let table: any = [];
 
     reportsToAnalyze.forEach((rta) => {
       const report = wclReports[rta.code];
@@ -162,6 +168,33 @@ export default function ViewAnalyzeRosterTable() {
             }
           });
         });
+    });
+
+    table = table.map((t: ResultEntry[]) => {
+      const nameServerSlugMap = new Map<
+        string,
+        { total: number; count: number }
+      >();
+      t.forEach((e) => {
+        const key = `${e.name}-${e.serverSlug}`;
+        if (!nameServerSlugMap.has(key)) {
+          nameServerSlugMap.set(key, { total: e.total, count: 1 });
+        } else {
+          const { total, count } = nameServerSlugMap.get(key)!;
+          nameServerSlugMap.set(key, {
+            total: total + e.total,
+            count: count + 1,
+          });
+        }
+      });
+
+      t = [];
+      nameServerSlugMap.forEach((value, key) => {
+        const [name, serverSlug] = key.split('-');
+        t.push({ name, serverSlug, total: value.total / value.count });
+      });
+
+      return t;
     });
 
     table.forEach((t: any[]) => {

@@ -1,10 +1,12 @@
 import { WowRaids } from '@/wow/raid';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import defaultTimeRanges from './defaultTimeRanges';
 
 export interface PlanState {
   encounterForm: {
     zoneID: number;
     encounterID: number;
+    timeRangesKey: string;
   };
 
   timeRanges: {
@@ -16,15 +18,10 @@ const initialState: PlanState = {
   encounterForm: {
     zoneID: WowRaids[0].id,
     encounterID: WowRaids[0].encounters[0].id,
+    timeRangesKey: 'default',
   },
-  timeRanges: {
-    default: [],
-  },
+  timeRanges: defaultTimeRanges,
 };
-
-for (let i = 3000; i < 18000000; i += 30000) {
-  initialState.timeRanges.default.push([i, Math.min(i + 30000, 18000000)]);
-}
 
 const planSlice = createSlice({
   name: 'plan',
@@ -33,9 +30,19 @@ const planSlice = createSlice({
     setEncounterForm: (state, action) => {
       state.encounterForm = action.payload;
     },
+    setTimeRangesByKey: (
+      state,
+      action: PayloadAction<{ key: string; timeRanges: [number, number][] }>,
+    ) => {
+      state.timeRanges[action.payload.key] = action.payload.timeRanges;
+    },
+    removeTimeRangesByKey: (state, action: PayloadAction<string>) => {
+      delete state.timeRanges[action.payload];
+    },
   },
 });
 
-export const { setEncounterForm } = planSlice.actions;
+export const { setEncounterForm, setTimeRangesByKey, removeTimeRangesByKey } =
+  planSlice.actions;
 
 export default planSlice;
