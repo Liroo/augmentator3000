@@ -6,6 +6,7 @@ import {
 } from '@/flux/plan/reducer';
 import {
   selectPlanEncounterForm,
+  selectPlanTimeRangesByKey,
   selectPlanTimeRangesKeys,
 } from '@/flux/plan/selector';
 import { CopyOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -29,6 +30,7 @@ export default function ViewPlanBossTimeRangesForm() {
   const { encounterID, zoneID, timeRangesKey } = useAppSelector(
     selectPlanEncounterForm,
   );
+  const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
   const dispatch = useAppDispatch();
 
   const [name, setName] = useState<string>('');
@@ -71,7 +73,7 @@ export default function ViewPlanBossTimeRangesForm() {
       : ' (1)';
     //  remove index from key
     const newKey = key.replace(/ \(\d+\)$/, '') + copyIndex;
-    dispatch(setTimeRangesByKey({ key: newKey, timeRanges: [] }));
+    dispatch(setTimeRangesByKey({ key: newKey, timeRanges }));
     dispatch(setEncounterForm({ zoneID, encounterID, timeRangesKey: newKey }));
     form.setFieldsValue({ timeRangeKey: newKey });
   };

@@ -10,10 +10,6 @@ export default function Home() {
         What I would like to add:
         <br />
         <br />
-        - Default time ranges per boss
-        <br />
-        - Editable time ranges (can save them)
-        <br />
         - Editable table
         <br />
         - Obv can export note
