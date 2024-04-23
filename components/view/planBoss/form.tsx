@@ -17,7 +17,7 @@ export default function ViewPlanBossForm() {
     <Space>
       <Form.Item name={'zoneID'}>
         <Select
-          style={{ width: '400px' }}
+          style={{ width: '300px' }}
           placeholder="Select Raid"
           options={WowRaids.map((wowRaid) => ({
             label: wowRaid.name,
@@ -55,7 +55,7 @@ export default function ViewPlanBossForm() {
       </Form.Item>
       <Form.Item name={'encounterID'}>
         <Select
-          style={{ width: '400px' }}
+          style={{ width: '300px' }}
           placeholder="Select Boss"
           options={WowRaids.find(
             (wowRaid) => wowRaid.id === zoneID,

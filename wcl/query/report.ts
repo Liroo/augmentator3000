@@ -1,3 +1,4 @@
+import { WowRealms } from '@/wow/realm';
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLFramgentReport } from '../fragment/report';
 import { WCLReport, WCLReportQuery } from '../wcl';
@@ -40,6 +41,7 @@ export const WCLGetReportTableDamage = async function (
       }
     }
   `;
+
   const res = (await WCLClient.request(query)) as {
     reportData: {
       report: any;
@@ -57,6 +59,11 @@ export const WCLGetReportTableDamage = async function (
           server: pd.server,
         }),
       ),
+    rankedCharacters: res.reportData.report.rankedCharacters.map((rc: any) => ({
+      name: rc.name,
+      serverSlug: rc.server.slug,
+      canonicalID: rc.canonicalID,
+    })),
   };
 
   Object.keys(res.reportData.report).forEach((key) => {
@@ -67,12 +74,43 @@ export const WCLGetReportTableDamage = async function (
       serializedReport.tables[`${startTime}-${endTime}`] = {
         startTime,
         endTime,
-        entries: res.reportData.report[key].data.entries.map((entry: any) => ({
-          name: entry.name,
-          id: entry.id,
-          guid: entry.guid,
-          total: entry.total,
-        })),
+        entries: res.reportData.report[key].data.entries
+          .map((entry: any) => {
+            const playerDetails =
+              res.reportData.report.playerDetails.data.playerDetails.dps.find(
+                (pd: any) => pd.guid === entry.guid,
+              );
+            if (!playerDetails) return null;
+
+            let serverSlug = '';
+            Object.values(WowRealms)
+              .reduce((acc, cur) => {
+                return [...acc, ...cur];
+              }, [])
+              .find((realm) => {
+                if (
+                  playerDetails.server.includes(realm.name.replace(' ', ''))
+                ) {
+                  serverSlug = realm.slug;
+                  return true;
+                }
+                return false;
+              });
+
+            const rankedCharacter = res.reportData.report.rankedCharacters.find(
+              (rc: any) =>
+                rc.name === playerDetails.name && rc.server.slug === serverSlug,
+            );
+
+            return {
+              name: entry.name,
+              id: entry.id,
+              guid: entry.guid,
+              total: entry.total,
+              canonicalID: rankedCharacter?.canonicalID,
+            };
+          })
+          .filter((entry: any) => !!entry),
       };
     }
   });

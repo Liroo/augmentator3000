@@ -1,17 +1,15 @@
-import { useAppSelector } from '@/flux/hooks';
-import { selectPlanTimeRangesByKey } from '@/flux/plan/selector';
 import { Flex, Typography } from 'antd';
 import moment from 'moment';
 
 interface Props {
-  timeRangesIndex: number;
+  startTime: number;
+  endTime: number;
 }
 
 export default function ViewAnalyzeResultTableCellTimer({
-  timeRangesIndex,
+  startTime,
+  endTime,
 }: Props) {
-  const timeRanges = useAppSelector(selectPlanTimeRangesByKey());
-  const [startTime, endTime] = timeRanges[timeRangesIndex];
   const start = moment(startTime).format('mm:ss');
   const end = moment(endTime).format('mm:ss');
 

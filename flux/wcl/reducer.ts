@@ -28,7 +28,9 @@ const wclSlice = createSlice({
       });
     },
     setReport: (state, action: PayloadAction<WCLReport>) => {
-      state.reports[action.payload.code] = action.payload;
+      state.reports[
+        `${action.payload.code}-${action.payload.associatedEncounterID}`
+      ] = action.payload;
     },
   },
 });

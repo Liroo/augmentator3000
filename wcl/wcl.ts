@@ -69,27 +69,34 @@ export type WCLCharacterEncounterRankingsQuery = {
 
 export type WCLReportQuery = {
   code: string;
+  startTime: number;
   timeRanges: Array<{ startTime: number; endTime: number }>;
+};
+
+export type WCLReportTableEntry = {
+  canonicalID: string;
+  name: string;
+  id: number;
+  guid: number;
+  total: number;
 };
 
 export type WCLReport = {
   code: string;
+  associatedEncounterID?: number;
   playerDetails: Array<{
     name: string;
     id: number;
     guid: number;
     server: string;
   }>;
+  startTime?: number;
   tables?: {
     [tableKey: string]: {
       startTime: number;
       endTime: number;
-      entries: Array<{
-        name: string;
-        id: number;
-        guid: number;
-        total: number;
-      }>;
+      entries: WCLReportTableEntry[];
     };
   };
+  rankedCharacters?: Array<WCLCharacter>;
 };

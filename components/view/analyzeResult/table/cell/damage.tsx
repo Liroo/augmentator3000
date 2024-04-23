@@ -1,16 +1,21 @@
 import { useAppSelector } from '@/flux/hooks';
-import { selectWCLCharacter } from '@/flux/wcl/selector';
+import { selectWCLCharacterByCanonicalID } from '@/flux/wcl/selector';
 import { ResultEntry } from '@/types/result';
 import { getClassById } from '@/wow/class';
 import { Flex, Typography } from 'antd';
 
 interface Props {
-  entry: ResultEntry;
+  entries: ResultEntry[];
+  index: number;
 }
 
-export default function ViewAnalyzeResultTableCellDamage({ entry }: Props) {
+export default function ViewAnalyzeResultTableCellDamage({
+  entries,
+  index,
+}: Props) {
+  const entry = entries[index];
   const character = useAppSelector(
-    selectWCLCharacter(entry?.name, entry?.serverSlug),
+    selectWCLCharacterByCanonicalID(entry?.canonicalID),
   );
 
   let textComponent = <span>-</span>;

@@ -1,18 +1,24 @@
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { selectPlanTimeRangesByKey } from '@/flux/plan/selector';
+import {
+  selectPlanEncounterForm,
+  selectPlanTimeRangesByKey,
+} from '@/flux/plan/selector';
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
 import {
   getWCLCharactersWithEncounterRankings,
   getWCLReports,
 } from '@/flux/wcl/action';
-import { WCLCharacter } from '@/wcl/wcl';
+import { WCLCharacter, WCLReportQuery } from '@/wcl/wcl';
 
 export default function useAugAnalyzer() {
   const dispatch = useAppDispatch();
   const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
-  const timeRanges = useAppSelector(selectPlanTimeRangesByKey());
+  const { encounterID, timeRangesKey } = useAppSelector(
+    selectPlanEncounterForm,
+  );
+  const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
 
-  const analyzeByEncounterId = async (encounterID: number) => {
+  const analyze = async () => {
     const charactersWithEncounterRankings = await dispatch(
       getWCLCharactersWithEncounterRankings({
         encounterID,
@@ -68,17 +74,27 @@ export default function useAugAnalyzer() {
     const reportsQuery = reportsToAnalyze.map((r) => {
       return {
         code: r.code,
+        startTime: r.startTime,
         timeRanges: timeRanges
-          .map((tr) => ({
-            startTime: r.startTime + tr[0],
-            endTime: r.startTime + tr[1],
-          }))
+          .reduce((acc: WCLReportQuery['timeRanges'], tr) => {
+            // Increment 9s by 9s max to reduce margin of error in wow in case of EB time window failure or not exact
+            for (let i = tr[0]; i < tr[1]; i += 9000) {
+              acc = [
+                ...acc,
+                {
+                  startTime: r.startTime + i + (i === tr[0] ? 0 : 1), // Add a single ms to avoid overlap between time ranges
+                  endTime: r.startTime + Math.min(i + 9000, tr[1]),
+                },
+              ];
+            }
+            return acc;
+          }, [])
           .filter((tr) => tr.startTime < r.endTime),
       };
     });
 
-    dispatch(getWCLReports({ reportsQuery }));
+    dispatch(getWCLReports({ reportsQuery, encounterID }));
   };
 
-  return { analyzeByEncounterId };
+  return { analyze };
 }

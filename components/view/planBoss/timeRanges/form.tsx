@@ -49,7 +49,7 @@ export default function ViewPlanBossTimeRangesForm() {
     if (!planTimeRangesKeys.includes(name))
       dispatch(setTimeRangesByKey({ key: name, timeRanges: [] }));
     dispatch(setEncounterForm({ zoneID, encounterID, timeRangesKey: name }));
-    form.setFieldsValue({ timeRangeKey: name });
+    form.setFieldsValue({ timeRangesKey: name });
     setName('');
     setTimeout(() => {
       inputRef.current?.focus();
@@ -61,7 +61,7 @@ export default function ViewPlanBossTimeRangesForm() {
       dispatch(
         setEncounterForm({ zoneID, encounterID, timeRangesKey: 'default' }),
       );
-      form.setFieldsValue({ timeRangeKey: 'default' });
+      form.setFieldsValue({ timeRangesKey: 'default' });
     }
     dispatch(removeTimeRangesByKey(key));
   };
@@ -75,19 +75,18 @@ export default function ViewPlanBossTimeRangesForm() {
     const newKey = key.replace(/ \(\d+\)$/, '') + copyIndex;
     dispatch(setTimeRangesByKey({ key: newKey, timeRanges }));
     dispatch(setEncounterForm({ zoneID, encounterID, timeRangesKey: newKey }));
-    form.setFieldsValue({ timeRangeKey: newKey });
+    form.setFieldsValue({ timeRangesKey: newKey });
   };
 
   return (
     <Space>
-      <Form.Item name={'timeRangeKey'}>
+      <Form.Item name={'timeRangesKey'}>
         <Select
           style={{ width: '400px' }}
           placeholder="Select timers"
-          defaultValue={timeRangesKey}
-          options={planTimeRangesKeys.map((timeRangeKey) => ({
-            label: timeRangeKey,
-            value: timeRangeKey,
+          options={planTimeRangesKeys.map((timeRangesKey) => ({
+            label: timeRangesKey,
+            value: timeRangesKey,
           }))}
           optionRender={(option) => {
             return (

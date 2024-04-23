@@ -1,20 +1,38 @@
 'use client';
 import { useAppSelector } from '@/flux/hooks';
 import { selectPlanEncounterForm } from '@/flux/plan/selector';
+import { StatusEnum } from '@/flux/status/reducer';
+import { selectStatusByActionTypeId } from '@/flux/status/selector';
+import {
+  getWCLCharactersWithEncounterRankings,
+  getWCLReports,
+} from '@/flux/wcl/action';
 import useAugAnalyzer from '@/hooks/useAugAnalyzer';
 import { Button, Form, Typography } from 'antd';
 import ViewPlanBossForm from './form';
 import ViewPlanBossTimeRanges from './timeRanges';
 
 export default function ViewPlanBoss() {
-  const { analyzeByEncounterId } = useAugAnalyzer();
+  const { analyze } = useAugAnalyzer();
   const [form] = Form.useForm();
   const { zoneID, encounterID, timeRangesKey } = useAppSelector(
     selectPlanEncounterForm,
   );
+  const { status: getWCLCharactersWithEncounterRankingsStatus } =
+    useAppSelector(
+      selectStatusByActionTypeId(
+        getWCLCharactersWithEncounterRankings.typePrefix,
+      ),
+    );
+  const { status: getWCLReportsStatus } = useAppSelector(
+    selectStatusByActionTypeId(getWCLReports.typePrefix),
+  );
+  const isLoading =
+    getWCLCharactersWithEncounterRankingsStatus === StatusEnum.Pending ||
+    getWCLReportsStatus === StatusEnum.Pending;
 
-  const onFinish = (values: any) => {
-    analyzeByEncounterId(values.encounterID);
+  const onFinish = () => {
+    analyze();
   };
 
   return (
@@ -39,7 +57,12 @@ export default function ViewPlanBoss() {
         </div>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="mt-[16px]">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="mt-[16px]"
+            disabled={isLoading}
+          >
             Compute
           </Button>
         </Form.Item>

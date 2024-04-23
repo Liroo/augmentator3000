@@ -28,7 +28,7 @@ const planSlice = createSlice({
   initialState,
   reducers: {
     setEncounterForm: (state, action) => {
-      state.encounterForm = action.payload;
+      state.encounterForm = { ...state.encounterForm, ...action.payload };
     },
     setTimeRangesByKey: (
       state,

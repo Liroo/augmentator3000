@@ -10,12 +10,21 @@ export const selectWCLCharacter = (name: string, serverSlug: string) =>
     ),
   );
 
+export const selectWCLCharacterByCanonicalID = (canonicalID: string) =>
+  createSelector([selectWCLState], (wclState) =>
+    Object.values(wclState.characters).find(
+      (c) => c.canonicalID === canonicalID,
+    ),
+  );
+
 export const selectWCLCharacters = createSelector(
   [selectWCLState],
   (wclState) => wclState.characters,
 );
 
-export const selectWCLReports = createSelector(
-  [selectWCLState],
-  (wclState) => wclState.reports,
-);
+export const selectWCLReportsByEncounterID = (encounterID: number) =>
+  createSelector([selectWCLState], (wclState) =>
+    Object.values(wclState.reports).filter(
+      (r) => r.associatedEncounterID === encounterID,
+    ),
+  );
