@@ -9,7 +9,7 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import autoMergeLevel1 from 'redux-persist/lib/stateReconciler/autoMergeLevel1';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import planSlice from './plan/reducer';
 import rosterSlice from './roster/reducer';
@@ -46,7 +46,7 @@ export const makeStore = () => {
     {
       storage,
       key: 'auganalyzer-root',
-      stateReconciler: autoMergeLevel1 as any,
+      stateReconciler: autoMergeLevel2 as any,
     },
     rootReducer,
   );
