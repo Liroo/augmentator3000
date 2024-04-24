@@ -8,7 +8,12 @@ import {
 import { getSpecNameById } from '@/wow/class';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getApi, postApi } from '../api';
-import { setCharacter, setCharacters, setReport } from './reducer';
+import {
+  setCharacter,
+  setCharacters,
+  setReport,
+  setReportWithFights,
+} from './reducer';
 
 export const getWCLCharacter = createAsyncThunk<
   void,
@@ -21,7 +26,7 @@ export const getWCLCharacter = createAsyncThunk<
       `/api/wcl/character?name=${name}&serverSlug=${serverSlug}&serverRegion=${serverRegion}`,
     );
 
-    if (!!character)
+    if (!!character) {
       dispatch(
         setCharacter({
           ...character,
@@ -29,6 +34,7 @@ export const getWCLCharacter = createAsyncThunk<
           serverRegion,
         }),
       );
+    }
   },
 );
 
@@ -90,6 +96,20 @@ export const getWCLReport = createAsyncThunk<
   );
 
   return report as WCLReport;
+});
+
+export const getWCLReportWithFights = createAsyncThunk<
+  void,
+  {
+    code: string;
+  } & ThunkArg,
+  ThunkApiConfig
+>('wcl/getWCLReportWithFights', async ({ code }, { dispatch }) => {
+  const report = await postApi('/api/wcl/reportWithFights', {
+    code: code,
+  });
+
+  dispatch(setReportWithFights(report));
 });
 
 export const getWCLReports = createAsyncThunk<

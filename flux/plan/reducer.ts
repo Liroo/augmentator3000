@@ -2,6 +2,13 @@ import { WowRaids } from '@/wow/raid';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import defaultTimeRanges from './defaultTimeRanges';
 
+export type PlanStateTimeRange = {
+  startTime: number;
+  endTime: number;
+  excludeCanonicalIDs: string[];
+  manualPriorities: string[];
+};
+
 export interface PlanState {
   encounterForm: {
     zoneID: number;
@@ -10,7 +17,12 @@ export interface PlanState {
   };
 
   timeRanges: {
-    [key: string]: [number, number][];
+    [key: string]: Array<{
+      startTime: number;
+      endTime: number;
+      excludeCanonicalIDs: string[];
+      manualPriorities: string[];
+    }>;
   };
 }
 
@@ -32,7 +44,7 @@ const planSlice = createSlice({
     },
     setTimeRangesByKey: (
       state,
-      action: PayloadAction<{ key: string; timeRanges: [number, number][] }>,
+      action: PayloadAction<{ key: string; timeRanges: PlanStateTimeRange[] }>,
     ) => {
       state.timeRanges[action.payload.key] = action.payload.timeRanges;
     },

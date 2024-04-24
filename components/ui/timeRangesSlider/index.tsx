@@ -1,10 +1,11 @@
+import { PlanStateTimeRange } from '@/flux/plan/reducer';
 import React from 'react';
 import UITimeRangesSliderRuler from './ruler';
 import UITimeRangesSliderTimeRange from './timeRange';
 
 type Props = {
-  timeRanges: [number, number][];
-  setTimeRanges: (timeRanges: [number, number][]) => void;
+  timeRanges: PlanStateTimeRange[];
+  setTimeRanges: (timeRanges: PlanStateTimeRange[]) => void;
 };
 
 const maxTime = 15 * 60; // 15 minutes
@@ -21,15 +22,20 @@ export default function UITimeRangesSlider({
 
     if (startTime >= 0 && endTime <= maxTime * 1000) {
       const isOverlapping = timeRanges.some(
-        ([start, end]) =>
+        ({ startTime: start, endTime: end }) =>
           (startTime >= start && startTime <= end) ||
           (endTime >= start && endTime <= end),
       );
 
       if (!isOverlapping) {
         const newTimeRanges = [...timeRanges];
-        newTimeRanges.push([startTime, endTime]);
-        newTimeRanges.sort((a, b) => a[0] - b[0]);
+        newTimeRanges.push({
+          startTime,
+          endTime,
+          excludeCanonicalIDs: [],
+          manualPriorities: Array.from({ length: 6 }).map(() => 'default'),
+        });
+        newTimeRanges.sort((a, b) => a.startTime - b.startTime);
         setTimeRanges(newTimeRanges);
       }
     }
@@ -52,7 +58,7 @@ export default function UITimeRangesSlider({
             className="relative top-[5px] h-[20px] w-full overflow-x-hidden"
             onClick={onClickAddTimeRange}
           >
-            {timeRanges.map(([startTime], index) =>
+            {timeRanges.map(({ startTime }, index) =>
               startTime > maxTime * 1000 ? null : (
                 <UITimeRangesSliderTimeRange
                   key={startTime}

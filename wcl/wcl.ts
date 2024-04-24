@@ -82,9 +82,10 @@ export type WCLReportTableEntry = {
 };
 
 export type WCLReport = {
+  title: string;
   code: string;
   associatedEncounterID?: number;
-  playerDetails: Array<{
+  playerDetails?: Array<{
     name: string;
     id: number;
     guid: number;
@@ -98,5 +99,15 @@ export type WCLReport = {
       entries: WCLReportTableEntry[];
     };
   };
+  fights?: Array<{
+    friendlyPlayers: number[];
+    bossPercentage: number;
+    encounterID: number;
+    startTime: number;
+    endTime: number;
+    fightPercentage: number;
+    kill: boolean;
+    name: string;
+  }>;
   rankedCharacters?: Array<WCLCharacter>;
 };

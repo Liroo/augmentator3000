@@ -1,3 +1,4 @@
+import ViewAddReports from '@/components/view/addReports';
 import ViewAnalyzeResult from '@/components/view/analyzeResult';
 import ViewEditRoster from '@/components/view/editRoster';
 import ViewSelectBoss from '@/components/view/planBoss';
@@ -5,20 +6,15 @@ import { Card } from 'antd';
 
 export default function Home() {
   return (
-    <main className="mx-[20px] my-[16px]">
+    <main className="mx-[20px] my-[16px] mb-[200px]">
       <Card className="!mb-[16px]">
         What I would like to add:
         <br />
-        <br />
-        - Editable table
-        <br />
-        - Obv can export note
-        <br />
-        - Improve form with number of log to analyze
-        <br />- Use log url instead of best rank
+        <br />- Use logs url list instead of best rank
       </Card>
 
       <ViewEditRoster />
+      <ViewAddReports />
       <ViewSelectBoss />
       <ViewAnalyzeResult />
     </main>

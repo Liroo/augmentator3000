@@ -8,11 +8,16 @@ export interface WCLState {
   reports: {
     [code: string]: WCLReport;
   };
+
+  reportWithFights: {
+    [code: string]: WCLReport;
+  };
 }
 
 const initialState: WCLState = {
   characters: {},
   reports: {},
+  reportWithFights: {},
 };
 
 const wclSlice = createSlice({
@@ -32,9 +37,21 @@ const wclSlice = createSlice({
         `${action.payload.code}-${action.payload.associatedEncounterID}`
       ] = action.payload;
     },
+    setReportWithFights: (state, action: PayloadAction<WCLReport>) => {
+      state.reportWithFights[action.payload.code] = action.payload;
+    },
+    removeReportWithFight: (state, action: PayloadAction<string>) => {
+      delete state.reportWithFights[action.payload];
+    },
   },
 });
 
-export const { setCharacter, setCharacters, setReport } = wclSlice.actions;
+export const {
+  setCharacter,
+  setCharacters,
+  setReport,
+  setReportWithFights,
+  removeReportWithFight,
+} = wclSlice.actions;
 
 export default wclSlice;

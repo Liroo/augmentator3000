@@ -28,3 +28,8 @@ export const selectWCLReportsByEncounterID = (encounterID: number) =>
       (r) => r.associatedEncounterID === encounterID,
     ),
   );
+
+export const selectWCLReportWithFights = createSelector(
+  [selectWCLState],
+  (wclState) => Object.values(wclState.reportWithFights),
+);

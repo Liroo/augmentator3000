@@ -1,13 +1,14 @@
+import { PlanStateTimeRange } from '@/flux/plan/reducer';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type Props = {
-  timeRanges: [number, number][];
+  timeRanges: PlanStateTimeRange[];
   index: number;
   secondWidth: number;
   maxTime: number;
-  setTimeRanges: (timeRanges: [number, number][]) => void;
+  setTimeRanges: (timeRanges: PlanStateTimeRange[]) => void;
 };
 
 enum TimeRangeInteraction {
@@ -24,10 +25,10 @@ export default function UITimeRangesSliderTimeRange({
   setTimeRanges,
 }: Props) {
   const [[startTime, endTime], setTmpPos] = useState<[number, number]>([
-    timeRanges[index][0],
-    timeRanges[index][1],
+    timeRanges[index].startTime,
+    timeRanges[index].endTime,
   ]);
-  const tmpTimeRangeRef = useRef<[number, number]>([startTime, endTime]);
+  const tmpTimeRangeRef = useRef<PlanStateTimeRange>(timeRanges[index]);
 
   const [interactionType, setInteractionType] = useState<TimeRangeInteraction>(
     TimeRangeInteraction.Grab,
@@ -56,7 +57,7 @@ export default function UITimeRangesSliderTimeRange({
       const newEndTime = newStartTime + (endTime - startTime);
       if (newStartTime >= 0 && newEndTime <= maxTime * 1000) {
         const isOverlapping = timeRanges.some(
-          ([start, end], i) =>
+          ({ startTime: start, endTime: end }, i) =>
             i !== index &&
             ((newStartTime >= start && newStartTime <= end) ||
               (newEndTime >= start && newEndTime <= end)),
@@ -71,7 +72,7 @@ export default function UITimeRangesSliderTimeRange({
         newStartTime >= 0 &&
         newStartTime <= endTime
       ) {
-        const prevEnvTime = index > 0 ? timeRanges[index - 1][1] : 0;
+        const prevEnvTime = index > 0 ? timeRanges[index - 1].endTime : 0;
 
         if (newStartTime > prevEnvTime) setTmpPos([newStartTime, endTime]);
       }
@@ -85,7 +86,7 @@ export default function UITimeRangesSliderTimeRange({
       ) {
         const nextEnvTime =
           index < timeRanges.length - 1
-            ? timeRanges[index + 1][0]
+            ? timeRanges[index + 1].startTime
             : maxTime * 1000;
         if (newEndTime < nextEnvTime) setTmpPos([startTime, newEndTime]);
       }
@@ -93,11 +94,13 @@ export default function UITimeRangesSliderTimeRange({
   };
   const onMouseUp = () => {
     const newTimeRanges = [...timeRanges];
-    newTimeRanges[index] = [
-      tmpTimeRangeRef.current[0],
-      tmpTimeRangeRef.current[1],
-    ];
-    newTimeRanges.sort((a, b) => a[0] - b[0]);
+    newTimeRanges[index] = {
+      startTime: tmpTimeRangeRef.current.startTime,
+      endTime: tmpTimeRangeRef.current.endTime,
+      excludeCanonicalIDs: tmpTimeRangeRef.current.excludeCanonicalIDs,
+      manualPriorities: tmpTimeRangeRef.current.manualPriorities,
+    };
+    newTimeRanges.sort((a, b) => a.startTime - b.startTime);
     setTimeRanges(newTimeRanges);
     setGrabbing(false);
   };
@@ -110,7 +113,12 @@ export default function UITimeRangesSliderTimeRange({
   };
 
   useEffect(() => {
-    tmpTimeRangeRef.current = [startTime, endTime];
+    tmpTimeRangeRef.current = {
+      startTime,
+      endTime,
+      excludeCanonicalIDs: timeRanges[index].excludeCanonicalIDs,
+      manualPriorities: timeRanges[index].manualPriorities,
+    };
   }, [startTime, endTime]);
   useEffect(() => {
     if (grabbing) {

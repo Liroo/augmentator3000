@@ -1,6 +1,6 @@
 import UITimeRangesSlider from '@/components/ui/timeRangesSlider';
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { setTimeRangesByKey } from '@/flux/plan/reducer';
+import { PlanStateTimeRange, setTimeRangesByKey } from '@/flux/plan/reducer';
 import {
   selectPlanEncounterForm,
   selectPlanTimeRangesByKey,
@@ -18,7 +18,7 @@ export default function ViewPlanBossTimeRanges() {
       <div className="mt-[16px]">
         <UITimeRangesSlider
           timeRanges={timeRanges}
-          setTimeRanges={(newTimeRanges: [number, number][]) => {
+          setTimeRanges={(newTimeRanges: PlanStateTimeRange[]) => {
             dispatch(
               setTimeRangesByKey({
                 key: timeRangesKey,
