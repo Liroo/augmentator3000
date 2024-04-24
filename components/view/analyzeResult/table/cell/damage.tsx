@@ -21,7 +21,9 @@ interface Props {
 
 const OptionRender = ({ value }: { value: string }) => {
   const isDefault = value === 'default';
-  const character = useAppSelector(selectWCLCharacterByCanonicalID(value));
+  const character = useAppSelector(
+    selectWCLCharacterByCanonicalID(parseInt(value)),
+  );
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -50,7 +52,7 @@ const LabelRender = ({
   const isDefault = value === 'default';
   const character = useAppSelector(
     selectWCLCharacterByCanonicalID(
-      isDefault && !!entry ? entry.canonicalID : value,
+      isDefault && !!entry ? entry.canonicalID : parseInt(value),
     ),
   );
   const characterClass = character
@@ -139,7 +141,8 @@ export default function ViewAnalyzeResultTableCellDamage({
           },
           ...rosterListEnhanced
             .filter(
-              ({ canonicalID }) => !manualPriorities.includes(canonicalID),
+              ({ canonicalID }) =>
+                !manualPriorities.includes(canonicalID?.toString?.()),
             )
             .map((roster) => {
               return {

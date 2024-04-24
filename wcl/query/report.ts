@@ -130,6 +130,7 @@ export const WCLGetReportWithFights = async function (
         report(code: "${code}") {
           ...WCLFramgentReport
           fights {
+            id
             friendlyPlayers
             bossPercentage
             encounterID

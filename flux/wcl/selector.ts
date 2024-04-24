@@ -10,7 +10,7 @@ export const selectWCLCharacter = (name: string, serverSlug: string) =>
     ),
   );
 
-export const selectWCLCharacterByCanonicalID = (canonicalID: string) =>
+export const selectWCLCharacterByCanonicalID = (canonicalID: number) =>
   createSelector([selectWCLState], (wclState) =>
     Object.values(wclState.characters).find(
       (c) => c.canonicalID === canonicalID,
@@ -33,3 +33,14 @@ export const selectWCLReportWithFights = createSelector(
   [selectWCLState],
   (wclState) => Object.values(wclState.reportWithFights),
 );
+
+export const selectWCLReportsWithFightsByEncoounterID = (encounterID: number) =>
+  createSelector([selectWCLReportWithFights], (reportWithFights) => {
+    const reports = reportWithFights.filter((r) =>
+      r.fights?.find((f) => f.encounterID === encounterID),
+    );
+    return reports.map((r) => ({
+      ...r,
+      fights: r.fights?.filter((f) => f.encounterID === encounterID),
+    }));
+  });

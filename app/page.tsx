@@ -10,7 +10,7 @@ export default function Home() {
       <Card className="!mb-[16px]">
         What I would like to add:
         <br />
-        <br />- Use logs url list instead of best rank
+        <br />- Export as note
       </Card>
 
       <ViewEditRoster />

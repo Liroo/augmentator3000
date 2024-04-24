@@ -16,7 +16,7 @@ export type WCLCharacterQueryWithSpec = {
 } & WCLCharacterQuery;
 
 export type WCLCharacter = {
-  canonicalID: string;
+  canonicalID: number;
   id: string;
   classID: number;
   name: string;
@@ -74,11 +74,23 @@ export type WCLReportQuery = {
 };
 
 export type WCLReportTableEntry = {
-  canonicalID: string;
+  canonicalID: number;
   name: string;
   id: number;
   guid: number;
   total: number;
+};
+
+export type WCLReportFight = {
+  id: number;
+  friendlyPlayers: number[];
+  bossPercentage: number;
+  encounterID: number;
+  startTime: number;
+  endTime: number;
+  fightPercentage: number;
+  kill: boolean;
+  name: string;
 };
 
 export type WCLReport = {
@@ -99,15 +111,6 @@ export type WCLReport = {
       entries: WCLReportTableEntry[];
     };
   };
-  fights?: Array<{
-    friendlyPlayers: number[];
-    bossPercentage: number;
-    encounterID: number;
-    startTime: number;
-    endTime: number;
-    fightPercentage: number;
-    kill: boolean;
-    name: string;
-  }>;
+  fights?: WCLReportFight[];
   rankedCharacters?: Array<WCLCharacter>;
 };

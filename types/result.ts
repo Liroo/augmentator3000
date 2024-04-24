@@ -1,4 +1,4 @@
 export type ResultEntry = {
-  canonicalID: string;
+  canonicalID: number;
   total: number;
 };

@@ -6,7 +6,7 @@ import ViewAddReportsTable from './table';
 export default function ViewAddReports() {
   return (
     <section className="mt-[32px]">
-      <Typography.Title level={5}>📊 Add Reports</Typography.Title>
+      <Typography.Title level={5}>📊 Add Report</Typography.Title>
 
       <Card size="small">
         That part is optional. You can add wlogs report url and select pull by

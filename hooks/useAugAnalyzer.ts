@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
 import {
   selectPlanEncounterForm,
+  selectPlanSelectedFightsFromReportWithFights,
   selectPlanTimeRangesByKey,
 } from '@/flux/plan/selector';
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
@@ -8,6 +9,7 @@ import {
   getWCLCharactersWithEncounterRankings,
   getWCLReports,
 } from '@/flux/wcl/action';
+import { selectWCLReportsWithFightsByEncoounterID } from '@/flux/wcl/selector';
 import { WCLCharacter, WCLReportQuery } from '@/wcl/wcl';
 
 export default function useAugAnalyzer() {
@@ -17,8 +19,14 @@ export default function useAugAnalyzer() {
     selectPlanEncounterForm,
   );
   const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
+  const reportsWithFights = useAppSelector(
+    selectWCLReportsWithFightsByEncoounterID(encounterID),
+  );
+  const planSelectedFightsFromReportWithFights = useAppSelector(
+    selectPlanSelectedFightsFromReportWithFights,
+  );
 
-  const analyze = async () => {
+  const analyze = async (includeBestLog: boolean) => {
     const charactersWithEncounterRankings = await dispatch(
       getWCLCharactersWithEncounterRankings({
         encounterID,
@@ -26,50 +34,56 @@ export default function useAugAnalyzer() {
       }),
     ).unwrap();
 
-    const reportsToAnalyze: Array<{
+    let reportsToAnalyze: Array<{
       code: string;
       startTime: number;
       endTime: number;
-      players: Array<{
-        name: string;
-        serverSlug: string;
-        serverRegion: string;
-      }>;
-    }> = charactersWithEncounterRankings.reduce((acc: any, c: WCLCharacter) => {
-      const addRankToAcc = (rank: any) => {
-        const existingRank = acc.find((r: any) => r.code === rank.report.code);
-        if (existingRank) {
-          existingRank.players.push({
-            name: c.name,
-            serverSlug: c.serverSlug,
-            serverRegion: c.serverRegion,
-          });
+    }> = [];
+    if (includeBestLog) {
+      reportsToAnalyze = charactersWithEncounterRankings.reduce(
+        (acc: any, c: WCLCharacter) => {
+          const addRankToAcc = (rank: any) => {
+            const existingRank = acc.find(
+              (r: any) => r.code === rank.report.code,
+            );
+            if (existingRank) return acc;
+
+            acc.push({
+              code: rank.report.code,
+              startTime: rank.startTime - rank.report.startTime,
+              endTime: rank.startTime - rank.report.startTime + rank.duration,
+            });
+          };
+          const rank0 = c?.encounterRankings?.[encounterID]?.ranks?.[0];
+          const rank1 = c?.encounterRankings?.[encounterID]?.ranks?.[1];
+          const rank2 = c?.encounterRankings?.[encounterID]?.ranks?.[2];
+
+          if (rank0) addRankToAcc(rank0);
+          if (rank1) addRankToAcc(rank1);
+          if (rank2) addRankToAcc(rank2);
+
           return acc;
+        },
+        [],
+      );
+    }
+
+    const charactersCanonicalIDs = rosterListEnhanced.map((c) => c.canonicalID);
+
+    reportsWithFights.forEach((r) => {
+      const fightsId = planSelectedFightsFromReportWithFights[r.code] || [];
+
+      r.fights?.forEach((f) => {
+        if (fightsId.includes(f.id)) {
+          if (charactersCanonicalIDs.some((c) => f.friendlyPlayers.includes(c)))
+            reportsToAnalyze.push({
+              code: r.code,
+              startTime: f.startTime,
+              endTime: f.endTime,
+            });
         }
-
-        acc.push({
-          code: rank.report.code,
-          startTime: rank.startTime - rank.report.startTime,
-          endTime: rank.startTime - rank.report.startTime + rank.duration,
-          players: [
-            {
-              name: c.name,
-              serverSlug: c.serverSlug,
-              serverRegion: c.serverRegion,
-            },
-          ],
-        });
-      };
-      const rank0 = c?.encounterRankings?.[encounterID]?.ranks?.[0];
-      const rank1 = c?.encounterRankings?.[encounterID]?.ranks?.[1];
-      const rank2 = c?.encounterRankings?.[encounterID]?.ranks?.[2];
-
-      if (rank0) addRankToAcc(rank0);
-      if (rank1) addRankToAcc(rank1);
-      if (rank2) addRankToAcc(rank2);
-
-      return acc;
-    }, []);
+      });
+    });
 
     const reportsQuery = reportsToAnalyze.map((r) => {
       return {
@@ -92,6 +106,8 @@ export default function useAugAnalyzer() {
           .filter((tr) => tr.startTime < r.endTime),
       };
     });
+
+    if (reportsQuery.length === 0) return;
 
     dispatch(getWCLReports({ reportsQuery, encounterID }));
   };

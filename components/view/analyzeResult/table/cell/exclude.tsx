@@ -12,7 +12,7 @@ import { Select, Tag } from 'antd';
 interface Props {
   startTime: number;
   endTime: number;
-  excludeCanonicalIDs: string[];
+  excludeCanonicalIDs: number[];
 }
 
 const TagRender = ({
@@ -24,7 +24,9 @@ const TagRender = ({
   closable: boolean;
   onClose: any;
 }) => {
-  const character = useAppSelector(selectWCLCharacterByCanonicalID(value));
+  const character = useAppSelector(
+    selectWCLCharacterByCanonicalID(parseInt(value)),
+  );
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -54,7 +56,7 @@ const TagRender = ({
 
 const OptionRender = ({ value }: { value: string }) => {
   const character = useAppSelector(
-    selectWCLCharacterByCanonicalID(value as string),
+    selectWCLCharacterByCanonicalID(parseInt(value) as number),
   );
   const characterClass = character
     ? getClassById(character.classID)
@@ -82,7 +84,7 @@ export default function ViewAnalyzeResultTableCellExclude({
   const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
   const dispatch = useAppDispatch();
 
-  const onChange = (values: string[]) => {
+  const onChange = (values: number[]) => {
     const newTimeRanges = timeRanges.map((timeRange) => {
       if (timeRange.startTime === startTime && timeRange.endTime === endTime) {
         return {

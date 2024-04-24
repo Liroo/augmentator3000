@@ -8,7 +8,7 @@ import {
   getWCLReports,
 } from '@/flux/wcl/action';
 import useAugAnalyzer from '@/hooks/useAugAnalyzer';
-import { Button, Form, Typography } from 'antd';
+import { Button, Checkbox, Flex, Form, Typography } from 'antd';
 import ViewPlanBossForm from './form';
 import ViewPlanBossTimeRanges from './timeRanges';
 
@@ -31,8 +31,8 @@ export default function ViewPlanBoss() {
     getWCLCharactersWithEncounterRankingsStatus === StatusEnum.Pending ||
     getWCLReportsStatus === StatusEnum.Pending;
 
-  const onFinish = () => {
-    analyze();
+  const onFinish = ({ includeBestLog }: any) => {
+    analyze(includeBestLog);
   };
 
   return (
@@ -48,6 +48,7 @@ export default function ViewPlanBoss() {
           zoneID,
           encounterID,
           timeRangesKey,
+          includeBestLog: false,
         }}
       >
         <ViewPlanBossForm />
@@ -56,16 +57,17 @@ export default function ViewPlanBoss() {
           <ViewPlanBossTimeRanges />
         </div>
 
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="mt-[16px]"
-            disabled={isLoading}
-          >
-            Compute
-          </Button>
-        </Form.Item>
+        <Flex align="center" className="mt-[16px]">
+          <Form.Item name="includeBestLog" valuePropName="checked">
+            <Checkbox>Include best log?</Checkbox>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" disabled={isLoading}>
+              Compute
+            </Button>
+          </Form.Item>
+        </Flex>
       </Form>
     </section>
   );

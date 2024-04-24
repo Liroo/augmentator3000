@@ -18,7 +18,7 @@ const columns: TableColumnsType<{
   startTime: number;
   endTime: number;
   entries: ResultEntry[];
-  excludeCanonicalIDs: string[];
+  excludeCanonicalIDs: number[];
 }> = [
   {
     title: 'Time Range',
@@ -150,7 +150,7 @@ export default function ViewAnalyzeRosterTable() {
       .map((c) => c.canonicalID)
       .filter((id) => !!id)
       .filter((id) => !timeRange.excludeCanonicalIDs.includes(id))
-      .filter((id) => !timeRange.manualPriorities.includes(id));
+      .filter((id) => !timeRange.manualPriorities.includes(id.toString?.()));
 
     // Get all entries from reports corresponding to the time range
     const entries = wclReports
@@ -168,7 +168,7 @@ export default function ViewAnalyzeRosterTable() {
     // Compute the average of the entries
     const canonicalIDMap = new Map<string, { total: number; count: number }>();
     entries.forEach((e) => {
-      const key = e.canonicalID;
+      const key = e.canonicalID?.toString?.();
       if (!canonicalIDMap.has(key)) {
         canonicalIDMap.set(key, { total: e.total, count: 1 });
       } else {
@@ -184,7 +184,7 @@ export default function ViewAnalyzeRosterTable() {
     let entriesAverage: ResultEntry[] = [];
     canonicalIDMap.forEach((value, key) => {
       entriesAverage.push({
-        canonicalID: key,
+        canonicalID: parseInt(key),
         total: value.total / value.count,
       });
     });

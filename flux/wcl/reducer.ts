@@ -25,16 +25,16 @@ const wclSlice = createSlice({
   initialState,
   reducers: {
     setCharacter: (state, action: PayloadAction<WCLCharacter>) => {
-      state.characters[action.payload.canonicalID as string] = action.payload;
+      state.characters[action.payload.canonicalID] = action.payload;
     },
     setCharacters: (state, action: PayloadAction<WCLCharacter[]>) => {
       action.payload.forEach((character) => {
-        state.characters[character.canonicalID as string] = character;
+        state.characters[character.canonicalID] = character;
       });
     },
     setReport: (state, action: PayloadAction<WCLReport>) => {
       state.reports[
-        `${action.payload.code}-${action.payload.associatedEncounterID}`
+        `${action.payload.code}-${action.payload.associatedEncounterID}-${action.payload.startTime}`
       ] = action.payload;
     },
     setReportWithFights: (state, action: PayloadAction<WCLReport>) => {
@@ -42,6 +42,9 @@ const wclSlice = createSlice({
     },
     removeReportWithFight: (state, action: PayloadAction<string>) => {
       delete state.reportWithFights[action.payload];
+    },
+    resetReports: (state) => {
+      state.reports = {};
     },
   },
 });
@@ -52,6 +55,7 @@ export const {
   setReport,
   setReportWithFights,
   removeReportWithFight,
+  resetReports,
 } = wclSlice.actions;
 
 export default wclSlice;
