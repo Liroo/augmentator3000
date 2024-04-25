@@ -161,5 +161,5 @@ ${canoncalIDsArray
       .join(' ');
   })
   .join('\n')}
-ligAugEnd`;
+lirAugEnd`;
 };
