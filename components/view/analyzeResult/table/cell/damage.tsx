@@ -147,7 +147,7 @@ export default function ViewAnalyzeResultTableCellDamage({
             .map((roster) => {
               return {
                 label: roster.name,
-                value: roster.canonicalID.toString(),
+                value: roster.canonicalID?.toString?.(),
               };
             }),
         ]}

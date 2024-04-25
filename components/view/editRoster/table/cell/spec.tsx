@@ -29,6 +29,7 @@ export default function ViewEditRosterTableCellSpec({ character }: Props) {
           }),
         );
       }}
+      defaultValue={character.specID}
       className={`class-${characterClass} w-full`}
       size="small"
       options={WowClassSpec[characterClass].specs.map((spec) => ({
