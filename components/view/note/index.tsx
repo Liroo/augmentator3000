@@ -12,7 +12,7 @@ export default function ViewNote() {
       <Card size="small">
         <span className="font-bold">
           Please use default timer ONLY in order to use the weak aura properly
-          (it's temporary)
+          (it is temporary)
         </span>
         <br />
         <br />
