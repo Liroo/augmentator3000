@@ -11,7 +11,7 @@ export default function Home() {
       <Card className="!mb-[16px]">
         What I would like to add:
         <br />
-        <br />- Export as note
+        <br />- Manual priorities by boss (or add list of manual priorities)
       </Card>
 
       <ViewEditRoster />
