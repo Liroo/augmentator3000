@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface WCLState {
   characters: {
-    [canonicalID: string]: WCLCharacter;
+    [canonicalID: number]: WCLCharacter;
   };
   reports: {
     [code: string]: WCLReport;

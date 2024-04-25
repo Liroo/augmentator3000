@@ -20,13 +20,11 @@ const TagRender = ({
   closable,
   onClose,
 }: {
-  value: string;
+  value: number;
   closable: boolean;
   onClose: any;
 }) => {
-  const character = useAppSelector(
-    selectWCLCharacterByCanonicalID(parseInt(value)),
-  );
+  const character = useAppSelector(selectWCLCharacterByCanonicalID(value));
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -54,10 +52,8 @@ const TagRender = ({
   );
 };
 
-const OptionRender = ({ value }: { value: string }) => {
-  const character = useAppSelector(
-    selectWCLCharacterByCanonicalID(parseInt(value) as number),
-  );
+const OptionRender = ({ value }: { value: number }) => {
+  const character = useAppSelector(selectWCLCharacterByCanonicalID(value));
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -111,7 +107,7 @@ export default function ViewAnalyzeResultTableCellExclude({
         label: character.canonicalID,
         value: character.canonicalID,
       }))}
-      optionRender={(props) => <OptionRender value={props.value as string} />}
+      optionRender={(props) => <OptionRender value={props.value as number} />}
       onChange={onChange}
     />
   );
