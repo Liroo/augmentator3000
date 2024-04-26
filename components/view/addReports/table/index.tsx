@@ -3,18 +3,25 @@ import { selectWCLReportWithFights } from '@/flux/wcl/selector';
 import { WCLReport } from '@/wcl/wcl';
 import { Table, TableColumnsType, Tooltip } from 'antd';
 import ViewAddReportTableCellDelete from './cell/delete';
+import ViewAddReportTableCellImportRoster from './cell/importRoster';
 import ViewAddReportTableCellPulls from './cell/pulls';
 
 const columns: TableColumnsType<WCLReport> = [
   {
     title: 'Title',
     key: 'title',
-    render: ({ title, code }) => (
+    render: ({ title }) => (
       <Tooltip title={title}>
         <p className="max-w-[140px] truncate font-semibold">{title}</p>
       </Tooltip>
     ),
     width: 150,
+  },
+  {
+    title: '',
+    key: 'importRoster',
+    render: (report) => <ViewAddReportTableCellImportRoster report={report} />,
+    width: 50,
   },
   {
     title: 'Pulls',
