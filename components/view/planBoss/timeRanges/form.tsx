@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
+import defaultTimeRanges from '@/flux/plan/defaultTimeRanges';
 import {
   removeTimeRangesByKey,
   setEncounterForm,
@@ -47,7 +48,12 @@ export default function ViewPlanBossTimeRangesForm() {
     if (!name) return;
 
     if (!planTimeRangesKeys.includes(name))
-      dispatch(setTimeRangesByKey({ key: name, timeRanges: [] }));
+      dispatch(
+        setTimeRangesByKey({
+          key: name,
+          timeRanges: defaultTimeRanges.default,
+        }),
+      );
     dispatch(setEncounterForm({ zoneID, encounterID, timeRangesKey: name }));
     form.setFieldsValue({ timeRangesKey: name });
     setName('');

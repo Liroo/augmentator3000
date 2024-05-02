@@ -41,7 +41,6 @@ export default function ViewAddReportTableCellImportRoster({ report }: Props) {
         }),
       );
     });
-    console.log(report, currentRoster);
   };
 
   return (

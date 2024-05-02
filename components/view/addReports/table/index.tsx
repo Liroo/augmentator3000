@@ -5,6 +5,7 @@ import { Table, TableColumnsType, Tooltip } from 'antd';
 import ViewAddReportTableCellDelete from './cell/delete';
 import ViewAddReportTableCellImportRoster from './cell/importRoster';
 import ViewAddReportTableCellPulls from './cell/pulls';
+import ViewAddReportTableCellRefresh from './cell/refresh';
 
 const columns: TableColumnsType<WCLReport> = [
   {
@@ -21,6 +22,12 @@ const columns: TableColumnsType<WCLReport> = [
     title: '',
     key: 'importRoster',
     render: (report) => <ViewAddReportTableCellImportRoster report={report} />,
+    width: 50,
+  },
+  {
+    title: '',
+    key: 'refresh',
+    render: (report) => <ViewAddReportTableCellRefresh report={report} />,
     width: 50,
   },
   {
