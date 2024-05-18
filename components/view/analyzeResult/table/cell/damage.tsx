@@ -95,7 +95,7 @@ export default function ViewAnalyzeResultTableCellDamage({
     if (manualPriorities[i]) shiftIndex++;
   }
   const entry = entries[index - shiftIndex];
-  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
+  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced(false));
   const { timeRangesKey } = useAppSelector(selectPlanEncounterForm);
   const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
   const dispatch = useAppDispatch();

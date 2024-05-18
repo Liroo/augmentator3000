@@ -36,7 +36,7 @@ export const WCLGetCharacter = async function (
     };
   };
 
-  return res.characterData.character;
+  return { ...res.characterData.character, use: true };
 };
 
 export const WCLGetCharacters = async function (
@@ -95,6 +95,7 @@ export const WCLGetCharacters = async function (
     character.serverSlug = characters[index].serverSlug;
     character.serverRegion = characters[index].serverRegion;
     character.encounterRankings = encounterRankings;
+    character.use = true;
   });
 
   return res.characterData as Record<string, WCLCharacter>;

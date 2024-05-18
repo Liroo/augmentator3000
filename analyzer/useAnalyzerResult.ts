@@ -14,7 +14,7 @@ export default function useAnalyzerResult() {
   const { encounterID, timeRangesKey } = useAppSelector(
     selectPlanEncounterForm,
   );
-  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
+  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced(true));
   const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
   const wclReports = useAppSelector(selectWCLReportsByEncounterID(encounterID));
 
@@ -73,10 +73,10 @@ export default function useAnalyzerResult() {
   const dataSource = timeRanges.map((timeRange) => {
     // Divide time ranges by 9s for each time ranges
     const subTimeRanges: PlanStateTimeRange[] = [];
-    for (let i = timeRange.startTime; i < timeRange.endTime; i += 9000) {
+    for (let i = timeRange.startTime; i < timeRange.endTime; i += 5000) {
       subTimeRanges.push({
         startTime: i + (i === timeRange.startTime ? 0 : 1),
-        endTime: Math.min(i + 9000, timeRange.endTime),
+        endTime: Math.min(i + 5000, timeRange.endTime),
         excludeInternalIds: timeRange.excludeInternalIds,
         manualPriorities: timeRange.manualPriorities,
       });

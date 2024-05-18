@@ -20,7 +20,7 @@ export default function UITimeRangesSlider({
   const onClickAddTimeRange = (e: React.MouseEvent) => {
     const x = e.clientX - e.currentTarget.getBoundingClientRect().left;
     const startTime = Math.round(x / secondWidth) * 1000;
-    const endTime = startTime + 27000;
+    const endTime = startTime + 29000;
 
     if (startTime >= 0 && endTime <= maxTime * 1000) {
       const isOverlapping = timeRanges.some(

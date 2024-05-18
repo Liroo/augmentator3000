@@ -76,7 +76,7 @@ export default function ViewAnalyzeResultTableCellExclude({
   endTime,
   excludeInternalIds,
 }: Props) {
-  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
+  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced(false));
   const { timeRangesKey } = useAppSelector(selectPlanEncounterForm);
   const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
   const dispatch = useAppDispatch();

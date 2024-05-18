@@ -19,6 +19,7 @@ export type WCLCharacter = {
   id: string;
   classID: number;
   name: string;
+  use?: boolean;
   encounterRankings?: {
     [encounterID: string]: {
       averagePerformance: number;

@@ -68,7 +68,7 @@ export default function UITimeRangesSliderTimeRange({
       const newStartTime =
         Math.round((startTime + (diffX / secondWidth) * 1000) / 1000) * 1000;
       if (
-        endTime - newStartTime >= 27000 &&
+        endTime - newStartTime >= 29000 &&
         newStartTime >= 0 &&
         newStartTime <= endTime
       ) {
@@ -80,7 +80,7 @@ export default function UITimeRangesSliderTimeRange({
       const newEndTime =
         Math.round((endTime + (diffX / secondWidth) * 1000) / 1000) * 1000;
       if (
-        newEndTime - startTime >= 27000 &&
+        newEndTime - startTime >= 29000 &&
         newEndTime <= maxTime * 1000 &&
         newEndTime >= startTime
       ) {

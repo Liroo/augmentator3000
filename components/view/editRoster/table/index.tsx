@@ -8,6 +8,7 @@ import ViewEditRosterTableCellName from './cell/name';
 import ViewEditRosterTableCellSpec from './cell/spec';
 import ViewEditRosterTableCellSpecIcon from './cell/specIcon';
 import ViewEditRosterTableCellState from './cell/state';
+import ViewEditRosterTableCellUse from './cell/use';
 
 const columns: TableColumnsType<WCLCharacter> = [
   {
@@ -16,6 +17,12 @@ const columns: TableColumnsType<WCLCharacter> = [
     render: (character) => (
       <ViewEditRosterTableCellState character={character} />
     ),
+    width: 50,
+  },
+  {
+    title: 'Use',
+    key: 'use',
+    render: (character) => <ViewEditRosterTableCellUse character={character} />,
     width: 50,
   },
   {
@@ -61,7 +68,7 @@ const columns: TableColumnsType<WCLCharacter> = [
 ];
 
 export default function ViewEditRosterTable() {
-  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
+  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced(false));
 
   return (
     <Table

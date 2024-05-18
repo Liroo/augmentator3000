@@ -11,7 +11,6 @@ export default function Home() {
       <Card className="!mb-[16px]">
         What I would like to add:
         <br />
-        <br />- import
         <br />- default target
         <br />- select logs to compute from (best from players)
         <br />- share?

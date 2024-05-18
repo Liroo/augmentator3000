@@ -15,7 +15,7 @@ import { WCLCharacter, WCLReportQuery } from '@/wcl/wcl';
 
 export default function useAnalyzerQuery() {
   const dispatch = useAppDispatch();
-  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
+  const rosterListEnhanced = useAppSelector(selectRosterListEnhanced(true));
   const { encounterID, timeRangesKey } = useAppSelector(
     selectPlanEncounterForm,
   );
@@ -99,12 +99,12 @@ export default function useAnalyzerQuery() {
         timeRanges: timeRanges
           .reduce((acc: WCLReportQuery['timeRanges'], tr) => {
             // Increment 9s by 9s max to reduce margin of error in wow in case of EB time window failure or not exact
-            for (let i = tr.startTime; i < tr.endTime; i += 9000) {
+            for (let i = tr.startTime; i < tr.endTime; i += 5000) {
               acc = [
                 ...acc,
                 {
                   startTime: r.startTime + i + (i === tr.startTime ? 0 : 1), // Add a single ms to avoid overlap between time ranges
-                  endTime: r.startTime + Math.min(i + 9000, tr.endTime),
+                  endTime: r.startTime + Math.min(i + 5000, tr.endTime),
                 },
               ];
             }

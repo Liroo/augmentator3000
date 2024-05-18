@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
 import { generateDefaultTimeRanges } from '@/flux/plan/defaultTimeRanges';
 import {
+  importTimeRangesManualPriorities,
   removeTimeRangesByKey,
   renameTimeRangesByKey,
   setEncounterForm,
@@ -15,6 +16,7 @@ import {
   CopyOutlined,
   DeleteOutlined,
   EditOutlined,
+  ImportOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 import {
@@ -115,6 +117,27 @@ export default function ViewPlanBossTimeRangesForm() {
                 <Flex align="center" justify="space-between" className="w-full">
                   <p>{option.data.label}</p>
                   <div>
+                    <Popover
+                      content="Import priorities"
+                      overlayStyle={{ zIndex: 1200 }}
+                    >
+                      <Button
+                        type="text"
+                        icon={<ImportOutlined />}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          dispatch(
+                            importTimeRangesManualPriorities({
+                              key: timeRangesKey,
+                              importKey: option.value as string,
+                            }),
+                          );
+                        }}
+                        className="text-[#f5222d]"
+                      />{' '}
+                    </Popover>
                     {(option.key as string).startsWith('default-') ? null : (
                       <Popover content="Rename" overlayStyle={{ zIndex: 1200 }}>
                         <Button

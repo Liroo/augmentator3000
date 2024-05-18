@@ -8,10 +8,10 @@ const defaultTimeRanges: {
 export const generateDefaultTimeRanges = () => {
   const timeRanges: PlanStateTimeRange[] = [];
 
-  for (let i = 3000; i < 600000; i += 30000) {
+  for (let i = 0; i < 600000; i += 30000) {
     timeRanges.push({
-      startTime: i,
-      endTime: Math.min(i + 27000, 600000),
+      startTime: i === 0 ? 4000 : i,
+      endTime: Math.min(i + 29000, 600000),
       excludeInternalIds: [],
       manualPriorities: Array.from({ length: 6 }).map(() => null),
     });

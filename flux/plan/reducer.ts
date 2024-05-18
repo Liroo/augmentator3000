@@ -29,7 +29,7 @@ const initialState: PlanState = {
   encounterForm: {
     zoneID: WowRaids[0].id,
     encounterID: WowRaids[0].encounters[0].id,
-    timeRangesKey: 'default',
+    timeRangesKey: `default-${WowRaids[0].encounters[0].id}`,
   },
   timeRanges: defaultTimeRanges,
   selectedFightsFromReportWithFights: {},
@@ -66,6 +66,26 @@ const planSlice = createSlice({
       state.selectedFightsFromReportWithFights[action.payload.code] =
         action.payload.fights;
     },
+    importTimeRangesManualPriorities: (
+      state,
+      action: PayloadAction<{
+        key: string;
+        importKey: string;
+      }>,
+    ) => {
+      const timeRanges = state.timeRanges[action.payload.key];
+
+      state.timeRanges[action.payload.importKey].forEach((itr) => {
+        const timeRange = timeRanges.find(
+          (tr) => tr.startTime === itr.startTime && tr.endTime === itr.endTime,
+        );
+
+        itr.manualPriorities.forEach((mp, index) => {
+          if (mp === null) return;
+          timeRange?.manualPriorities?.splice(index, 1, mp);
+        });
+      });
+    },
   },
 });
 
@@ -75,6 +95,7 @@ export const {
   renameTimeRangesByKey,
   removeTimeRangesByKey,
   setSelectedFightsFromReportWithFights,
+  importTimeRangesManualPriorities,
 } = planSlice.actions;
 
 export default planSlice;

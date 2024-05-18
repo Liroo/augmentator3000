@@ -17,7 +17,7 @@ interface Props {
 export default function ViewAddReportTableCellImportRoster({ report }: Props) {
   const dispatch = useAppDispatch();
 
-  const currentRoster = useAppSelector(selectRosterListEnhanced);
+  const currentRoster = useAppSelector(selectRosterListEnhanced(false));
 
   const importRosterFromReport = () => {
     report.playerDetails?.forEach((pd) => {
