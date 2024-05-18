@@ -189,7 +189,7 @@ lirAugEnd`,
         return line.children
           .map((child) => {
             if (child.entries.length === 0) return '';
-            let line = `${child.startTime}:${child.endTime}`;
+            let line = `${Math.floor(child.startTime / 1000)}:${Math.floor(child.endTime / 1000)}`;
             child.entries.forEach((entry) => {
               const characterName = rosterListEnhanced.find(
                 (r) => characterToInternalId(r) === entry.internalId,
