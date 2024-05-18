@@ -101,7 +101,7 @@ export default function ViewAnalyzeResultTableCellExclude({
   return (
     <Select
       mode="multiple"
-      defaultValue={excludeInternalIds}
+      value={excludeInternalIds}
       tagRender={(props) => <TagRender {...props} />}
       style={{ width: '100%' }}
       options={rosterListEnhanced.map((character) => ({

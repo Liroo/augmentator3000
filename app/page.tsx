@@ -11,7 +11,10 @@ export default function Home() {
       <Card className="!mb-[16px]">
         What I would like to add:
         <br />
-        <br />- Manual priorities by boss (or add list of manual priorities)
+        <br />- import
+        <br />- default target
+        <br />- select logs to compute from (best from players)
+        <br />- share?
       </Card>
 
       <ViewEditRoster />
