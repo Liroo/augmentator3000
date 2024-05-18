@@ -2,7 +2,6 @@ import {
   characterToInternalId,
   playerDetailsServerToServer,
 } from '@/utils/wcl';
-import { WowRealms } from '@/wow/realm';
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLFramgentReport } from '../fragment/report';
 import { WCLReport, WCLReportQuery } from '../wcl';
@@ -52,14 +51,21 @@ export const WCLGetReportTableDamage = async function (
     };
   };
 
+  const playerDetails = [
+    ...res.reportData.report.playerDetails.data.playerDetails.dps,
+    ...res.reportData.report.playerDetails.data.playerDetails.healers,
+    ...res.reportData.report.playerDetails.data.playerDetails.tanks,
+  ].map((pd: any) => {
+    return {
+      ...pd,
+      serverSlug: playerDetailsServerToServer(pd.server)?.slug,
+    };
+  });
+
   const serializedReport: WCLReport = {
     title: res.reportData.report.title,
     code: res.reportData.report.code,
-    playerDetails: [
-      ...res.reportData.report.playerDetails.data.playerDetails.dps,
-      ...res.reportData.report.playerDetails.data.playerDetails.healers,
-      ...res.reportData.report.playerDetails.data.playerDetails.tanks,
-    ],
+    playerDetails,
   };
 
   Object.keys(res.reportData.report).forEach((key) => {
@@ -72,34 +78,16 @@ export const WCLGetReportTableDamage = async function (
         endTime,
         entries: res.reportData.report[key].data.entries
           .map((entry: any) => {
-            const playerDetails =
-              res.reportData.report.playerDetails.data.playerDetails.dps.find(
-                (pd: any) => pd.guid === entry.guid,
-              );
-            if (!playerDetails) return null;
-
-            let serverSlug = '';
-            Object.values(WowRealms)
-              .reduce((acc, cur) => {
-                return [...acc, ...cur];
-              }, [])
-              .find((realm) => {
-                if (
-                  playerDetails.server.includes(realm.name.replace(' ', ''))
-                ) {
-                  serverSlug = realm.slug;
-                  return true;
-                }
-                return false;
-              });
+            const pd = playerDetails.find((pd: any) => pd.guid === entry.guid);
+            if (!pd) return null;
 
             return {
               internalId: characterToInternalId({
                 name: entry.name,
-                serverSlug,
+                serverSlug: pd.serverSlug,
               }),
               name: entry.name,
-              serverSlug: serverSlug,
+              serverSlug: pd.serverSlug,
               id: entry.id,
               guid: entry.guid,
               total: entry.total,
