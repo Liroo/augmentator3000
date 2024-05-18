@@ -21,10 +21,9 @@ export const useGenerateNote = () => {
 
   const computeEntries = (timeRange: PlanStateTimeRange) => {
     // Get all the canonical IDs from the roster list
-    const canoncalIDs = rosterListEnhanced
+    const internalIds = rosterListEnhanced
       .map((c) => characterToInternalId(c))
-      .filter((id) => !timeRange.excludeInternalIds.includes(id))
-      .filter((id) => !timeRange.manualPriorities.includes(id.toString?.()));
+      .filter((id) => !timeRange.excludeInternalIds.includes(id));
 
     // Get all entries from reports corresponding to the time range
     const entries = wclReports
@@ -37,17 +36,17 @@ export const useGenerateNote = () => {
         );
         return [...acc, ...tables.flatMap((t) => t.entries)];
       }, [])
-      .filter((e) => canoncalIDs.includes(e.internalId));
+      .filter((e) => internalIds.includes(e.internalId));
 
     // Compute the average of the entries
-    const canonicalIDMap = new Map<string, { total: number; count: number }>();
+    const internalIdMap = new Map<string, { total: number; count: number }>();
     entries.forEach((e) => {
       const key = e.internalId;
-      if (!canonicalIDMap.has(key)) {
-        canonicalIDMap.set(key, { total: e.total, count: 1 });
+      if (!internalIdMap.has(key)) {
+        internalIdMap.set(key, { total: e.total, count: 1 });
       } else {
-        const { total, count } = canonicalIDMap.get(key)!;
-        canonicalIDMap.set(key, {
+        const { total, count } = internalIdMap.get(key)!;
+        internalIdMap.set(key, {
           total: total + e.total,
           count: count + 1,
         });
@@ -56,7 +55,7 @@ export const useGenerateNote = () => {
 
     // Convert in a map
     let entriesAverage: ResultEntry[] = [];
-    canonicalIDMap.forEach((value, key) => {
+    internalIdMap.forEach((value, key) => {
       entriesAverage.push({
         internalId: key,
         total: value.total / value.count,
@@ -126,10 +125,16 @@ export const useGenerateNote = () => {
 
         entries[index] = line.manualPriorities[index]
           ? (line.manualPriorities[index] as string)
-          : line.entries[index - shiftIndex]?.internalId;
+          : line.entries.filter((entry) => {
+              return !line.manualPriorities.includes(entry.internalId);
+            })[index - shiftIndex]?.internalId;
       }
 
       line.children.forEach((child) => {
+        const filteredEntries = child.entries.filter((entry) => {
+          return !line.manualPriorities.includes(entry.internalId);
+        });
+
         const childrenEntries: string[] = [];
         for (let index = 0; index < child.entries.length; index++) {
           let shiftIndex = 0;
@@ -140,19 +145,23 @@ export const useGenerateNote = () => {
           childrenEntries[index] =
             child.manualPriorities[index] && index < 6
               ? (child.manualPriorities[index] as string)
-              : child.entries[index - shiftIndex]?.internalId;
+              : filteredEntries[index - shiftIndex]?.internalId;
         }
 
-        child.entries = childrenEntries.map((internalId, index) => {
-          if (child.manualPriorities[index] === internalId) {
-            return {
-              internalId,
-              total: 0,
-              priority: true,
-            };
-          }
-          return child.entries.find((e) => e?.internalId === internalId);
-        }) as ResultEntry[];
+        child.entries = childrenEntries
+          .map((internalId, index) => {
+            if (child.manualPriorities[index] === internalId) {
+              return {
+                internalId,
+                total: child.entries.find((e) => e?.internalId === internalId)
+                  ?.total,
+                priority: true,
+              };
+            }
+            if (line.manualPriorities.includes(internalId)) return null;
+            return child.entries.find((e) => e?.internalId === internalId);
+          })
+          .filter((entry) => !!entry) as ResultEntry[];
       });
 
       return { ...line, entries };
@@ -167,44 +176,26 @@ export const useGenerateNote = () => {
     }
   });
 
-  return {
-    v1: `lirAugStart
-${internalIdsArray
-  .filter((entry) => entry.length > 0)
-  .map((internalIdsArrayLine) => {
-    return internalIdsArrayLine
-      .map((entry) => {
-        const character = rosterListEnhanced.find(
-          (character) => characterToInternalId(character) === entry,
-        );
-        return character?.name;
-      })
-      .join(' ');
-  })
-  .join('\n')}
-lirAugEnd`,
+  return linesWithPriority
+    .map((line) => {
+      return line.children
+        .map((child) => {
+          if (child.entries.length === 0) return '';
+          let line = `${child.startTime}:${child.endTime}`;
+          child.entries.forEach((entry) => {
+            const characterName = rosterListEnhanced.find(
+              (r) => characterToInternalId(r) === entry.internalId,
+            )?.name;
+            if (!characterName) return;
 
-    v2: linesWithPriority
-      .map((line) => {
-        return line.children
-          .map((child) => {
-            if (child.entries.length === 0) return '';
-            let line = `${child.startTime}:${child.endTime}`;
-            child.entries.forEach((entry) => {
-              const characterName = rosterListEnhanced.find(
-                (r) => characterToInternalId(r) === entry.internalId,
-              )?.name;
-              if (!characterName) return;
-
-              line = `${line} ${characterName}:${entry.priority ? '1' : '0'}:${Math.round(entry.total / 1000)}`;
-            });
-            return line;
-          })
-          .filter((line) => line.length > 0)
-          .join('\n');
-      })
-      .flat()
-      .filter((line) => line.length > 0)
-      .join('\n'),
-  };
+            line = `${line} ${characterName}:${entry.priority ? '1' : '0'}:${Math.round(entry.total / 1000)}`;
+          });
+          return line;
+        })
+        .filter((line) => line.length > 0)
+        .join('\n');
+    })
+    .flat()
+    .filter((line) => line.length > 0)
+    .join('\n');
 };
