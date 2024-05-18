@@ -1,10 +1,10 @@
 'use client';
 import { useGenerateNote } from '@/hooks/useGenerateNote';
-import { Card, Collapse, Input } from 'antd';
+import { Collapse, Divider, Input, Typography } from 'antd';
+import ViewNoteV2 from './v2';
 
 export default function ViewNote() {
-  const noteLines = useGenerateNote();
-  // const noteV2Lines = useGenerateNoteV2();
+  const { v1, v2 } = useGenerateNote();
 
   return (
     <section className="mt-[32px]">
@@ -13,47 +13,33 @@ export default function ViewNote() {
         items={[
           {
             key: '1',
-            label: '🗒️ Use note',
+            label: '🗒️ Weak Aura',
             children: (
               <>
-                <Card size="small">
-                  <span className="font-bold">
-                    Please use default timer ONLY in order to use the weak aura
-                    properly (with that note)
-                  </span>
-                  <br />
-                  <br />
+                <ViewNoteV2 v2={v2} />
+
+                <Divider />
+
+                <Typography.Title level={5} className="mt-[16px]">
+                  Weak Aura V1
+                </Typography.Title>
+
+                <p>
                   Use with that aura{' '}
                   <a href="https://wago.io/-0f1A1GEK" target="_blank">
                     https://wago.io/-0f1A1GEK
                   </a>{' '}
                   Copy within personal note
-                </Card>
-
-                <div className="my-[16px]">
-                  <Input.TextArea value={noteLines} />
-                </div>
-                {/* 
-                <Card size="small">
-                  WIP - This feature is still in development
-                  <br />
                   <br />
                   <span className="font-bold">
-                    That note is compatible with the following weak aura. It
-                    should be more precise than the other one.
+                    Please use default timer ONLY in order to use the weak aura
+                    properly (with that note)
                   </span>
-                  <br />
-                  <br />
-                  Use with that aura{' '}
-                  <a href="https://wago.io" target="_blank">
-                    https://wago.io
-                  </a>{' '}
-                  Copy within personal note
-                </Card>
+                </p>
 
-                <div className="mt-[16px]">
-                  <Input.TextArea value={noteV2Lines} />
-                </div> */}
+                <div className="my-[16px]">
+                  <Input.TextArea value={v1} />
+                </div>
               </>
             ),
           },

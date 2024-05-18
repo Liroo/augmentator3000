@@ -9,6 +9,7 @@ const validation = z.object({
     z.object({
       encounterID: z.number(),
       difficulty: z.number(),
+      partition: z.number().optional(),
     }),
   ),
   characters: z.array(

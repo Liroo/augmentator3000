@@ -6,6 +6,7 @@ import {
   WCLReportQuery,
 } from '@/wcl/wcl';
 import { getSpecNameById } from '@/wow/class';
+import { WowRaids } from '@/wow/raid';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getApi, postApi } from '../api';
 import {
@@ -48,6 +49,10 @@ export const getWCLCharactersWithEncounterRankings = createAsyncThunk<
 >(
   'wcl/getWCLCharactersWithEncounterRankings',
   async ({ encounterID, characters }, { dispatch }) => {
+    const raid = WowRaids.find((r) =>
+      r.encounters.some((e) => e.id === encounterID),
+    );
+
     const { characters: charactersWithEncounterRankings } = await postApi(
       '/api/wcl/characters',
       {
@@ -55,6 +60,7 @@ export const getWCLCharactersWithEncounterRankings = createAsyncThunk<
           {
             encounterID,
             difficulty: 5,
+            partition: raid?.partition,
           },
         ],
         characters: characters.map((c) => ({

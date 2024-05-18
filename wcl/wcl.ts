@@ -65,6 +65,7 @@ export type WCLCharacter = {
 export type WCLCharacterEncounterRankingsQuery = {
   encounterID: number;
   difficulty: number;
+  partition?: number;
 };
 
 export type WCLReportQuery = {

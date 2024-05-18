@@ -1,5 +1,6 @@
 export interface WowRaid {
   name: string;
+  partition: number | null;
   id: number;
   encounters: WowRaidBoss[];
 }
@@ -12,6 +13,7 @@ export interface WowRaidBoss {
 export const WowRaids: WowRaid[] = [
   {
     name: "Amirdrassil, the Dream's Hope",
+    partition: 3,
     id: 35,
     encounters: [
       {
@@ -54,6 +56,7 @@ export const WowRaids: WowRaid[] = [
   },
   {
     name: 'Aberrus, the Shadowed Crucible',
+    partition: 6,
     id: 33,
     encounters: [
       {
@@ -96,6 +99,7 @@ export const WowRaids: WowRaid[] = [
   },
   {
     name: 'Vault of the Incarnates',
+    partition: 4,
     id: 31,
     encounters: [
       {

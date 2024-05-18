@@ -63,6 +63,7 @@ export const WCLGetCharacters = async function (
                 encounterID: ${encounterRanking.encounterID},
                 difficulty: ${encounterRanking.difficulty},
                 specName: "${character.specName}"
+                ${encounterRanking.partition ? `, partition: ${encounterRanking.partition}` : ''}
               )`;
                   })
                 : ''

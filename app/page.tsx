@@ -9,11 +9,9 @@ export default function Home() {
   return (
     <main className="mx-[20px] my-[16px] mb-[200px]">
       <Card className="!mb-[16px]">
-        What I would like to add:
-        <br />
-        <br />- default target
-        <br />- select logs to compute from (best from players)
-        <br />- share?
+        <a href="https://github.com/Liroo/auganalyzer" target="_blank">
+          https://github.com/Liroo/auganalyzer
+        </a>
       </Card>
 
       <ViewEditRoster />
