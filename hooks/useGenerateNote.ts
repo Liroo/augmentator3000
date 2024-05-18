@@ -7,6 +7,7 @@ import {
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
 import { selectWCLReportsByEncounterID } from '@/flux/wcl/selector';
 import { ResultEntry } from '@/types/result';
+import { characterToInternalId } from '@/utils/wcl';
 import { WCLReportTableEntry } from '@/wcl/wcl';
 import { useMemo } from 'react';
 
@@ -22,9 +23,8 @@ export const useGenerateNote = () => {
   const computeEntries = (timeRange: PlanStateTimeRange) => {
     // Get all the canonical IDs from the roster list
     const canoncalIDs = rosterListEnhanced
-      .map((c) => c.canonicalID)
-      .filter((id) => !!id)
-      .filter((id) => !timeRange.excludeCanonicalIDs.includes(id))
+      .map((c) => characterToInternalId(c))
+      .filter((id) => !timeRange.excludeInternalIds.includes(id))
       .filter((id) => !timeRange.manualPriorities.includes(id.toString?.()));
 
     // Get all entries from reports corresponding to the time range
@@ -38,12 +38,12 @@ export const useGenerateNote = () => {
         );
         return [...acc, ...tables.flatMap((t) => t.entries)];
       }, [])
-      .filter((e) => canoncalIDs.includes(e.canonicalID));
+      .filter((e) => canoncalIDs.includes(e.internalId));
 
     // Compute the average of the entries
     const canonicalIDMap = new Map<string, { total: number; count: number }>();
     entries.forEach((e) => {
-      const key = e.canonicalID?.toString?.();
+      const key = e.internalId;
       if (!canonicalIDMap.has(key)) {
         canonicalIDMap.set(key, { total: e.total, count: 1 });
       } else {
@@ -59,7 +59,7 @@ export const useGenerateNote = () => {
     let entriesAverage: ResultEntry[] = [];
     canonicalIDMap.forEach((value, key) => {
       entriesAverage.push({
-        canonicalID: parseInt(key),
+        internalId: key,
         total: value.total / value.count,
       });
     });
@@ -78,7 +78,7 @@ export const useGenerateNote = () => {
           subTimeRanges.push({
             startTime: i + (i === timeRange.startTime ? 0 : 1),
             endTime: Math.min(i + 9000, timeRange.endTime),
-            excludeCanonicalIDs: timeRange.excludeCanonicalIDs,
+            excludeInternalIds: timeRange.excludeInternalIds,
             manualPriorities: timeRange.manualPriorities,
           });
         }
@@ -87,7 +87,7 @@ export const useGenerateNote = () => {
           entries: computeEntries(subTimeRange),
           startTime: subTimeRange.startTime,
           endTime: subTimeRange.endTime,
-          excludeCanonicalIDs: timeRange.excludeCanonicalIDs,
+          excludeInternalIds: timeRange.excludeInternalIds,
           manualPriorities: timeRange.manualPriorities,
         }));
 
@@ -95,7 +95,7 @@ export const useGenerateNote = () => {
         const entries = children.reduce((acc, child) => {
           child.entries.forEach((entry) => {
             const existingEntry = acc.find(
-              (e) => e.canonicalID === entry.canonicalID,
+              (e) => e.internalId === entry.internalId,
             );
             if (existingEntry) {
               existingEntry.total += entry.total;
@@ -112,7 +112,7 @@ export const useGenerateNote = () => {
           startTime: timeRange.startTime,
           endTime: timeRange.endTime,
           entries,
-          excludeCanonicalIDs: timeRange.excludeCanonicalIDs,
+          excludeInternalIds: timeRange.excludeInternalIds,
           manualPriorities: timeRange.manualPriorities,
           children,
         };
@@ -122,24 +122,23 @@ export const useGenerateNote = () => {
 
   const linesWithPriority = useMemo(() => {
     return lines.map((line) => {
-      const entries: number[] = [];
+      const entries: string[] = [];
       for (let index = 0; index < 6; index++) {
         let shiftIndex = 0;
         for (let i = 0; i < index; i++) {
-          if (line.manualPriorities[i] !== 'default') shiftIndex++;
+          if (line.manualPriorities[i]) shiftIndex++;
         }
 
-        entries[index] =
-          line.manualPriorities[index] !== 'default'
-            ? parseInt(line.manualPriorities[index])
-            : line.entries[index - shiftIndex]?.canonicalID;
+        entries[index] = line.manualPriorities[index]
+          ? (line.manualPriorities[index] as string)
+          : line.entries[index - shiftIndex]?.internalId;
       }
 
       return { ...line, entries };
     });
   }, [lines]);
 
-  const canoncalIDsArray: number[][] = [];
+  const canoncalIDsArray: string[][] = [];
 
   linesWithPriority.map((line) => {
     for (let i = 0; i < 6; i++) {
@@ -154,7 +153,7 @@ ${canoncalIDsArray
     return canoncalIDsArrayLine
       .map((entry) => {
         const character = rosterListEnhanced.find(
-          (roster) => roster.canonicalID === entry,
+          (character) => characterToInternalId(character) === entry,
         );
         return character?.name;
       })

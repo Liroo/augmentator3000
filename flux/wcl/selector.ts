@@ -1,3 +1,4 @@
+import { characterToInternalId } from '@/utils/wcl';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
@@ -10,10 +11,10 @@ export const selectWCLCharacter = (name: string, serverSlug: string) =>
     ),
   );
 
-export const selectWCLCharacterByCanonicalID = (canonicalID: number) =>
+export const selectWCLCharacterByInternalId = (internalId: string) =>
   createSelector([selectWCLState], (wclState) =>
     Object.values(wclState.characters).find(
-      (c) => c.canonicalID === canonicalID,
+      (c) => characterToInternalId(c) === internalId,
     ),
   );
 

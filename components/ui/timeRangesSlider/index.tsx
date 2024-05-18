@@ -4,6 +4,7 @@ import UITimeRangesSliderRuler from './ruler';
 import UITimeRangesSliderTimeRange from './timeRange';
 
 type Props = {
+  disabled?: boolean;
   timeRanges: PlanStateTimeRange[];
   setTimeRanges: (timeRanges: PlanStateTimeRange[]) => void;
 };
@@ -12,6 +13,7 @@ const maxTime = 15 * 60; // 15 minutes
 const secondWidth = 4;
 
 export default function UITimeRangesSlider({
+  disabled,
   timeRanges,
   setTimeRanges,
 }: Props) {
@@ -32,7 +34,7 @@ export default function UITimeRangesSlider({
         newTimeRanges.push({
           startTime,
           endTime,
-          excludeCanonicalIDs: [],
+          excludeInternalIds: [],
           manualPriorities: Array.from({ length: 6 }).map(() => 'default'),
         });
         newTimeRanges.sort((a, b) => a.startTime - b.startTime);
@@ -55,7 +57,7 @@ export default function UITimeRangesSlider({
             secondWidth={secondWidth}
           />
           <div
-            className="relative top-[5px] h-[20px] w-full overflow-x-hidden"
+            className={`relative top-[5px] h-[20px] w-full overflow-x-hidden ${disabled ? 'pointer-events-none opacity-60' : ''}`}
             onClick={onClickAddTimeRange}
           >
             {timeRanges.map(({ startTime }, index) =>

@@ -2,7 +2,11 @@ import { useAppDispatch, useAppSelector } from '@/flux/hooks';
 import { rosterAddCharacter } from '@/flux/roster/reducer';
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
 import { getWCLCharacter } from '@/flux/wcl/action';
-import { WCLReport } from '@/wcl/wcl';
+import {
+  characterToInternalId,
+  playerDetailsClassToClassId,
+} from '@/utils/wcl';
+import { WCLCharacter, WCLReport } from '@/wcl/wcl';
 import { TeamOutlined } from '@ant-design/icons';
 import { Flex, Tooltip } from 'antd';
 
@@ -16,27 +20,29 @@ export default function ViewAddReportTableCellImportRoster({ report }: Props) {
   const currentRoster = useAppSelector(selectRosterListEnhanced);
 
   const importRosterFromReport = () => {
-    report.rankedCharacters?.forEach((character) => {
+    report.playerDetails?.forEach((pd) => {
       if (
         currentRoster.find(
           (c) =>
-            c.name === character.name && c.serverSlug === character.serverSlug,
+            characterToInternalId(c) ===
+            characterToInternalId(pd as any as WCLCharacter),
         )
       )
         return;
-      if (character)
+      if (pd)
         dispatch(
           rosterAddCharacter({
-            name: character.name,
-            serverSlug: character.serverSlug,
+            name: pd.name,
+            serverSlug: pd.serverSlug,
             serverRegion: 'EU',
+            classID: playerDetailsClassToClassId(pd.type),
           }),
         );
       dispatch(
         getWCLCharacter({
-          key: `${character.name}-${character.serverSlug}-EU`,
-          name: character.name,
-          serverSlug: character.serverSlug,
+          key: `${pd.name}-${pd.serverSlug}-EU`,
+          name: pd.name,
+          serverSlug: pd.serverSlug,
           serverRegion: 'EU',
         }),
       );

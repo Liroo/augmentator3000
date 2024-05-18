@@ -16,7 +16,9 @@ export default function ViewEditRosterForm() {
     }) as WowRegion) || WowRegions[0];
 
   const onFinish = (values: any) => {
-    const { name } = values;
+    let name: string = values.name;
+    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
     const serverSlug = WowRealms[serverRegion].find(
       (realm) => realm.name === values.serverSlug,
     )!.slug;

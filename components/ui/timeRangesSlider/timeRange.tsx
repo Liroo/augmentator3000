@@ -97,7 +97,7 @@ export default function UITimeRangesSliderTimeRange({
     newTimeRanges[index] = {
       startTime: tmpTimeRangeRef.current.startTime,
       endTime: tmpTimeRangeRef.current.endTime,
-      excludeCanonicalIDs: tmpTimeRangeRef.current.excludeCanonicalIDs,
+      excludeInternalIds: tmpTimeRangeRef.current.excludeInternalIds,
       manualPriorities: tmpTimeRangeRef.current.manualPriorities,
     };
     newTimeRanges.sort((a, b) => a.startTime - b.startTime);
@@ -116,7 +116,7 @@ export default function UITimeRangesSliderTimeRange({
     tmpTimeRangeRef.current = {
       startTime,
       endTime,
-      excludeCanonicalIDs: timeRanges[index].excludeCanonicalIDs,
+      excludeInternalIds: timeRanges[index].excludeInternalIds,
       manualPriorities: timeRanges[index].manualPriorities,
     };
   }, [startTime, endTime]);

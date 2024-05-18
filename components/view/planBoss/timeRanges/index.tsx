@@ -17,6 +17,7 @@ export default function ViewPlanBossTimeRanges() {
       <ViewPlanBossTimeRangesForm />
       <div className="mt-[16px]">
         <UITimeRangesSlider
+          disabled={timeRangesKey.startsWith('default-')}
           timeRanges={timeRanges}
           setTimeRanges={(newTimeRanges: PlanStateTimeRange[]) => {
             dispatch(

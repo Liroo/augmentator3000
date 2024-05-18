@@ -5,8 +5,8 @@ import defaultTimeRanges from './defaultTimeRanges';
 export type PlanStateTimeRange = {
   startTime: number;
   endTime: number;
-  excludeCanonicalIDs: number[];
-  manualPriorities: string[];
+  excludeInternalIds: string[];
+  manualPriorities: (string | null)[];
 };
 
 export interface PlanState {
@@ -17,12 +17,7 @@ export interface PlanState {
   };
 
   timeRanges: {
-    [key: string]: Array<{
-      startTime: number;
-      endTime: number;
-      excludeCanonicalIDs: number[];
-      manualPriorities: string[];
-    }>;
+    [key: string]: Array<PlanStateTimeRange>;
   };
 
   selectedFightsFromReportWithFights: {
@@ -53,6 +48,14 @@ const planSlice = createSlice({
     ) => {
       state.timeRanges[action.payload.key] = action.payload.timeRanges;
     },
+    renameTimeRangesByKey: (
+      state,
+      action: PayloadAction<{ key: string; newKey: string }>,
+    ) => {
+      state.timeRanges[action.payload.newKey] =
+        state.timeRanges[action.payload.key];
+      delete state.timeRanges[action.payload.key];
+    },
     removeTimeRangesByKey: (state, action: PayloadAction<string>) => {
       delete state.timeRanges[action.payload];
     },
@@ -69,6 +72,7 @@ const planSlice = createSlice({
 export const {
   setEncounterForm,
   setTimeRangesByKey,
+  renameTimeRangesByKey,
   removeTimeRangesByKey,
   setSelectedFightsFromReportWithFights,
 } = planSlice.actions;

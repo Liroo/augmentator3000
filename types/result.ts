@@ -1,5 +1,5 @@
 export type ResultEntry = {
-  canonicalID: number;
+  internalId: string;
   total: number;
   priority?: boolean;
 };

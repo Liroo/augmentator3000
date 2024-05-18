@@ -38,16 +38,19 @@ export default function ViewPlanBossForm() {
           )}
           value={zoneID}
           onChange={(value) => {
+            const firstEncounterId = WowRaids.find((raid) => raid.id === value)
+              ?.encounters[0].id;
+
             dispatch(
               setEncounterForm({
                 zoneID: value,
-                encounterID: WowRaids.find((raid) => raid.id === value)
-                  ?.encounters[0].id,
+                encounterID: firstEncounterId,
+                timeRangesKey: `default-${firstEncounterId}`,
               }),
             );
             form.setFieldsValue({
-              encounterID: WowRaids.find((raid) => raid.id === value)
-                ?.encounters[0].id,
+              encounterID: firstEncounterId,
+              timeRangesKey: `default-${firstEncounterId}`,
             });
             rerender();
           }}
@@ -83,8 +86,12 @@ export default function ViewPlanBossForm() {
               setEncounterForm({
                 zoneID,
                 encounterID: value,
+                timeRangesKey: `default-${value}`,
               }),
             );
+            form.setFieldsValue({
+              timeRangesKey: `default-${value}`,
+            });
             rerender();
           }}
         />

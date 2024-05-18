@@ -5,14 +5,15 @@ import {
   selectPlanTimeRangesByKey,
 } from '@/flux/plan/selector';
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
-import { selectWCLCharacterByCanonicalID } from '@/flux/wcl/selector';
+import { selectWCLCharacterByInternalId } from '@/flux/wcl/selector';
+import { characterToInternalId } from '@/utils/wcl';
 import { getClassById, getClassColor } from '@/wow/class';
 import { Select, Tag } from 'antd';
 
 interface Props {
   startTime: number;
   endTime: number;
-  excludeCanonicalIDs: number[];
+  excludeInternalIds: string[];
 }
 
 const TagRender = ({
@@ -20,11 +21,11 @@ const TagRender = ({
   closable,
   onClose,
 }: {
-  value: number;
+  value: string;
   closable: boolean;
   onClose: any;
 }) => {
-  const character = useAppSelector(selectWCLCharacterByCanonicalID(value));
+  const character = useAppSelector(selectWCLCharacterByInternalId(value));
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -52,8 +53,8 @@ const TagRender = ({
   );
 };
 
-const OptionRender = ({ value }: { value: number }) => {
-  const character = useAppSelector(selectWCLCharacterByCanonicalID(value));
+const OptionRender = ({ value }: { value: string }) => {
+  const character = useAppSelector(selectWCLCharacterByInternalId(value));
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -73,19 +74,19 @@ const OptionRender = ({ value }: { value: number }) => {
 export default function ViewAnalyzeResultTableCellExclude({
   startTime,
   endTime,
-  excludeCanonicalIDs,
+  excludeInternalIds,
 }: Props) {
   const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
   const { timeRangesKey } = useAppSelector(selectPlanEncounterForm);
   const timeRanges = useAppSelector(selectPlanTimeRangesByKey(timeRangesKey));
   const dispatch = useAppDispatch();
 
-  const onChange = (values: number[]) => {
+  const onChange = (values: string[]) => {
     const newTimeRanges = timeRanges.map((timeRange) => {
       if (timeRange.startTime === startTime && timeRange.endTime === endTime) {
         return {
           ...timeRange,
-          excludeCanonicalIDs: values,
+          excludeInternalIds: values,
         };
       }
 
@@ -100,14 +101,14 @@ export default function ViewAnalyzeResultTableCellExclude({
   return (
     <Select
       mode="multiple"
-      defaultValue={excludeCanonicalIDs}
+      defaultValue={excludeInternalIds}
       tagRender={(props) => <TagRender {...props} />}
       style={{ width: '100%' }}
       options={rosterListEnhanced.map((character) => ({
-        label: character.canonicalID,
-        value: character.canonicalID,
+        label: characterToInternalId(character),
+        value: characterToInternalId(character),
       }))}
-      optionRender={(props) => <OptionRender value={props.value as number} />}
+      optionRender={(props) => <OptionRender value={props.value as string} />}
       onChange={onChange}
     />
   );

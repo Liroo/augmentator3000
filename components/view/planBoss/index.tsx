@@ -1,4 +1,5 @@
 'use client';
+import useAnalyzerQuery from '@/analyzer/useAnalyzerQuery';
 import { useAppSelector } from '@/flux/hooks';
 import { selectPlanEncounterForm } from '@/flux/plan/selector';
 import { StatusEnum } from '@/flux/status/reducer';
@@ -7,13 +8,12 @@ import {
   getWCLCharactersWithEncounterRankings,
   getWCLReports,
 } from '@/flux/wcl/action';
-import useAugAnalyzer from '@/hooks/useAugAnalyzer';
 import { Button, Checkbox, Flex, Form, Typography } from 'antd';
 import ViewPlanBossForm from './form';
 import ViewPlanBossTimeRanges from './timeRanges';
 
 export default function ViewPlanBoss() {
-  const { analyze } = useAugAnalyzer();
+  const analyze = useAnalyzerQuery();
   const [form] = Form.useForm();
   const { zoneID, encounterID, timeRangesKey } = useAppSelector(
     selectPlanEncounterForm,

@@ -29,7 +29,7 @@ export default function ViewEditRosterTableCellState({ character }: Props) {
         <Spin indicator={<LoadingOutlined style={{ fontSize: 18 }} spin />} />
       </Tooltip>
     );
-  } else if (status === StatusEnum.Fulfilled && character.canonicalID) {
+  } else if (status === StatusEnum.Fulfilled && character.classID) {
     icon = (
       <Tooltip title="Character has been fetch">
         <CheckCircleOutlined style={{ fontSize: 18, color: '#52c41a' }} />
@@ -37,7 +37,7 @@ export default function ViewEditRosterTableCellState({ character }: Props) {
     );
   } else {
     icon = (
-      <Tooltip title="Character not found">
+      <Tooltip title="Character not found. Maybe they changed name or server. This character will still be used in analysis.">
         <CloseCircleOutlined style={{ fontSize: 18, color: '#f5222d' }} />{' '}
       </Tooltip>
     );

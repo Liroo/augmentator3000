@@ -1,9 +1,10 @@
+import { characterToInternalId } from '@/utils/wcl';
 import { WCLCharacter, WCLReport } from '@/wcl/wcl';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface WCLState {
   characters: {
-    [canonicalID: number]: WCLCharacter;
+    [internalId: string]: WCLCharacter;
   };
   reports: {
     [code: string]: WCLReport;
@@ -25,11 +26,11 @@ const wclSlice = createSlice({
   initialState,
   reducers: {
     setCharacter: (state, action: PayloadAction<WCLCharacter>) => {
-      state.characters[action.payload.canonicalID] = action.payload;
+      state.characters[characterToInternalId(action.payload)] = action.payload;
     },
     setCharacters: (state, action: PayloadAction<WCLCharacter[]>) => {
       action.payload.forEach((character) => {
-        state.characters[character.canonicalID] = character;
+        state.characters[characterToInternalId(character)] = character;
       });
     },
     setReport: (state, action: PayloadAction<WCLReport>) => {

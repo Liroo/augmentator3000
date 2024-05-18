@@ -2,7 +2,7 @@ import ViewAddReports from '@/components/view/addReports';
 import ViewAnalyzeResult from '@/components/view/analyzeResult';
 import ViewEditRoster from '@/components/view/editRoster';
 import ViewNote from '@/components/view/note';
-import ViewSelectBoss from '@/components/view/planBoss';
+import ViewPlanBoss from '@/components/view/planBoss';
 import { Card } from 'antd';
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
 
       <ViewEditRoster />
       <ViewAddReports />
-      <ViewSelectBoss />
+      <ViewPlanBoss />
       <ViewAnalyzeResult />
 
       <ViewNote />

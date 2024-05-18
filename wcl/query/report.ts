@@ -1,3 +1,7 @@
+import {
+  characterToInternalId,
+  playerDetailsServerToServer,
+} from '@/utils/wcl';
 import { WowRealms } from '@/wow/realm';
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLFramgentReport } from '../fragment/report';
@@ -51,20 +55,11 @@ export const WCLGetReportTableDamage = async function (
   const serializedReport: WCLReport = {
     title: res.reportData.report.title,
     code: res.reportData.report.code,
-    playerDetails:
-      res.reportData.report.playerDetails.data.playerDetails.dps.map(
-        (pd: any) => ({
-          name: pd.name,
-          id: pd.id,
-          guid: pd.guid,
-          server: pd.server,
-        }),
-      ),
-    rankedCharacters: res.reportData.report.rankedCharacters.map((rc: any) => ({
-      name: rc.name,
-      serverSlug: rc.server.slug,
-      canonicalID: rc.canonicalID,
-    })),
+    playerDetails: [
+      ...res.reportData.report.playerDetails.data.playerDetails.dps,
+      ...res.reportData.report.playerDetails.data.playerDetails.healers,
+      ...res.reportData.report.playerDetails.data.playerDetails.tanks,
+    ],
   };
 
   Object.keys(res.reportData.report).forEach((key) => {
@@ -98,17 +93,16 @@ export const WCLGetReportTableDamage = async function (
                 return false;
               });
 
-            const rankedCharacter = res.reportData.report.rankedCharacters.find(
-              (rc: any) =>
-                rc.name === playerDetails.name && rc.server.slug === serverSlug,
-            );
-
             return {
+              internalId: characterToInternalId({
+                name: entry.name,
+                serverSlug,
+              }),
               name: entry.name,
+              serverSlug: serverSlug,
               id: entry.id,
               guid: entry.guid,
               total: entry.total,
-              canonicalID: rankedCharacter?.canonicalID,
             };
           })
           .filter((entry: any) => !!entry),
@@ -123,12 +117,10 @@ export const WCLGetReportWithFights = async function (
   WCLClient: GraphQLClient,
   code: string,
 ) {
-  const query = gql`
-    ${WCLFramgentReport}
+  const fightsQuery = gql`
     query WCLGetReportTableDamage {
       reportData {
         report(code: "${code}") {
-          ...WCLFramgentReport
           fights {
             id
             friendlyPlayers
@@ -140,63 +132,65 @@ export const WCLGetReportWithFights = async function (
             kill
             name
           }
-          masterData(translate: true) {
-            actors {
-              id
-              name
-              server
-              type
-            }
-          }
-        } 
+        }
       }
     }
   `;
+  const fightsRes = (await WCLClient.request(fightsQuery)) as {
+    reportData: {
+      report: any;
+    };
+  };
+  let fights = fightsRes.reportData.report.fights.filter(
+    (f: any) => f.encounterID !== 0 && f.fightPercentage,
+  );
+  const fightIDs = fights.map((f: any) => f.id);
 
-  const res = (await WCLClient.request(query)) as {
+  const reportQuery = gql`
+  ${WCLFramgentReport}
+  query WCLGetReportTableDamage {
+    reportData {
+      report(code: "${code}") {
+        ...WCLFramgentReport
+        playerDetails(
+          fightIDs: ${JSON.stringify(fightIDs)}
+        )
+      }
+    }
+  }
+`;
+
+  const reportRes = (await WCLClient.request(reportQuery)) as {
     reportData: {
       report: any;
     };
   };
 
-  const serializedReport: WCLReport = {
-    title: res.reportData.report.title,
-    code: res.reportData.report.code,
-    rankedCharacters: res.reportData.report.rankedCharacters.map((rc: any) => ({
-      name: rc.name,
-      serverSlug: rc.server.slug,
-      canonicalID: rc.canonicalID,
-    })),
-  };
-
-  serializedReport.fights = res.reportData.report.fights.map((fight: any) => {
-    const friendlyCanocialIDs = fight.friendlyPlayers.map((fp: number) => {
-      const actor = res.reportData.report.masterData.actors.find(
-        (a: any) => a.id === fp,
-      );
-      if (!actor) return null;
-
-      let serverSlug = '';
-      Object.values(WowRealms)
-        .reduce((acc, cur) => {
-          return [...acc, ...cur];
-        }, [])
-        .find((realm) => {
-          if (actor.server.includes(realm.name.replace(' ', ''))) {
-            serverSlug = realm.slug;
-            return true;
-          }
-          return false;
-        });
-
-      const rankedCharacter = res.reportData.report.rankedCharacters.find(
-        (rc: any) => rc.name === actor.name && rc.server.slug === serverSlug,
-      );
-      return rankedCharacter?.canonicalID;
-    });
-
-    return { ...fight, friendlyPlayers: friendlyCanocialIDs };
+  const playerDetails = [
+    ...reportRes.reportData.report.playerDetails.data.playerDetails.dps,
+    ...reportRes.reportData.report.playerDetails.data.playerDetails.healers,
+    ...reportRes.reportData.report.playerDetails.data.playerDetails.tanks,
+  ].map((pd: any) => {
+    return {
+      ...pd,
+      serverSlug: playerDetailsServerToServer(pd.server)?.slug,
+    };
   });
+
+  fights = fights.map((f: any) => {
+    f.friendlyPlayers = f.friendlyPlayers.map((fp: number) => {
+      const player = playerDetails.find((pd: any) => pd.id === fp);
+      return characterToInternalId(player as any);
+    });
+    return f;
+  });
+
+  const serializedReport: WCLReport = {
+    title: reportRes.reportData.report.title,
+    code: reportRes.reportData.report.code,
+    playerDetails,
+    fights,
+  };
 
   return serializedReport;
 };

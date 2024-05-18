@@ -10,9 +10,10 @@ import {
   getWCLReports,
 } from '@/flux/wcl/action';
 import { selectWCLReportsWithFightsByEncoounterID } from '@/flux/wcl/selector';
+import { characterToInternalId } from '@/utils/wcl';
 import { WCLCharacter, WCLReportQuery } from '@/wcl/wcl';
 
-export default function useAugAnalyzer() {
+export default function useAnalyzerQuery() {
   const dispatch = useAppDispatch();
   const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
   const { encounterID, timeRangesKey } = useAppSelector(
@@ -27,6 +28,8 @@ export default function useAugAnalyzer() {
   );
 
   const analyze = async (includeBestLog: boolean) => {
+    if (rosterListEnhanced.length === 0) return;
+
     const charactersWithEncounterRankings = await dispatch(
       getWCLCharactersWithEncounterRankings({
         encounterID,
@@ -39,6 +42,8 @@ export default function useAugAnalyzer() {
       startTime: number;
       endTime: number;
     }> = [];
+
+    // best logs from the roster (maybe we should create a selector (manual + input) for this)
     if (includeBestLog) {
       reportsToAnalyze = charactersWithEncounterRankings.reduce(
         (acc: any, c: WCLCharacter) => {
@@ -68,14 +73,16 @@ export default function useAugAnalyzer() {
       );
     }
 
-    const charactersCanonicalIDs = rosterListEnhanced.map((c) => c.canonicalID);
+    const charactersInternalIds = rosterListEnhanced.map((c) =>
+      characterToInternalId(c),
+    );
 
     reportsWithFights.forEach((r) => {
       const fightsId = planSelectedFightsFromReportWithFights[r.code] || [];
 
       r.fights?.forEach((f) => {
         if (fightsId.includes(f.id)) {
-          if (charactersCanonicalIDs.some((c) => f.friendlyPlayers.includes(c)))
+          if (charactersInternalIds.some((c) => f.friendlyPlayers.includes(c)))
             reportsToAnalyze.push({
               code: r.code,
               startTime: f.startTime,
@@ -112,5 +119,5 @@ export default function useAugAnalyzer() {
     dispatch(getWCLReports({ reportsQuery, encounterID }));
   };
 
-  return { analyze };
+  return analyze;
 }

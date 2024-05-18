@@ -5,8 +5,9 @@ import {
   selectPlanTimeRangesByKey,
 } from '@/flux/plan/selector';
 import { selectRosterListEnhanced } from '@/flux/roster/selector';
-import { selectWCLCharacterByCanonicalID } from '@/flux/wcl/selector';
+import { selectWCLCharacterByInternalId } from '@/flux/wcl/selector';
 import { ResultEntry } from '@/types/result';
+import { characterToInternalId } from '@/utils/wcl';
 import { getClassById, getClassColor } from '@/wow/class';
 import { Flex, Select } from 'antd';
 
@@ -20,10 +21,8 @@ interface Props {
 }
 
 const OptionRender = ({ value }: { value: string }) => {
-  const isDefault = value === 'default';
-  const character = useAppSelector(
-    selectWCLCharacterByCanonicalID(parseInt(value)),
-  );
+  const isDefault = !value;
+  const character = useAppSelector(selectWCLCharacterByInternalId(value));
   const characterClass = character
     ? getClassById(character.classID)
     : undefined;
@@ -46,13 +45,13 @@ const LabelRender = ({
   value,
   entry,
 }: {
-  value: string;
+  value: string | null;
   entry: ResultEntry;
 }) => {
-  const isDefault = value === 'default';
+  const isDefault = value === null;
   const character = useAppSelector(
-    selectWCLCharacterByCanonicalID(
-      isDefault && !!entry ? entry.canonicalID : parseInt(value),
+    selectWCLCharacterByInternalId(
+      isDefault && !!entry ? entry.internalId : (value as string),
     ),
   );
   const characterClass = character
@@ -93,7 +92,7 @@ export default function ViewAnalyzeResultTableCellDamage({
 }: Props) {
   let shiftIndex = 0;
   for (let i = 0; i < index; i++) {
-    if (manualPriorities[i] !== 'default') shiftIndex++;
+    if (manualPriorities[i]) shiftIndex++;
   }
   const entry = entries[index - shiftIndex];
   const rosterListEnhanced = useAppSelector(selectRosterListEnhanced);
@@ -111,7 +110,7 @@ export default function ViewAnalyzeResultTableCellDamage({
 
         if (newTimeRange.manualPriorities.length < 6)
           newTimeRange.manualPriorities = Array.from({ length: 6 }).map(
-            () => 'default',
+            () => null,
           );
         newTimeRange.manualPriorities[index] = value;
         return newTimeRange;
@@ -128,26 +127,27 @@ export default function ViewAnalyzeResultTableCellDamage({
   return (
     <Flex justify="start" align="center" className="mr-[8px]">
       <Select
+        allowClear
         style={{ width: '100%' }}
-        value={manualPriorities?.[index] || 'default'}
+        value={manualPriorities?.[index] || null}
         variant="borderless"
         labelRender={({ value }) => {
-          return <LabelRender value={value as string} entry={entry} />;
+          return <LabelRender value={value as string | null} entry={entry} />;
         }}
         options={[
           {
             label: 'default',
-            value: 'default',
+            value: null,
           },
           ...rosterListEnhanced
             .filter(
-              ({ canonicalID }) =>
-                !manualPriorities.includes(canonicalID?.toString?.()),
+              (character) =>
+                !manualPriorities.includes(characterToInternalId(character)),
             )
-            .map((roster) => {
+            .map((character) => {
               return {
-                label: roster.name,
-                value: roster.canonicalID?.toString?.(),
+                label: character.name,
+                value: characterToInternalId(character),
               };
             }),
         ]}
@@ -156,6 +156,7 @@ export default function ViewAnalyzeResultTableCellDamage({
         }}
         onChange={onChange}
         disabled={!canEdit}
+        className={`${manualPriorities?.[index] ? 'rounded-[4px] border border-white border-opacity-30' : ''}`}
       />
     </Flex>
   );

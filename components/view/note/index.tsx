@@ -1,11 +1,10 @@
 'use client';
 import { useGenerateNote } from '@/hooks/useGenerateNote';
-import { useGenerateNoteV2 } from '@/hooks/useGenerateNoteV2';
 import { Card, Collapse, Input } from 'antd';
 
 export default function ViewNote() {
   const noteLines = useGenerateNote();
-  const noteV2Lines = useGenerateNoteV2();
+  // const noteV2Lines = useGenerateNoteV2();
 
   return (
     <section className="mt-[32px]">
@@ -34,7 +33,7 @@ export default function ViewNote() {
                 <div className="my-[16px]">
                   <Input.TextArea value={noteLines} />
                 </div>
-
+                {/* 
                 <Card size="small">
                   WIP - This feature is still in development
                   <br />
@@ -54,7 +53,7 @@ export default function ViewNote() {
 
                 <div className="mt-[16px]">
                   <Input.TextArea value={noteV2Lines} />
-                </div>
+                </div> */}
               </>
             ),
           },

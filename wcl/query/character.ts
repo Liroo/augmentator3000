@@ -42,7 +42,7 @@ export const WCLGetCharacter = async function (
 export const WCLGetCharacters = async function (
   WCLClient: GraphQLClient,
   characters: Array<WCLCharacterQueryWithSpec>,
-  encounterRankings: Array<WCLCharacterEncounterRankingsQuery>,
+  encounterRankings: Array<WCLCharacterEncounterRankingsQuery> = [],
 ) {
   const query = gql`
     ${WCLFramgentCharacter}
@@ -52,17 +52,21 @@ export const WCLGetCharacters = async function (
           return `character${index}: character(
             name: "${character.name}"
             serverSlug: "${character.serverSlug}"
-            serverRegion: "${character.serverRegion}"
+            serverRegion: "${character.serverRegion ?? 'EU'}"
           ) {
             ...WCLFramgentCharacter
 
-            ${encounterRankings.map((encounterRanking) => {
-              return `encounterRanking_${encounterRanking.encounterID}: encounterRankings(
+            ${
+              encounterRankings.length > 0
+                ? encounterRankings.map((encounterRanking) => {
+                    return `encounterRanking_${encounterRanking.encounterID}: encounterRankings(
                 encounterID: ${encounterRanking.encounterID},
                 difficulty: ${encounterRanking.difficulty},
                 specName: "${character.specName}"
               )`;
-            })}
+                  })
+                : ''
+            }
           }`;
         })}
       }
