@@ -178,7 +178,7 @@ export default function ViewNoteV2({ v2 }: Props) {
 
       <div className="mt-[16px]">
         <Input.TextArea
-          value={`lirAugV2Start
+          value={`lirAugStart
 ${defaultTargets
   .map((target) => {
     const character = rosterListEnhanced.find(
@@ -188,7 +188,7 @@ ${defaultTargets
   })
   .join(' ')}
 ${v2}
-lirAugV2End`}
+lirAugEnd`}
         />
       </div>
     </>
