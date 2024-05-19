@@ -57,8 +57,8 @@ export default function ViewNoteV2({ v2 }: Props) {
 
       <p>
         Use with that aura{' '}
-        <a href="https://wago.io" target="_blank">
-          https://wago.io
+        <a href="https://wago.io/-0f1A1GEK" target="_blank">
+          https://wago.io/-0f1A1GEK
         </a>
         <br />
         Copy within personal note
