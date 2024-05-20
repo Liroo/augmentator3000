@@ -61,8 +61,8 @@ export const WCLGetCharacters = async function (
                 ? encounterRankings.map((encounterRanking) => {
                     return `encounterRanking_${encounterRanking.encounterID}: encounterRankings(
                 encounterID: ${encounterRanking.encounterID},
-                difficulty: ${encounterRanking.difficulty},
-                specName: "${character.specName}"
+                difficulty: ${encounterRanking.difficulty}
+                ${character.specName ? `, specName: "${character.specName}"` : ''},
                 ${encounterRanking.partition ? `, partition: ${encounterRanking.partition}` : ''}
               )`;
                   })
