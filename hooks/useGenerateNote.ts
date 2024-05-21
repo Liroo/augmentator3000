@@ -188,7 +188,7 @@ export const useGenerateNote = () => {
             )?.name;
             if (!characterName) return;
 
-            line = `${line} ${characterName}:${entry.priority ? '1' : '0'}:${Math.round(entry.total / 1000)}`;
+            line = `${line} ${characterName}:${entry.priority ? '1' : '0'}:${Math.round(entry.total / 1000) || '0'}`;
           });
           return line;
         })
