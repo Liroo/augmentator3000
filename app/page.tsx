@@ -1,3 +1,4 @@
+import { authOptions } from '@/auth';
 import AuthSignIn from '@/components/auth/signIn';
 import AuthSignOut from '@/components/auth/signOut';
 import ViewAddReports from '@/components/view/addReports';
@@ -6,7 +7,6 @@ import ViewEditRoster from '@/components/view/editRoster';
 import ViewNote from '@/components/view/note';
 import ViewPlanBoss from '@/components/view/planBoss';
 import { Alert, Card } from 'antd';
-import { authOptions } from 'app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 
 export default async function Home({
