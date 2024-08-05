@@ -1,5 +1,7 @@
 import { initWCLClient } from '@/wcl';
 import { WCLGetCharacters } from '@/wcl/query/character';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest } from 'next/server';
 import { z } from 'zod';
 
 export const dynamic = 'force-dynamic';
@@ -40,7 +42,12 @@ export async function POST(request: Request) {
 
   const { characters, encounterRankings } = queryResult.data;
 
-  const WCLClient = await initWCLClient();
+  const token = await getToken({
+    req: request as NextRequest,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  if (!token) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  const WCLClient = await initWCLClient(token.accessToken as string);
   const charactersWithEncounterRankings = await WCLGetCharacters(
     WCLClient,
     characters,

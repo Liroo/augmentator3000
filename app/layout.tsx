@@ -1,3 +1,4 @@
+import AuthProvider from '@/components/auth/provider';
 import UIAntdTheme from '@/components/ui/antd/theme';
 import UILayout from '@/components/ui/layout';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
@@ -6,7 +7,7 @@ import './globals.css';
 import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
-  title: 'AugAnalyzer',
+  title: 'Augmentator3000',
   description:
     'Generate note for your augmentation raid based on the raid composition',
 };
@@ -21,9 +22,11 @@ export default function RootLayout({
       <body>
         <UIAntdTheme>
           <AntdRegistry>
-            <StoreProvider>
-              <UILayout>{children}</UILayout>
-            </StoreProvider>
+            <AuthProvider>
+              <StoreProvider>
+                <UILayout>{children}</UILayout>
+              </StoreProvider>
+            </AuthProvider>
           </AntdRegistry>
         </UIAntdTheme>
       </body>
