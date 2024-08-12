@@ -6,6 +6,7 @@ const securityHeaders = [
 ];
 
 module.exports = {
+  reactStrictMode: false,
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),

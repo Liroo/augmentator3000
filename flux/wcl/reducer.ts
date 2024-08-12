@@ -1,8 +1,10 @@
+import { Region } from '@/game/REGIONS';
 import { characterToInternalId } from '@/utils/wcl';
 import { WCLCharacter, WCLReport } from '@/wcl/wcl';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface WCLState {
+  region: Region;
   characters: {
     [internalId: string]: WCLCharacter;
   };
@@ -16,6 +18,7 @@ export interface WCLState {
 }
 
 const initialState: WCLState = {
+  region: 'EU',
   characters: {},
   reports: {},
   reportWithFights: {},
@@ -25,6 +28,9 @@ const wclSlice = createSlice({
   name: 'wcl',
   initialState,
   reducers: {
+    setRegion: (state, action: PayloadAction<Region>) => {
+      state.region = action.payload;
+    },
     setCharacter: (state, action: PayloadAction<WCLCharacter>) => {
       state.characters[characterToInternalId(action.payload)] = action.payload;
     },
@@ -51,6 +57,7 @@ const wclSlice = createSlice({
 });
 
 export const {
+  setRegion,
   setCharacter,
   setCharacters,
   setReport,

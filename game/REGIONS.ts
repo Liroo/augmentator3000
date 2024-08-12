@@ -3,7 +3,7 @@ const ALL_REGIONS = ['EU', 'US', 'TW', 'KR', 'CN'] as const;
 export type Region = (typeof ALL_REGIONS)[number];
 
 // WoWAnalyzer/Blizzard API supported regions
-const SUPPORTED_REGIONS = ['EU', 'US', 'TW', 'KR'] as const;
+export const SUPPORTED_REGIONS = ['EU', 'US', 'TW', 'KR'];
 type SupportedRegion = (typeof SUPPORTED_REGIONS)[number];
 
 /**

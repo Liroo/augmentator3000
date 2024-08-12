@@ -4,6 +4,11 @@ import { RootState } from '../store';
 
 const selectWCLState = (state: RootState) => state.wcl;
 
+export const selectWCLRegion = createSelector(
+  [selectWCLState],
+  (wclState) => wclState.region,
+);
+
 export const selectWCLCharacter = (name: string, serverSlug: string) =>
   createSelector([selectWCLState], (wclState) =>
     Object.values(wclState.characters).find(

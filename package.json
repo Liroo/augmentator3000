@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.10.0",
     "@ant-design/icons": "^5.3.6",
     "@ant-design/nextjs-registry": "^1.0.0",
     "@apollo/client": "^3.9.11",

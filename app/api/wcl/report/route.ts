@@ -1,7 +1,5 @@
 import { initWCLClient } from '@/wcl';
 import { WCLGetReportTableDamage } from '@/wcl/query/report';
-import { getToken } from 'next-auth/jwt';
-import { NextRequest } from 'next/server';
 import { z } from 'zod';
 
 export const dynamic = 'force-dynamic';
@@ -35,12 +33,7 @@ export async function POST(request: Request) {
 
   const { code, timeRanges, filterExpression } = queryResult.data;
 
-  const token = await getToken({
-    req: request as NextRequest,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-  if (!token) return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  const WCLClient = await initWCLClient(token.accessToken as string);
+  const WCLClient = await initWCLClient('');
   const reportTableDamage = await WCLGetReportTableDamage(
     WCLClient,
     code,
