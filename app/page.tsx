@@ -18,18 +18,6 @@ export default async function Home({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session)
-    return (
-      <main className="flex h-full flex-col items-center justify-center">
-        <div className="mb-[16px]">
-          <AuthSignIn />
-        </div>
-        {searchParams.error && (
-          <Alert message={searchParams.error} type="error" />
-        )}
-      </main>
-    );
-
   return (
     <main className="mx-[20px] my-[16px] mb-[200px]">
       <Card className="!mb-[16px]">
@@ -45,7 +33,18 @@ export default async function Home({
 
       <ViewNote />
 
-      <AuthSignOut />
+      {session ? (
+        <AuthSignOut />
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          <div className="mb-[16px]">
+            <AuthSignIn />
+          </div>
+          {searchParams.error && (
+            <Alert message={searchParams.error} type="error" />
+          )}
+        </div>
+      )}
     </main>
   );
 }

@@ -1,10 +1,10 @@
-import AuthProvider from '@/components/auth/provider';
 import UIAntdTheme from '@/components/ui/antd/theme';
 import UILayout from '@/components/ui/layout';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import type { Metadata } from 'next';
+import AuthProvider from './authProvider';
 import './globals.css';
-import StoreProvider from './StoreProvider';
+import StoreProvider from './storeProvider';
 
 export const metadata: Metadata = {
   title: 'Augmentator3000',
