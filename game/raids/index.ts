@@ -1,17 +1,16 @@
 import Aberrus from 'game/raids/aberrus';
 import Amirdrassil from 'game/raids/amirdrassil';
-import {
-  bot as BastionOfTwilight,
-  bwd as BlackwingDescent,
-  totfw as ThroneOfTheFourWinds,
-} from 'game/raids/cata_bwd_bot_totfw';
-import MythicPlusSeasonFour from 'game/raids/mythicplusseasonfour';
-import MythicPlusSeasonOne from 'game/raids/mythicplusseasonone';
-import MythicPlusSeasonThree from 'game/raids/mythicplusseasonthree';
-import MythicPlusSeasonTwo from 'game/raids/mythicplusseasontwo';
 import VaultOfTheIncarnates from 'game/raids/vaultoftheincarnates';
 import { StaticImageData } from 'next/image';
-import PhaseConfig from 'parser/core/PhaseConfig';
+
+export default interface PhaseConfig {
+  name: string;
+  key: string;
+  difficulties: number[];
+  multiple?: boolean;
+  instance?: number;
+  intermission?: boolean;
+}
 
 interface EncounterConfig {
   vantusRuneBuffId?: number;
@@ -49,29 +48,11 @@ export interface Phase extends PhaseConfig {
   end: number[];
 }
 
-const dungeons = {
-  // Dragonflight
-  MythicPlusSeasonOne,
-  MythicPlusSeasonTwo,
-  MythicPlusSeasonThree,
-  MythicPlusSeasonFour,
-};
-
 const raids = {
   VaultOfTheIncarnates, // tier 29
   Aberrus, // tier 30
   Amirdrassil, // tier 31
-  // Cataclysm (Classic)
-  BlackwingDescent,
-  BastionOfTwilight,
-  ThroneOfTheFourWinds,
 };
-
-function findByDungeonBossId(id: number) {
-  return Object.values(dungeons)
-    .flatMap((dungeon) => Object.values(dungeon.bosses))
-    .find((boss) => boss.id === id);
-}
 
 function findByRaidBossId(id: number) {
   return Object.values(raids)
@@ -80,5 +61,5 @@ function findByRaidBossId(id: number) {
 }
 
 export function findByBossId(id: number) {
-  return findByRaidBossId(id) ?? findByDungeonBossId(id) ?? null;
+  return findByRaidBossId(id) ?? null;
 }

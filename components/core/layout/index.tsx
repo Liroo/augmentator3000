@@ -18,7 +18,7 @@ export default function CoreLayout({ children }: Props) {
         <h1 className="text-center text-[40px] font-bold text-[#33937F]">
           Augmentator3000
         </h1>
-        <p className="text-center">Delete aug? Of course.. 😉</p>
+        <p className="mt-[-5px] text-center">Delete aug? Of course.. 😉</p>
       </div>
 
       <div className="absolute right-0 top-0 z-10">
