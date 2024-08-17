@@ -9,8 +9,8 @@ import { RosterCharacter } from 'flux/roster/types';
 import { StatusEnum } from 'flux/status/reducer';
 import { selectStatusByActionTypeId } from 'flux/status/selector';
 import { getWCLCharacter } from 'flux/wcl/action';
+import { WCLCharacter } from 'services/wcl/types';
 import { rosterCharacterToKey } from 'utils/roster';
-import { WCLCharacter } from 'wcl/types';
 
 interface Props {
   rosterCharacter: RosterCharacter;

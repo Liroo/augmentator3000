@@ -1,20 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkApiConfig, ThunkArg } from 'flux/types';
-import { WCLReport } from 'wcl/types';
+import { WCLReport } from 'services/wcl/types';
 import {
   setCharacter,
   setCharacterEncounterRanking,
   setReportWithFights,
 } from './reducer';
 
-import WCLClient from 'services/wcl';
+import WCLClient from 'services/wcl/client';
+import { WCLGetCharacter } from 'services/wcl/query/character/getCharacter';
+import { WCLGetCharactersEncounterRankings } from 'services/wcl/query/character/getCharactersEncounterRankings';
+import { WCLGetReportWithFights } from 'services/wcl/query/report/getReportWithFights';
 import {
   encounterRankingRankToKey,
   getDataFromEncouterRankingKey,
 } from 'utils/report';
-import { WCLGetCharacter } from 'wcl/query/character/getCharacter';
-import { WCLGetCharactersEncounterRankings } from 'wcl/query/character/getCharactersEncounterRankings';
-import { WCLGetReportWithFights } from 'wcl/query/report/getReportWithFights';
 import { addBestLogsFightsSelected } from '../plan/reducer';
 import { selectRosterInUseListWithWCLCharacter } from '../roster/selector';
 import { selectWCLCharacterByCharacterKey } from './selector';

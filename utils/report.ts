@@ -3,11 +3,22 @@ import {
   WCLCharacterEncounterRanking,
   WCLReport,
   WCLReportFight,
-} from 'wcl/types';
+} from 'services/wcl/types';
 import { rosterCharacterToKey } from './roster';
 
 export const reportFightToKey = (report: WCLReport, fight: WCLReportFight) => {
   return `${report.code}-${report.region}-${fight.encounterID}-${fight.difficulty}-${fight.id}`;
+};
+
+export const getDataFromReportFightKey = (key: string) => {
+  const [reportCode, region, encounterID, difficulty, id] = key.split('-');
+  return {
+    reportCode,
+    region,
+    encounterId: Number(encounterID),
+    difficulty: Number(difficulty),
+    fightId: Number(id),
+  };
 };
 
 export const encounterRankingRankToKey = (

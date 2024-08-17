@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from 'flux/hooks';
 import { toggleBestLogsFightsSelected } from 'flux/plan/reducer';
 import { selectPlanBestLogsFightsSelectedByCharacterAndPartition } from 'flux/plan/selector';
 import moment from 'moment';
+import { WCLCharacter, WCLCharacterEncounterRanking } from 'services/wcl/types';
 import { encounterRankingRankToKey } from 'utils/report';
 import { rosterCharacterToKey } from 'utils/roster';
-import { WCLCharacter, WCLCharacterEncounterRanking } from 'wcl/types';
 
 interface Props {
   WCLCharacter: WCLCharacter;

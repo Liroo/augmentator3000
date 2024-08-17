@@ -4,7 +4,7 @@ import {
   selectPlanFilterCustomReportByEncouterId,
 } from 'flux/plan/selector';
 import { useMemo } from 'react';
-import { WCLReport, WCLReportFight } from 'wcl/types';
+import { WCLReport, WCLReportFight } from 'services/wcl/types';
 import LogsSelectCustomReportTableCellPullsEncounter from './encounter';
 
 interface Props {

@@ -2,7 +2,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch } from 'flux/hooks';
 import { removeReportWithFight } from 'flux/wcl/reducer';
 import { logEvent } from 'services/amplitude/analytics';
-import { WCLReport } from 'wcl/types';
+import { WCLReport } from 'services/wcl/types';
 
 interface Props {
   report: WCLReport;

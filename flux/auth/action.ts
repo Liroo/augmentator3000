@@ -4,7 +4,7 @@ import { generateWCLBearerToken } from 'services/wcl/generateBearer';
 import { setBearerToken, setCredentials } from './reducer';
 import { selectAuthCredentials } from './selector';
 
-import WCLClient from 'services/wcl';
+import WCLClient from 'services/wcl/client';
 
 export const authGenerateWCLBearerToken = createAsyncThunk<
   string,

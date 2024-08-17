@@ -4,8 +4,8 @@ import { toggleCustomReportFightsSelected } from 'flux/plan/reducer';
 import { selectPlanCustomReportFightsSelectedByReportCode } from 'flux/plan/selector';
 import { Boss, getEncounterByEncounterId } from 'game/raids';
 import { useMemo } from 'react';
+import { WCLReport, WCLReportFight } from 'services/wcl/types';
 import { reportFightToKey } from 'utils/report';
-import { WCLReport, WCLReportFight } from 'wcl/types';
 
 interface Props {
   report: WCLReport;

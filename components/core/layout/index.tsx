@@ -28,10 +28,10 @@ export default function CoreLayout({ children }: Props) {
 
       <div className="absolute left-0 top-0 z-10">
         <Tooltip
-          title="Work in progress. This will be ready for TWW."
+          title="Work in progress. This will be ready for TWW. In any case, expect bugs as this is home made and mainly for personal use."
           placement="bottomRight"
         >
-          <div className="ml-[40px] mt-[50px] flex cursor-pointer select-none items-center">
+          <div className="ml-[40px] mt-[48px] flex cursor-pointer select-none items-center">
             <WarningOutlined size={40} />
             <Typography.Title level={5} className="!mb-0 ml-[4px]">
               Disclaimer

@@ -1,5 +1,6 @@
 'use client';
 
+import Analysis from 'components/block/analysis';
 import BossSelect from 'components/block/bossSelect';
 import LogsSelect from 'components/block/logsSelect';
 import Roster from 'components/block/roster';
@@ -19,6 +20,8 @@ export default function Home() {
       <BossSelect />
 
       <LogsSelect />
+
+      <Analysis />
 
       <CoreLogEventScreen location="home" />
     </main>

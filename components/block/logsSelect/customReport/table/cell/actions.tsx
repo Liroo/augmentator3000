@@ -8,8 +8,8 @@ import { getWCLCharacter, getWCLReportWithFights } from 'flux/wcl/action';
 import specs from 'game/specs';
 import { useEffect } from 'react';
 import { logEvent } from 'services/amplitude/analytics';
+import { WCLReport, WCLReportPlayerDetails } from 'services/wcl/types';
 import { rosterCharacterToKey } from 'utils/roster';
-import { WCLReport, WCLReportPlayerDetails } from 'wcl/types';
 
 interface Props {
   report: WCLReport;

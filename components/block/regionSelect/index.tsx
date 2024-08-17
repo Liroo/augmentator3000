@@ -16,7 +16,7 @@ export default function RegionSelect() {
 
   return (
     <Tooltip
-      title="Region that will be used in Warcraft Logs requests. Changing region will reset all data."
+      title="Region that will be used in Warcraft Logs requests."
       placement="bottomLeft"
     >
       <div className="mt-[50px] flex flex-col items-end">

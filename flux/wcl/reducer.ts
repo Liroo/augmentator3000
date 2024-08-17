@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Region } from 'game/regions';
-import { rosterCharacterToKey } from 'utils/roster';
 import {
   WCLCharacter,
   WCLCharacterEncounterRanking,
   WCLReport,
-} from 'wcl/types';
+} from 'services/wcl/types';
+import { rosterCharacterToKey } from 'utils/roster';
 
 export interface WCLState {
   region: Region;
