@@ -1,38 +1,27 @@
-import { WowRaids } from '@/wow/raid';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import defaultTimeRanges from './defaultTimeRanges';
-
-export type PlanStateTimeRange = {
-  startTime: number;
-  endTime: number;
-  excludeInternalIds: string[];
-  manualPriorities: (string | null)[];
-};
+import DIFFICULTIES from 'game/difficulties';
+import { Raids } from 'game/raids';
 
 export interface PlanState {
   encounterForm: {
-    zoneID: number;
-    encounterID: number;
-    timeRangesKey: string;
+    zoneId: number;
+    encounterId: number;
+    difficulty: number;
   };
-
-  timeRanges: {
-    [key: string]: Array<PlanStateTimeRange>;
-  };
-
-  selectedFightsFromReportWithFights: {
-    [code: string]: number[];
-  };
+  filterCustomReportByEncouterId: boolean;
+  customReportFightsSelected: string[];
+  bestLogsFightsSelected: string[];
 }
 
 const initialState: PlanState = {
   encounterForm: {
-    zoneID: WowRaids[0].id,
-    encounterID: WowRaids[0].encounters[0].id,
-    timeRangesKey: `default-${WowRaids[0].encounters[0].id}`,
+    zoneId: Raids[0].id,
+    encounterId: Raids[0].encounters[0].id,
+    difficulty: DIFFICULTIES.MYTHIC_RAID,
   },
-  timeRanges: defaultTimeRanges,
-  selectedFightsFromReportWithFights: {},
+  filterCustomReportByEncouterId: true,
+  customReportFightsSelected: [],
+  bestLogsFightsSelected: [],
 };
 
 const planSlice = createSlice({
@@ -42,60 +31,51 @@ const planSlice = createSlice({
     setEncounterForm: (state, action) => {
       state.encounterForm = { ...state.encounterForm, ...action.payload };
     },
-    setTimeRangesByKey: (
+    setFilterCustomReportByEncouterId: (
       state,
-      action: PayloadAction<{ key: string; timeRanges: PlanStateTimeRange[] }>,
+      action: PayloadAction<boolean>,
     ) => {
-      state.timeRanges[action.payload.key] = action.payload.timeRanges;
+      state.filterCustomReportByEncouterId = action.payload;
     },
-    renameTimeRangesByKey: (
+    addCustomReportFightsSelected: (state, action) => {
+      if (!state.customReportFightsSelected.includes(action.payload))
+        state.customReportFightsSelected.push(action.payload);
+    },
+    toggleCustomReportFightsSelected: (
       state,
-      action: PayloadAction<{ key: string; newKey: string }>,
+      action: PayloadAction<string[]>,
     ) => {
-      state.timeRanges[action.payload.newKey] =
-        state.timeRanges[action.payload.key];
-      delete state.timeRanges[action.payload.key];
-    },
-    removeTimeRangesByKey: (state, action: PayloadAction<string>) => {
-      delete state.timeRanges[action.payload];
-    },
-    setSelectedFightsFromReportWithFights: (
-      state,
-      action: PayloadAction<{ code: string; fights: number[] }>,
-    ) => {
-      state.selectedFightsFromReportWithFights[action.payload.code] =
-        action.payload.fights;
-    },
-    importTimeRangesManualPriorities: (
-      state,
-      action: PayloadAction<{
-        key: string;
-        importKey: string;
-      }>,
-    ) => {
-      const timeRanges = state.timeRanges[action.payload.key];
-
-      state.timeRanges[action.payload.importKey].forEach((itr) => {
-        const timeRange = timeRanges.find(
-          (tr) => tr.startTime === itr.startTime && tr.endTime === itr.endTime,
-        );
-
-        itr.manualPriorities.forEach((mp, index) => {
-          if (mp === null) return;
-          timeRange?.manualPriorities?.splice(index, 1, mp);
-        });
+      action.payload.forEach((fightId) => {
+        const index = state.customReportFightsSelected.indexOf(fightId);
+        if (index === -1) state.customReportFightsSelected.push(fightId);
+        else state.customReportFightsSelected.splice(index, 1);
       });
+    },
+    addBestLogsFightsSelected: (state, action: PayloadAction<string>) => {
+      if (!state.bestLogsFightsSelected.includes(action.payload))
+        state.bestLogsFightsSelected.push(action.payload);
+    },
+    toggleBestLogsFightsSelected: (state, action: PayloadAction<string[]>) => {
+      action.payload.forEach((fightId) => {
+        const index = state.bestLogsFightsSelected.indexOf(fightId);
+        if (index === -1) state.bestLogsFightsSelected.push(fightId);
+        else state.bestLogsFightsSelected.splice(index, 1);
+      });
+    },
+    resetBestLogsFightsSelected: (state) => {
+      state.bestLogsFightsSelected = [];
     },
   },
 });
 
 export const {
   setEncounterForm,
-  setTimeRangesByKey,
-  renameTimeRangesByKey,
-  removeTimeRangesByKey,
-  setSelectedFightsFromReportWithFights,
-  importTimeRangesManualPriorities,
+  setFilterCustomReportByEncouterId,
+  addCustomReportFightsSelected,
+  toggleCustomReportFightsSelected,
+  addBestLogsFightsSelected,
+  toggleBestLogsFightsSelected,
+  resetBestLogsFightsSelected,
 } = planSlice.actions;
 
 export default planSlice;

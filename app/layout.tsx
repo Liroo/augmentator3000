@@ -1,10 +1,9 @@
-import UIAntdTheme from '@/components/ui/antd/theme';
-import UILayout from '@/components/ui/layout';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import CoreLayout from 'components/core/layout';
+import UIAntdTheme from 'components/ui/antd/theme';
 import type { Metadata } from 'next';
-import AuthProvider from './authProvider';
+import StoreProvider from '../providers/storeProvider';
 import './globals.css';
-import StoreProvider from './storeProvider';
 
 export const metadata: Metadata = {
   title: 'Augmentator3000',
@@ -22,11 +21,9 @@ export default function RootLayout({
       <body>
         <UIAntdTheme>
           <AntdRegistry>
-            <AuthProvider>
-              <StoreProvider>
-                <UILayout>{children}</UILayout>
-              </StoreProvider>
-            </AuthProvider>
+            <StoreProvider>
+              <CoreLayout>{children}</CoreLayout>
+            </StoreProvider>
           </AntdRegistry>
         </UIAntdTheme>
       </body>

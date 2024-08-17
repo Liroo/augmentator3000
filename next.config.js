@@ -5,7 +5,8 @@ const securityHeaders = [
   },
 ];
 
-module.exports = {
+const nextConfig = {
+  reactStrictMode: false,
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),
@@ -63,3 +64,18 @@ module.exports = {
     ];
   },
 };
+
+// Injected content via Sentry wizard below
+
+const { withSentryConfig } = require('@sentry/nextjs');
+
+module.exports = withSentryConfig(nextConfig, {
+  org: 'liroo',
+  project: 'augmentator3000',
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+  telemetry: false,
+});

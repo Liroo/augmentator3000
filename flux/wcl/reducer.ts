@@ -1,23 +1,25 @@
-import { characterToInternalId } from '@/utils/wcl';
-import { WCLCharacter, WCLReport } from '@/wcl/wcl';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Region } from 'game/regions';
+import { rosterCharacterToKey } from 'utils/roster';
+import {
+  WCLCharacter,
+  WCLCharacterEncounterRanking,
+  WCLReport,
+} from 'wcl/types';
 
 export interface WCLState {
+  region: Region;
   characters: {
-    [internalId: string]: WCLCharacter;
+    [characterKey: string]: WCLCharacter;
   };
-  reports: {
-    [code: string]: WCLReport;
-  };
-
   reportWithFights: {
     [code: string]: WCLReport;
   };
 }
 
 const initialState: WCLState = {
+  region: 'EU',
   characters: {},
-  reports: {},
   reportWithFights: {},
 };
 
@@ -25,18 +27,30 @@ const wclSlice = createSlice({
   name: 'wcl',
   initialState,
   reducers: {
+    setRegion: (state, action: PayloadAction<Region>) => {
+      state.region = action.payload;
+    },
     setCharacter: (state, action: PayloadAction<WCLCharacter>) => {
-      state.characters[characterToInternalId(action.payload)] = action.payload;
+      state.characters[rosterCharacterToKey(action.payload)] = action.payload;
     },
-    setCharacters: (state, action: PayloadAction<WCLCharacter[]>) => {
-      action.payload.forEach((character) => {
-        state.characters[characterToInternalId(character)] = character;
-      });
-    },
-    setReport: (state, action: PayloadAction<WCLReport>) => {
-      state.reports[
-        `${action.payload.code}-${action.payload.associatedEncounterID}-${action.payload.startTime}`
-      ] = action.payload;
+    setCharacterEncounterRanking: (
+      state,
+      action: PayloadAction<{
+        characterKey: string;
+        encounterRankings: {
+          [rosterCharacterKey: string]: WCLCharacterEncounterRanking;
+        };
+      }>,
+    ) => {
+      const { characterKey, encounterRankings } = action.payload;
+      if (!state.characters[characterKey]) return;
+      if (!state.characters[characterKey].encounterRankings)
+        state.characters[characterKey].encounterRankings = {};
+
+      state.characters[characterKey].encounterRankings = {
+        ...state.characters[characterKey].encounterRankings,
+        ...encounterRankings,
+      };
     },
     setReportWithFights: (state, action: PayloadAction<WCLReport>) => {
       state.reportWithFights[action.payload.code] = action.payload;
@@ -44,19 +58,21 @@ const wclSlice = createSlice({
     removeReportWithFight: (state, action: PayloadAction<string>) => {
       delete state.reportWithFights[action.payload];
     },
-    resetReports: (state) => {
-      state.reports = {};
+    resetEncounterRankings: (state) => {
+      Object.values(state.characters).forEach((character) => {
+        character.encounterRankings = {};
+      });
     },
   },
 });
 
 export const {
+  setRegion,
   setCharacter,
-  setCharacters,
-  setReport,
+  setCharacterEncounterRanking,
   setReportWithFights,
   removeReportWithFight,
-  resetReports,
+  resetEncounterRankings,
 } = wclSlice.actions;
 
 export default wclSlice;

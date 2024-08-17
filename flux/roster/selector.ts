@@ -1,29 +1,53 @@
-import { WCLCharacter } from '@/wcl/wcl';
 import { createSelector } from '@reduxjs/toolkit';
+import { rosterCharacterToKey } from 'utils/roster';
 import { RootState } from '../store';
+import { selectWCLRegion } from '../wcl/selector';
 
 const selectRosterState = (state: RootState) => state.roster;
 const selectWCLState = (state: RootState) => state.wcl;
 
 export const selectRosterList = createSelector(
-  [selectRosterState],
-  (rosterState) => rosterState.list,
+  [selectRosterState, selectWCLRegion],
+  (rosterState, region) =>
+    rosterState.list.filter((c) => c.serverRegion === region),
 );
 
-export const selectRosterListEnhanced = (filterUse: boolean = false) =>
-  createSelector([selectRosterState, selectWCLState], (rosterState, wclState) =>
-    rosterState.list
-      .map((characterDetails) => {
-        const character = Object.values(wclState.characters).find(
+export const selectRosterListCount = createSelector(
+  [selectRosterList],
+  (rosterList) => ({
+    total: rosterList.length,
+    inUse: rosterList.filter((rosterCharacter) => rosterCharacter.use).length,
+  }),
+);
+
+export const selectRosterListWithWCLCharacter = createSelector(
+  [selectRosterList, selectWCLState],
+  (rosterList, wclState) =>
+    rosterList.map((rosterCharacter) => {
+      const WCLCharacter = Object.values(wclState.characters).find(
+        (c) =>
+          rosterCharacterToKey(c) === rosterCharacterToKey(rosterCharacter),
+      );
+      return {
+        rosterCharacter,
+        WCLCharacter,
+      };
+    }),
+);
+
+export const selectRosterInUseListWithWCLCharacter = createSelector(
+  [selectRosterList, selectWCLState],
+  (rosterList, wclState) =>
+    rosterList
+      .filter((rosterCharacter) => rosterCharacter.use)
+      .map((rosterCharacter) => {
+        const WCLCharacter = Object.values(wclState.characters).find(
           (c) =>
-            c.name === characterDetails.name &&
-            c.serverSlug === characterDetails.serverSlug &&
-            c.serverRegion === characterDetails.serverRegion,
+            rosterCharacterToKey(c) === rosterCharacterToKey(rosterCharacter),
         );
         return {
-          ...characterDetails,
-          ...character,
-        } as WCLCharacter;
-      })
-      .filter((c) => !filterUse || c.use),
-  );
+          rosterCharacter,
+          WCLCharacter,
+        };
+      }),
+);

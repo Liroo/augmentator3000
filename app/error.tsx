@@ -12,7 +12,7 @@ export default function Error({
   }, [error]);
 
   const resetStore = () => {
-    localStorage.removeItem('persist:auganalyzer-root');
+    localStorage.removeItem('persist:augmentator3000-root');
     window.location.reload();
   };
 

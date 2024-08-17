@@ -416,6 +416,44 @@ body {
   object-position: calc(-80px * var(--size)) 0;
 }
 
+.difficulty-1 {
+  color: #4d4d4d;
+}
+.difficulty-2 {
+  color: #1a7d00;
+}
+.difficulty-3 {
+  color: #006dcc;
+}
+.difficulty-4 {
+  color: #a335ee;
+}
+.difficulty-5 {
+  color: #ff8000;
+}
+
+.rank-common {
+  color: #666;
+}
+.rank-uncommon {
+  color: #1eff00;
+}
+.rank-rare {
+  color: #0070dd;
+}
+.rank-epic {
+  color: #a335ee;
+}
+.rank-legendary {
+  color: #ff8000;
+}
+.rank-astounding {
+  color: #e268a8;
+}
+.rank-artifact {
+  color: #e5cc80;
+}
+
 .class-death-knight,
 .classID-1 {
   color: #c41f3b;
@@ -467,4 +505,8 @@ body {
 .class-warrior,
 .classID-11 {
   color: #c79c6e;
+}
+
+.ant-collapse-header {
+  user-select: none;
 }

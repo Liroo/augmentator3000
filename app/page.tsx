@@ -1,50 +1,20 @@
-import { authOptions } from '@/auth';
-import AuthSignIn from '@/components/auth/signIn';
-import AuthSignOut from '@/components/auth/signOut';
-import ViewAddReports from '@/components/view/addReports';
-import ViewAnalyzeResult from '@/components/view/analyzeResult';
-import ViewEditRoster from '@/components/view/editRoster';
-import ViewNote from '@/components/view/note';
-import ViewPlanBoss from '@/components/view/planBoss';
-import { Alert, Card } from 'antd';
-import { getServerSession } from 'next-auth';
+'use client';
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: {
-    error: string;
-  };
-}) {
-  const session = await getServerSession(authOptions);
+import BossSelect from 'components/block/bossSelect';
+import LogsSelect from 'components/block/logsSelect';
+import Roster from 'components/block/roster';
+import CoreLogEventScreen from 'components/core/logEventScreen';
 
+export default function Home() {
   return (
-    <main className="mx-[20px] my-[16px] mb-[200px]">
-      <Card className="!mb-[16px]">
-        <a href="https://github.com/Liroo/auganalyzer" target="_blank">
-          https://github.com/Liroo/auganalyzer
-        </a>
-      </Card>
+    <main className="my-[16px] flex flex-col gap-[16px]">
+      <Roster />
 
-      <ViewEditRoster />
-      <ViewAddReports />
-      <ViewPlanBoss />
-      <ViewAnalyzeResult />
+      <BossSelect />
 
-      <ViewNote />
+      <LogsSelect />
 
-      {session ? (
-        <AuthSignOut />
-      ) : (
-        <div className="flex flex-col items-center justify-center">
-          <div className="mb-[16px]">
-            <AuthSignIn />
-          </div>
-          {searchParams.error && (
-            <Alert message={searchParams.error} type="error" />
-          )}
-        </div>
-      )}
+      <CoreLogEventScreen location="home" />
     </main>
   );
 }

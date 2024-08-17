@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { RootState } from '@/flux/store';
+import { RootState } from 'flux/store';
 import { StatusEnum } from './reducer';
 
 const idleStatus = {
@@ -18,3 +18,10 @@ export const selectStatusByActionTypeId = (
     [selectStatusReducer],
     (statusReducer) => statusReducer[actionType]?.[id] ?? idleStatus,
   );
+
+export const selectStatusByActionTypeIsLoading = (actionType: string) =>
+  createSelector([selectStatusReducer], (statusReducer) => {
+    return Object.keys(statusReducer[actionType] ?? []).some(
+      (key) => statusReducer[actionType][key].status === StatusEnum.Pending,
+    );
+  });

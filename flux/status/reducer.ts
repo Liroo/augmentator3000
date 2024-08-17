@@ -1,5 +1,5 @@
-import { FulfilledAction, PendingAction, RejectedAction } from '@/types/thunk';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { FulfilledAction, PendingAction, RejectedAction } from 'flux/types';
 
 export enum StatusEnum {
   Idle = 'idle',
