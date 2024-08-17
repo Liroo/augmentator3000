@@ -26,7 +26,8 @@ export default function WCLCredentialsForm() {
   };
 
   useEffect(() => {
-    dispatch(authGenerateWCLBearerToken(credentials));
+    if (credentials.clientId && credentials.clientSecret)
+      dispatch(authGenerateWCLBearerToken(credentials));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
