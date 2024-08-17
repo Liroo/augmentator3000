@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { toggleBestLogsFightsSelected } from '@/flux/plan/reducer';
-import { selectPlanBestLogsFightsSelectedByCharacterAndPartition } from '@/flux/plan/selector';
-import { encounterRankingRankToKey } from '@/utils/report';
-import { rosterCharacterToKey } from '@/utils/roster';
-import { WCLCharacter, WCLCharacterEncounterRanking } from '@/wcl/types';
 import { Tag, Typography } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { toggleBestLogsFightsSelected } from 'flux/plan/reducer';
+import { selectPlanBestLogsFightsSelectedByCharacterAndPartition } from 'flux/plan/selector';
 import moment from 'moment';
+import { encounterRankingRankToKey } from 'utils/report';
+import { rosterCharacterToKey } from 'utils/roster';
+import { WCLCharacter, WCLCharacterEncounterRanking } from 'wcl/types';
 
 interface Props {
   WCLCharacter: WCLCharacter;
@@ -58,6 +58,7 @@ export default function LogsSelectBestLogsTableCellRankingsPartition({
 
             return (
               <Tag
+                key={rank.startTime}
                 className="cursor-pointer select-none"
                 color={
                   selectedFights.includes(

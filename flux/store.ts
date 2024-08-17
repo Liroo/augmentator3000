@@ -14,7 +14,6 @@ import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import authSlice from './auth/reducer';
 import listenerMiddleware from './listener';
 import planSlice from './plan/reducer';
-import reportSlice from './report/reducer';
 import rosterSlice from './roster/reducer';
 import statusSlice from './status/reducer';
 import wclSlice from './wcl/reducer';
@@ -58,7 +57,6 @@ export const makeStore = () => {
     [wclSlice.name]: wclSlice.reducer,
     [rosterSlice.name]: rosterSlice.reducer,
     [planSlice.name]: planSlice.reducer,
-    [reportSlice.name]: reportSlice.reducer,
   });
 
   const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

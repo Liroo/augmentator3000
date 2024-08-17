@@ -1,21 +1,17 @@
-import { Region } from '@/game/regions';
-import { rosterCharacterToKey } from '@/utils/roster';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Region } from 'game/regions';
+import { rosterCharacterToKey } from 'utils/roster';
 import {
   WCLCharacter,
   WCLCharacterEncounterRanking,
   WCLReport,
-} from '@/wcl/types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+} from 'wcl/types';
 
 export interface WCLState {
   region: Region;
   characters: {
-    [internalId: string]: WCLCharacter;
+    [characterKey: string]: WCLCharacter;
   };
-  reports: {
-    [code: string]: WCLReport;
-  };
-
   reportWithFights: {
     [code: string]: WCLReport;
   };
@@ -24,7 +20,6 @@ export interface WCLState {
 const initialState: WCLState = {
   region: 'EU',
   characters: {},
-  reports: {},
   reportWithFights: {},
 };
 
@@ -68,15 +63,6 @@ const wclSlice = createSlice({
         character.encounterRankings = {};
       });
     },
-
-    setReport: (state, action: PayloadAction<WCLReport>) => {
-      state.reports[
-        `${action.payload.code}-${action.payload.associatedEncounterID}-${action.payload.startTime}`
-      ] = action.payload;
-    },
-    resetReports: (state) => {
-      state.reports = {};
-    },
   },
 });
 
@@ -84,10 +70,8 @@ export const {
   setRegion,
   setCharacter,
   setCharacterEncounterRanking,
-  setReport,
   setReportWithFights,
   removeReportWithFight,
-  resetReports,
   resetEncounterRankings,
 } = wclSlice.actions;
 

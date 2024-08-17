@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { setRegion } from '@/flux/wcl/reducer';
-import { selectWCLRegion } from '@/flux/wcl/selector';
-import { Region, SUPPORTED_REGIONS } from '@/game/regions';
-import { logEvent } from '@/services/amplitude/analytics';
 import { Select, Tooltip } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { setRegion } from 'flux/wcl/reducer';
+import { selectWCLRegion } from 'flux/wcl/selector';
+import { Region, SUPPORTED_REGIONS } from 'game/regions';
+import { logEvent } from 'services/amplitude/analytics';
 
 export default function RegionSelect() {
   const dispatch = useAppDispatch();

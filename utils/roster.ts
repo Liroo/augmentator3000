@@ -1,4 +1,4 @@
-import { RosterCharacter, RosterCharacterQuery } from '@/flux/roster/types';
+import { RosterCharacter, RosterCharacterQuery } from 'flux/roster/types';
 
 export const rosterCharacterToKey = (
   player: RosterCharacter | RosterCharacterQuery,

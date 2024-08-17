@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { RootState } from '@/flux/store';
+import { RootState } from 'flux/store';
 import { StatusEnum } from './reducer';
 
 const idleStatus = {

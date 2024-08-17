@@ -1,9 +1,9 @@
-import { useAppSelector } from '@/flux/hooks';
+import { Collapse, Divider, Typography } from 'antd';
+import { useAppSelector } from 'flux/hooks';
 import {
   selectPlanBestLogsFightsSelectedByEncounterFormCount,
   selectPlanCustomReportFightsSelectedByEncounterFormCount,
-} from '@/flux/plan/selector';
-import { Collapse, Divider, Typography } from 'antd';
+} from 'flux/plan/selector';
 import LogsSelectBestLogs from './bestLogs';
 import LogsSelectCustomReport from './customReport';
 

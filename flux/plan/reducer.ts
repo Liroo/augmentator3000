@@ -1,6 +1,6 @@
-import DIFFICULTIES from '@/game/difficulties';
-import { Raids } from '@/game/raids';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import DIFFICULTIES from 'game/difficulties';
+import { Raids } from 'game/raids';
 
 export interface PlanState {
   encounterForm: {

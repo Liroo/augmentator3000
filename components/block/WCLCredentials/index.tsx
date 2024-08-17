@@ -1,6 +1,6 @@
-import { selectAuthBearerToken } from '@/flux/auth/selector';
-import { useAppSelector } from '@/flux/hooks';
 import { Collapse, Divider } from 'antd';
+import { selectAuthBearerToken } from 'flux/auth/selector';
+import { useAppSelector } from 'flux/hooks';
 import WCLCredentialsForm from './form';
 import WCLCredentialsUsage from './usage';
 

@@ -76,7 +76,6 @@ export type WCLReportQuery = {
 };
 
 export type WCLReportTableEntry = {
-  internalId: string;
   name: string;
   id: number;
   guid: number;

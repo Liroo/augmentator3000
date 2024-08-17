@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { toggleCustomReportFightsSelected } from '@/flux/plan/reducer';
-import { selectPlanCustomReportFightsSelectedByReportCode } from '@/flux/plan/selector';
-import { Boss, getEncounterByEncounterId } from '@/game/raids';
-import { reportFightToKey } from '@/utils/report';
-import { WCLReport, WCLReportFight } from '@/wcl/types';
 import { Tag, Typography } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { toggleCustomReportFightsSelected } from 'flux/plan/reducer';
+import { selectPlanCustomReportFightsSelectedByReportCode } from 'flux/plan/selector';
+import { Boss, getEncounterByEncounterId } from 'game/raids';
 import { useMemo } from 'react';
+import { reportFightToKey } from 'utils/report';
+import { WCLReport, WCLReportFight } from 'wcl/types';
 
 interface Props {
   report: WCLReport;

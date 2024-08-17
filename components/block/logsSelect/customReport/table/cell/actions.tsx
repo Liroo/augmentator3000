@@ -1,15 +1,15 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { rosterAddCharacter } from '@/flux/roster/reducer';
-import { StatusEnum } from '@/flux/status/reducer';
-import { selectStatusByActionTypeId } from '@/flux/status/selector';
-import { getWCLCharacter, getWCLReportWithFights } from '@/flux/wcl/action';
-import specs from '@/game/specs';
-import { logEvent } from '@/services/amplitude/analytics';
-import { rosterCharacterToKey } from '@/utils/roster';
-import { WCLReport, WCLReportPlayerDetails } from '@/wcl/types';
 import { RedoOutlined, TeamOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { rosterAddCharacter } from 'flux/roster/reducer';
+import { StatusEnum } from 'flux/status/reducer';
+import { selectStatusByActionTypeId } from 'flux/status/selector';
+import { getWCLCharacter, getWCLReportWithFights } from 'flux/wcl/action';
+import specs from 'game/specs';
 import { useEffect } from 'react';
+import { logEvent } from 'services/amplitude/analytics';
+import { rosterCharacterToKey } from 'utils/roster';
+import { WCLReport, WCLReportPlayerDetails } from 'wcl/types';
 
 interface Props {
   report: WCLReport;
@@ -72,7 +72,7 @@ export default function LogsSelectCustomReportTableCellActions({
     );
 
     return () => clearInterval(interval);
-  }, []);
+  }, [dispatch, report.code]);
 
   return (
     <div className="flex cursor-pointer select-none items-center justify-center gap-[12px]">

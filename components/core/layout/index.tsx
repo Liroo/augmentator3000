@@ -1,9 +1,9 @@
 'use client';
 
-import WCLCredentials from '@/components/block/WCLCredentials';
-import RegionSelect from '@/components/block/regionSelect';
-import initAmplitude from '@/services/amplitude';
 import { Typography } from 'antd';
+import WCLCredentials from 'components/block/WCLCredentials';
+import RegionSelect from 'components/block/regionSelect';
+import initAmplitude from 'services/amplitude';
 
 interface Props {
   children: React.ReactNode;

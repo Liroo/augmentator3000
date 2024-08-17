@@ -1,8 +1,8 @@
-import { useAppSelector } from '@/flux/hooks';
-import { selectPlanEncounterForm } from '@/flux/plan/selector';
-import { getDataFromEncouterRankingKey } from '@/utils/report';
-import { WCLCharacter, WCLCharacterEncounterRanking } from '@/wcl/types';
+import { useAppSelector } from 'flux/hooks';
+import { selectPlanEncounterForm } from 'flux/plan/selector';
 import { useMemo } from 'react';
+import { getDataFromEncouterRankingKey } from 'utils/report';
+import { WCLCharacter, WCLCharacterEncounterRanking } from 'wcl/types';
 import LogsSelectBestLogsTableCellRankingsPartition from './partition';
 
 interface Props {

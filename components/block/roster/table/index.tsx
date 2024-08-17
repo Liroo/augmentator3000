@@ -1,8 +1,8 @@
-import { useAppSelector } from '@/flux/hooks';
-import { selectRosterListWithWCLCharacter } from '@/flux/roster/selector';
-import { RosterCharacter } from '@/flux/roster/types';
-import { WCLCharacter } from '@/wcl/types';
 import { Table, TableColumnsType } from 'antd';
+import { useAppSelector } from 'flux/hooks';
+import { selectRosterListWithWCLCharacter } from 'flux/roster/selector';
+import { RosterCharacter } from 'flux/roster/types';
+import { WCLCharacter } from 'wcl/types';
 import RosterTableCellClass from './cell/class';
 import RosterTableCellDelete from './cell/delete';
 import RosterTableCellName from './cell/name';

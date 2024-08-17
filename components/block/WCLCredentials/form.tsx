@@ -1,14 +1,14 @@
-import { authGenerateWCLBearerToken } from '@/flux/auth/action';
+import { Alert, Button, Form, Input } from 'antd';
+import { authGenerateWCLBearerToken } from 'flux/auth/action';
 import {
   selectAuthBearerToken,
   selectAuthCredentials,
-} from '@/flux/auth/selector';
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { StatusEnum } from '@/flux/status/reducer';
-import { selectStatusByActionTypeId } from '@/flux/status/selector';
-import { logEvent } from '@/services/amplitude/analytics';
-import { Alert, Button, Form, Input } from 'antd';
+} from 'flux/auth/selector';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { StatusEnum } from 'flux/status/reducer';
+import { selectStatusByActionTypeId } from 'flux/status/selector';
 import { useEffect } from 'react';
+import { logEvent } from 'services/amplitude/analytics';
 
 export default function WCLCredentialsForm() {
   const dispatch = useAppDispatch();

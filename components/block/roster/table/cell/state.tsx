@@ -1,16 +1,16 @@
-import { useAppSelector } from '@/flux/hooks';
-import { RosterCharacter } from '@/flux/roster/types';
-import { StatusEnum } from '@/flux/status/reducer';
-import { selectStatusByActionTypeId } from '@/flux/status/selector';
-import { getWCLCharacter } from '@/flux/wcl/action';
-import { rosterCharacterToKey } from '@/utils/roster';
-import { WCLCharacter } from '@/wcl/types';
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   LoadingOutlined,
 } from '@ant-design/icons';
 import { Flex, Spin, Tooltip } from 'antd';
+import { useAppSelector } from 'flux/hooks';
+import { RosterCharacter } from 'flux/roster/types';
+import { StatusEnum } from 'flux/status/reducer';
+import { selectStatusByActionTypeId } from 'flux/status/selector';
+import { getWCLCharacter } from 'flux/wcl/action';
+import { rosterCharacterToKey } from 'utils/roster';
+import { WCLCharacter } from 'wcl/types';
 
 interface Props {
   rosterCharacter: RosterCharacter;

@@ -1,7 +1,7 @@
-import { findServerFromRegionAndName } from '@/game/realmList';
-import { WCLFramgentReport } from '@/wcl/fragment/report';
-import { WCLReportPlayerDetails } from '@/wcl/types';
+import { findServerFromRegionAndName } from 'game/realmList';
 import { gql, GraphQLClient } from 'graphql-request';
+import { WCLFramgentReport } from 'wcl/fragment/report';
+import { WCLReportPlayerDetails } from 'wcl/types';
 
 export const WCLGetReportWithFights = async function (
   WCLClient: GraphQLClient,

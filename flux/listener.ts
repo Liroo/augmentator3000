@@ -1,5 +1,5 @@
-import { logEvent } from '@/services/amplitude/analytics';
 import { createListenerMiddleware, isRejected } from '@reduxjs/toolkit';
+import { logEvent } from 'services/amplitude/analytics';
 
 const listenerMiddleware = createListenerMiddleware();
 

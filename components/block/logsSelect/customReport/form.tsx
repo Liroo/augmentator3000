@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { toggleCustomReportFightsSelected } from '@/flux/plan/reducer';
-import { selectStatusByActionTypeIsLoading } from '@/flux/status/selector';
-import { getWCLReportWithFights } from '@/flux/wcl/action';
 import { Button, Form, Input, notification } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { toggleCustomReportFightsSelected } from 'flux/plan/reducer';
+import { selectStatusByActionTypeIsLoading } from 'flux/status/selector';
+import { getWCLReportWithFights } from 'flux/wcl/action';
 
 export default function LogsSelectCustomReportForm() {
   const dispatch = useAppDispatch();

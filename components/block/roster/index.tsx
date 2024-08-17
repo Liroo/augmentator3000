@@ -1,6 +1,6 @@
-import { useAppSelector } from '@/flux/hooks';
-import { selectRosterListCount } from '@/flux/roster/selector';
 import { Collapse } from 'antd';
+import { useAppSelector } from 'flux/hooks';
+import { selectRosterListCount } from 'flux/roster/selector';
 import RosterForm from './form';
 import RosterTable from './table';
 

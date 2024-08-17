@@ -1,8 +1,8 @@
-import { useAppDispatch } from '@/flux/hooks';
-import { rosterRemoveCharacter } from '@/flux/roster/reducer';
-import { RosterCharacter } from '@/flux/roster/types';
-import { logEvent } from '@/services/amplitude/analytics';
 import { DeleteOutlined } from '@ant-design/icons';
+import { useAppDispatch } from 'flux/hooks';
+import { rosterRemoveCharacter } from 'flux/roster/reducer';
+import { RosterCharacter } from 'flux/roster/types';
+import { logEvent } from 'services/amplitude/analytics';
 
 interface Props {
   rosterCharacter: RosterCharacter;

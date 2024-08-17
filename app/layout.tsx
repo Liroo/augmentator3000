@@ -1,6 +1,6 @@
-import CoreLayout from '@/components/core/layout';
-import UIAntdTheme from '@/components/ui/antd/theme';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import CoreLayout from 'components/core/layout';
+import UIAntdTheme from 'components/ui/antd/theme';
 import type { Metadata } from 'next';
 import StoreProvider from '../providers/storeProvider';
 import './globals.css';

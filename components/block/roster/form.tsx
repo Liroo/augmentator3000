@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { rosterAddCharacter, rosterReset } from '@/flux/roster/reducer';
-import { getWCLCharacter } from '@/flux/wcl/action';
-import { selectWCLRegion } from '@/flux/wcl/selector';
-import { REALM_LIST } from '@/game/realmList';
-import { logEvent } from '@/services/amplitude/analytics';
-import { rosterCharacterToKey } from '@/utils/roster';
 import { Button, Form, Input, Select, Tooltip } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { rosterAddCharacter, rosterReset } from 'flux/roster/reducer';
+import { getWCLCharacter } from 'flux/wcl/action';
+import { selectWCLRegion } from 'flux/wcl/selector';
+import { REALM_LIST } from 'game/realmList';
+import { logEvent } from 'services/amplitude/analytics';
+import { rosterCharacterToKey } from 'utils/roster';
 
 export default function RosterForm() {
   const dispatch = useAppDispatch();

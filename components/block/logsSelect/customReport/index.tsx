@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { setFilterCustomReportByEncouterId } from '@/flux/plan/reducer';
-import { selectPlanFilterCustomReportByEncouterId } from '@/flux/plan/selector';
 import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { setFilterCustomReportByEncouterId } from 'flux/plan/reducer';
+import { selectPlanFilterCustomReportByEncouterId } from 'flux/plan/selector';
 import LogsSelectCustomReportForm from './form';
 import LogsSelectCustomReportTable from './table';
 

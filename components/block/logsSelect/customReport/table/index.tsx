@@ -1,7 +1,7 @@
-import { useAppSelector } from '@/flux/hooks';
-import { selectWCLReportWithFights } from '@/flux/wcl/selector';
-import { WCLReport } from '@/wcl/types';
 import { Table, TableColumnsType, Tooltip } from 'antd';
+import { useAppSelector } from 'flux/hooks';
+import { selectWCLReportWithFights } from 'flux/wcl/selector';
+import { WCLReport } from 'wcl/types';
 import LogsSelectCustomReportTableCellActions from './cell/actions';
 import LogsSelectCustomReportTableCellDelete from './cell/delete';
 import LogsSelectCustomReportTableCellPulls from './cell/pulls';

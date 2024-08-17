@@ -1,5 +1,5 @@
-import { logEvent } from '@/services/amplitude/analytics';
 import { useEffect } from 'react';
+import { logEvent } from 'services/amplitude/analytics';
 
 type CoreLogEventScreenProps = {
   location: string;

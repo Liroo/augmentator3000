@@ -1,6 +1,6 @@
-import { WCLFramgentCharacter } from '@/wcl/fragment/character';
-import { WCLCharacter, WCLCharacterQuery } from '@/wcl/types';
 import { gql, GraphQLClient } from 'graphql-request';
+import { WCLFramgentCharacter } from 'wcl/fragment/character';
+import { WCLCharacter, WCLCharacterQuery } from 'wcl/types';
 
 export const WCLGetCharacter = async function (
   WCLClient: GraphQLClient,

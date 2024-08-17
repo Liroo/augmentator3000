@@ -1,9 +1,9 @@
-import { useAppDispatch } from '@/flux/hooks';
-import { rosterModifyCharacter } from '@/flux/roster/reducer';
-import { RosterCharacter } from '@/flux/roster/types';
-import { getClassById } from '@/game/classes';
-import { WCLCharacter } from '@/wcl/types';
 import { Select } from 'antd';
+import { useAppDispatch } from 'flux/hooks';
+import { rosterModifyCharacter } from 'flux/roster/reducer';
+import { RosterCharacter } from 'flux/roster/types';
+import { getClassById } from 'game/classes';
+import { WCLCharacter } from 'wcl/types';
 
 interface Props {
   rosterCharacter: RosterCharacter;

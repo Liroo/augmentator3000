@@ -1,17 +1,17 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { setEncounterForm } from '@/flux/plan/reducer';
-import { selectPlanEncounterForm } from '@/flux/plan/selector';
-import { Difficulties } from '@/game/difficulties';
+import { Select, Typography } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { setEncounterForm } from 'flux/plan/reducer';
+import { selectPlanEncounterForm } from 'flux/plan/selector';
+import { Difficulties } from 'game/difficulties';
 import {
   Boss,
   getEncounterByEncounterId,
   getRaidByZoneId,
   Raids,
   Zone,
-} from '@/game/raids';
-import { logEvent } from '@/services/amplitude/analytics';
-import { Select, Typography } from 'antd';
+} from 'game/raids';
 import Image from 'next/image';
+import { logEvent } from 'services/amplitude/analytics';
 
 export default function BossSelect() {
   const dispatch = useAppDispatch();

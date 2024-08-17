@@ -1,10 +1,10 @@
-import { RosterCharacter } from '@/flux/roster/types';
-import { getClassById } from '@/game/classes';
-import { WCLCharacter } from '@/wcl/types';
+import { RosterCharacter } from 'flux/roster/types';
+import { getClassById } from 'game/classes';
 import ActorsJpg from 'images/actors.jpg';
 import Image from 'next/image';
+import { WCLCharacter } from 'wcl/types';
 
-import SPECS from '@/game/specs';
+import SPECS from 'game/specs';
 import { useMemo } from 'react';
 
 interface Props {

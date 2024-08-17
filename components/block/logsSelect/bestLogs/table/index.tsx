@@ -1,8 +1,8 @@
-import { useAppSelector } from '@/flux/hooks';
-import { selectRosterInUseListWithWCLCharacter } from '@/flux/roster/selector';
-import { RosterCharacter } from '@/flux/roster/types';
-import { WCLCharacter } from '@/wcl/types';
 import { Table, TableColumnsType } from 'antd';
+import { useAppSelector } from 'flux/hooks';
+import { selectRosterInUseListWithWCLCharacter } from 'flux/roster/selector';
+import { RosterCharacter } from 'flux/roster/types';
+import { WCLCharacter } from 'wcl/types';
 import LogsSelectBestLogsTableCellName from './cell/name';
 import LogsSelectBestLogsTableCellRankings from './cell/rankings';
 import LogsSelectBestLogsTableCellSpecIcon from './cell/specIcon';

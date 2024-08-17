@@ -1,10 +1,10 @@
-import { useAppSelector } from '@/flux/hooks';
+import { useAppSelector } from 'flux/hooks';
 import {
   selectPlanEncounterForm,
   selectPlanFilterCustomReportByEncouterId,
-} from '@/flux/plan/selector';
-import { WCLReport, WCLReportFight } from '@/wcl/types';
+} from 'flux/plan/selector';
 import { useMemo } from 'react';
+import { WCLReport, WCLReportFight } from 'wcl/types';
 import LogsSelectCustomReportTableCellPullsEncounter from './encounter';
 
 interface Props {
@@ -29,10 +29,8 @@ export default function LogsSelectCustomReportTableCellPulls({
           return acc;
 
         const key = `${fight.encounterID}-${fight.difficulty}`;
-        if (!acc[key]) {
-          acc[key] = [];
-        }
-        acc[key].push(fight);
+        if (!acc[key]) acc[key] = [];
+        (acc[key] as WCLReportFight[]).push(fight);
         return acc;
       },
       {} as Record<string, WCLReport['fights']>,

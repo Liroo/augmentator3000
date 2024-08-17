@@ -3,7 +3,7 @@ import {
   WCLCharacterEncounterRanking,
   WCLReport,
   WCLReportFight,
-} from '@/wcl/types';
+} from 'wcl/types';
 import { rosterCharacterToKey } from './roster';
 
 export const reportFightToKey = (report: WCLReport, fight: WCLReportFight) => {

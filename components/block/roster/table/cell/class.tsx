@@ -1,5 +1,5 @@
-import { getClassById } from '@/game/classes';
-import { WCLCharacter } from '@/wcl/types';
+import { getClassById } from 'game/classes';
+import { WCLCharacter } from 'wcl/types';
 
 interface Props {
   WCLCharacter: WCLCharacter;

@@ -1,13 +1,13 @@
-import { useAppDispatch, useAppSelector } from '@/flux/hooks';
-import { resetBestLogsFightsSelected } from '@/flux/plan/reducer';
-import { selectPlanEncounterForm } from '@/flux/plan/selector';
-import { selectStatusByActionTypeIsLoading } from '@/flux/status/selector';
-import { getWCLCharactersEncounterRankings } from '@/flux/wcl/action';
-import { resetEncounterRankings } from '@/flux/wcl/reducer';
-import { getRaidByZoneId, Zone } from '@/game/raids';
-import { logEvent } from '@/services/amplitude/analytics';
 import { Button, Form, Select, Tooltip } from 'antd';
+import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { resetBestLogsFightsSelected } from 'flux/plan/reducer';
+import { selectPlanEncounterForm } from 'flux/plan/selector';
+import { selectStatusByActionTypeIsLoading } from 'flux/status/selector';
+import { getWCLCharactersEncounterRankings } from 'flux/wcl/action';
+import { resetEncounterRankings } from 'flux/wcl/reducer';
+import { getRaidByZoneId, Zone } from 'game/raids';
 import { useEffect, useMemo } from 'react';
+import { logEvent } from 'services/amplitude/analytics';
 
 export default function LogsSelectBestLogsForm() {
   const dispatch = useAppDispatch();

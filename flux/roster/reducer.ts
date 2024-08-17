@@ -1,6 +1,6 @@
-import { rosterCharacterToKey } from '@/utils/roster';
-import { WCLCharacterQuery } from '@/wcl/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { rosterCharacterToKey } from 'utils/roster';
+import { WCLCharacterQuery } from 'wcl/types';
 import { RosterCharacter, RosterCharacterQuery } from './types';
 
 export interface RosterState {

@@ -1,6 +1,6 @@
-import { generateWCLBearerToken } from '@/services/wcl/generateBearer';
-import { ThunkApiConfig, ThunkArg } from '@/types/thunk';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ThunkApiConfig, ThunkArg } from 'flux/types';
+import { generateWCLBearerToken } from 'services/wcl/generateBearer';
 import { setBearerToken, setCredentials } from './reducer';
 import { selectAuthCredentials } from './selector';
 

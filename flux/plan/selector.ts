@@ -1,6 +1,6 @@
-import { getDataFromEncouterRankingRankKey } from '@/utils/report';
-import { getDataFromRosterCharacterKey } from '@/utils/roster';
 import { createSelector } from '@reduxjs/toolkit';
+import { getDataFromEncouterRankingRankKey } from 'utils/report';
+import { getDataFromRosterCharacterKey } from 'utils/roster';
 import { RootState } from '../store';
 import { selectWCLRegion } from '../wcl/selector';
 

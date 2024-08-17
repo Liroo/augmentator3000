@@ -1,7 +1,7 @@
-import { useAppDispatch } from '@/flux/hooks';
-import { rosterToggleCharacterUse } from '@/flux/roster/reducer';
-import { RosterCharacter } from '@/flux/roster/types';
 import { Checkbox } from 'antd';
+import { useAppDispatch } from 'flux/hooks';
+import { rosterToggleCharacterUse } from 'flux/roster/reducer';
+import { RosterCharacter } from 'flux/roster/types';
 
 interface Props {
   rosterCharacter: RosterCharacter;
