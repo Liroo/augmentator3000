@@ -6,7 +6,7 @@ import {
   characterToInternalId,
   playerDetailsClassToClassId,
 } from '@/utils/wcl';
-import { WCLCharacter, WCLReport } from '@/wcl/wcl';
+import { WCLCharacter, WCLReport } from '@/wcl/types';
 import { TeamOutlined } from '@ant-design/icons';
 import { Flex, Tooltip } from 'antd';
 

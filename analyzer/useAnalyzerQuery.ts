@@ -11,7 +11,7 @@ import {
 } from '@/flux/wcl/action';
 import { selectWCLReportsWithFightsByEncoounterID } from '@/flux/wcl/selector';
 import { characterToInternalId } from '@/utils/wcl';
-import { WCLCharacter, WCLReportQuery } from '@/wcl/wcl';
+import { WCLCharacter, WCLReportQuery } from '@/wcl/types';
 
 export default function useAnalyzerQuery() {
   const dispatch = useAppDispatch();

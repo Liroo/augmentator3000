@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/flux/hooks';
 import { removeReportWithFight } from '@/flux/wcl/reducer';
-import { WCLReport } from '@/wcl/wcl';
+import { WCLReport } from '@/wcl/types';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Flex } from 'antd';
 

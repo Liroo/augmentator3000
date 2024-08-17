@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/flux/hooks';
 import { selectWCLReportWithFights } from '@/flux/wcl/selector';
-import { WCLReport } from '@/wcl/wcl';
+import { WCLReport } from '@/wcl/types';
 import { Table, TableColumnsType, Tooltip } from 'antd';
 import ViewAddReportTableCellDelete from './cell/delete';
 import ViewAddReportTableCellImportRoster from './cell/importRoster';

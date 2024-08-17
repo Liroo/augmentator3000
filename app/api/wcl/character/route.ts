@@ -1,4 +1,4 @@
-import { initWCLClient } from '@/wcl';
+import { initWCLClient } from '@/wcl/client';
 import { WCLGetCharacter } from '@/wcl/query/character';
 import { z } from 'zod';
 

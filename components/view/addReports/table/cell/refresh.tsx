@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/flux/hooks';
 import { StatusEnum } from '@/flux/status/reducer';
 import { selectStatusByActionTypeId } from '@/flux/status/selector';
 import { getWCLReportWithFights } from '@/flux/wcl/action';
-import { WCLReport } from '@/wcl/wcl';
+import { WCLReport } from '@/wcl/types';
 import { RedoOutlined } from '@ant-design/icons';
 import { Flex, Tooltip } from 'antd';
 

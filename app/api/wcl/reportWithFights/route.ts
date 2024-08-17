@@ -1,4 +1,4 @@
-import { initWCLClient } from '@/wcl';
+import { initWCLClient } from '@/wcl/client';
 import { WCLGetReportWithFights } from '@/wcl/query/report';
 import { z } from 'zod';
 

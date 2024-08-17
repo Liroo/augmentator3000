@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/flux/hooks';
 import { setSelectedFightsFromReportWithFights } from '@/flux/plan/reducer';
 import { selectPlanSelectedFightsFromReportWithFightsByReportCode } from '@/flux/plan/selector';
-import { WCLReport, WCLReportFight } from '@/wcl/wcl';
+import { WCLReport, WCLReportFight } from '@/wcl/types';
 import { WowRaids } from '@/wow/raid';
 import { Flex, Tag } from 'antd';
 

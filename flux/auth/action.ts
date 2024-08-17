@@ -4,6 +4,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setBearerToken, setCredentials } from './reducer';
 import { selectAuthCredentials } from './selector';
 
+import WCLClient from 'services/wcl';
+
 export const authGenerateWCLBearerToken = createAsyncThunk<
   string,
   { clientId: string; clientSecret: string } & ThunkArg,
@@ -21,6 +23,8 @@ export const authGenerateWCLBearerToken = createAsyncThunk<
       dispatch(setCredentials({ clientId, clientSecret }));
 
     dispatch(setBearerToken(access_token));
+
+    WCLClient.setWCLBearerToken(access_token);
 
     return access_token;
   },

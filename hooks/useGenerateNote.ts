@@ -8,7 +8,7 @@ import { selectRosterListEnhanced } from '@/flux/roster/selector';
 import { selectWCLReportsByEncounterID } from '@/flux/wcl/selector';
 import { ResultEntry } from '@/types/result';
 import { characterToInternalId } from '@/utils/wcl';
-import { WCLReportTableEntry } from '@/wcl/wcl';
+import { WCLReportTableEntry } from '@/wcl/types';
 import { useMemo } from 'react';
 
 export const useGenerateNote = () => {

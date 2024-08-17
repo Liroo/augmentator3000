@@ -1,28 +1,25 @@
-import RosterForm from '@/components/block/rosterForm';
+'use client';
+
+import BossSelect from '@/components/block/bossSelect';
+import LogsSelect from '@/components/block/logsSelect';
+import Roster from '@/components/block/roster';
 import CoreLogEventScreen from '@/components/core/logEventScreen';
-import ViewAddReports from '@/components/view/addReports';
-import ViewAnalyzeResult from '@/components/view/analyzeResult';
-import ViewEditRoster from '@/components/view/editRoster';
-import ViewNote from '@/components/view/note';
-import ViewPlanBoss from '@/components/view/planBoss';
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: {
-    error: string;
-  };
-}) {
+export default function Home() {
   return (
-    <main className="my-[16px]">
-      <RosterForm />
+    <main className="my-[16px] flex flex-col gap-[16px]">
+      <Roster />
 
-      <ViewEditRoster />
-      <ViewAddReports />
+      <BossSelect />
+
+      <LogsSelect />
+      {/* Select Logs (best logs with a refresh best logs for this boss) + add custom report */}
+
+      {/* <ViewAddReports />
       <ViewPlanBoss />
       <ViewAnalyzeResult />
 
-      <ViewNote />
+      <ViewNote /> */}
 
       <CoreLogEventScreen location="home" />
     </main>

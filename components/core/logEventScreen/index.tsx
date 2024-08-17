@@ -1,5 +1,3 @@
-'use client';
-
 import { logEvent } from '@/services/amplitude/analytics';
 import { useEffect } from 'react';
 

@@ -4,7 +4,7 @@ import {
 } from '@/utils/wcl';
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLFramgentReport } from '../fragment/report';
-import { WCLReport, WCLReportQuery } from '../wcl';
+import { WCLReport, WCLReportQuery } from '../types';
 
 export const WCLGetReportTableDamage = async function (
   WCLClient: GraphQLClient,
@@ -109,6 +109,10 @@ export const WCLGetReportWithFights = async function (
     query WCLGetReportTableDamage {
       reportData {
         report(code: "${code}") {
+          code
+          region {
+            slug
+          }
           fights {
             id
             friendlyPlayers
@@ -120,6 +124,7 @@ export const WCLGetReportWithFights = async function (
             kill
             name
           }
+          playerDetails(startTime: 0, endTime: 2147483647) # 0 to max int
         }
       }
     }
@@ -132,53 +137,8 @@ export const WCLGetReportWithFights = async function (
   let fights = fightsRes.reportData.report.fights.filter(
     (f: any) => f.encounterID !== 0 && f.fightPercentage,
   );
-  const fightIDs = fights.map((f: any) => f.id);
 
-  const reportQuery = gql`
-  ${WCLFramgentReport}
-  query WCLGetReportTableDamage {
-    reportData {
-      report(code: "${code}") {
-        ...WCLFramgentReport
-        playerDetails(
-          fightIDs: ${JSON.stringify(fightIDs)}
-        )
-      }
-    }
-  }
-`;
-
-  const reportRes = (await WCLClient.request(reportQuery)) as {
-    reportData: {
-      report: any;
-    };
+  return {
+    ...
   };
-
-  const playerDetails = [
-    ...reportRes.reportData.report.playerDetails.data.playerDetails.dps,
-    ...reportRes.reportData.report.playerDetails.data.playerDetails.healers,
-    ...reportRes.reportData.report.playerDetails.data.playerDetails.tanks,
-  ].map((pd: any) => {
-    return {
-      ...pd,
-      serverSlug: playerDetailsServerToServer(pd.server)?.slug,
-    };
-  });
-
-  fights = fights.map((f: any) => {
-    f.friendlyPlayers = f.friendlyPlayers.map((fp: number) => {
-      const player = playerDetails.find((pd: any) => pd.id === fp);
-      return characterToInternalId(player as any);
-    });
-    return f;
-  });
-
-  const serializedReport: WCLReport = {
-    title: reportRes.reportData.report.title,
-    code: reportRes.reportData.report.code,
-    playerDetails,
-    fights,
-  };
-
-  return serializedReport;
 };

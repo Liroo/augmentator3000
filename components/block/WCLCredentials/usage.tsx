@@ -4,8 +4,7 @@ export default function WCLCredentialsUsage() {
       <p>
         To avoid hitting my own rate limits, I'm asking for your ClientID and
         ClientSecret. Don't worry, these credentials are stored securely in your
-        browser, and I don't have access to them (I'm generating a token to
-        communicate with Warcraft Logs directly from the browser).
+        browser, and I don't have access to them.
         <br />
         <br />
         To generate your credentials, log into your Warcraft Logs account, visit{' '}

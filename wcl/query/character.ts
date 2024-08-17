@@ -5,7 +5,7 @@ import {
   WCLCharacterEncounterRankingsQuery,
   WCLCharacterQuery,
   WCLCharacterQueryWithSpec,
-} from '../wcl';
+} from '../types';
 
 export const WCLGetCharacter = async function (
   WCLClient: GraphQLClient,

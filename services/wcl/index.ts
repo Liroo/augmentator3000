@@ -11,3 +11,21 @@ export async function initWCLClient(WCLBearerToken: string) {
 
   return graphQLClient;
 }
+
+class WCLClient {
+  client: GraphQLClient;
+
+  constructor() {
+    this.client = new GraphQLClient(WCLGraphQLEndpoint);
+  }
+
+  async setWCLBearerToken(WCLBearerToken: string) {
+    this.client.setHeaders({
+      authorization: `Bearer ${WCLBearerToken}`,
+    });
+  }
+}
+
+const client = new WCLClient();
+
+export default client;

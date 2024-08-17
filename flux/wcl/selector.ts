@@ -1,3 +1,4 @@
+import { rosterCharacterToKey } from '@/utils/roster';
 import { characterToInternalId } from '@/utils/wcl';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../store';
@@ -9,17 +10,25 @@ export const selectWCLRegion = createSelector(
   (wclState) => wclState.region,
 );
 
-export const selectWCLCharacter = (name: string, serverSlug: string) =>
-  createSelector([selectWCLState], (wclState) =>
-    Object.values(wclState.characters).find(
-      (c) => c.name === name && c.serverSlug === serverSlug,
-    ),
-  );
+export const selectWCLReportWithFights = createSelector(
+  [selectWCLState, selectWCLRegion],
+  (wclState, region) =>
+    Object.values(wclState.reportWithFights).filter((r) => r.region === region),
+);
 
 export const selectWCLCharacterByInternalId = (internalId: string) =>
   createSelector([selectWCLState], (wclState) =>
     Object.values(wclState.characters).find(
       (c) => characterToInternalId(c) === internalId,
+    ),
+  );
+
+export const selectWCLCharacterByInternalIdCharacterKey = (
+  characterKey: string,
+) =>
+  createSelector([selectWCLState], (wclState) =>
+    Object.values(wclState.characters).find(
+      (c) => rosterCharacterToKey(c) === characterKey,
     ),
   );
 
@@ -34,11 +43,6 @@ export const selectWCLReportsByEncounterID = (encounterID: number) =>
       (r) => r.associatedEncounterID === encounterID,
     ),
   );
-
-export const selectWCLReportWithFights = createSelector(
-  [selectWCLState],
-  (wclState) => Object.values(wclState.reportWithFights),
-);
 
 export const selectWCLReportsWithFightsByEncoounterID = (encounterID: number) =>
   createSelector([selectWCLReportWithFights], (reportWithFights) => {

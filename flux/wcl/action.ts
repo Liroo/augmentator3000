@@ -1,20 +1,25 @@
 import { ThunkApiConfig, ThunkArg } from '@/types/thunk';
-import {
-  WCLCharacter,
-  WCLCharacterQueryWithSpec,
-  WCLReport,
-  WCLReportQuery,
-} from '@/wcl/wcl';
-import { getSpecNameById } from '@/wow/class';
-import { WowRaids } from '@/wow/raid';
+import { WCLReport, WCLReportQuery } from '@/wcl/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getApi, postApi } from '../api';
+import { postApi } from '../api';
 import {
   setCharacter,
-  setCharacters,
+  setCharacterEncounterRanking,
   setReport,
   setReportWithFights,
 } from './reducer';
+
+import {
+  encounterRankingRankToKey,
+  getDataFromEncouterRankingKey,
+} from '@/utils/report';
+import { WCLGetCharacter } from '@/wcl/query/character/getCharacter';
+import { WCLGetCharactersEncounterRankings } from '@/wcl/query/character/getCharactersEncounterRankings';
+import { WCLGetReportWithFights } from '@/wcl/query/report/getReportWithFights';
+import WCLClient from 'services/wcl';
+import { addBestLogsFightsSelected } from '../plan/reducer';
+import { selectRosterInUseListWithWCLCharacter } from '../roster/selector';
+import { selectWCLCharacterByInternalIdCharacterKey } from './selector';
 
 export const getWCLCharacter = createAsyncThunk<
   void,
@@ -23,9 +28,11 @@ export const getWCLCharacter = createAsyncThunk<
 >(
   'wcl/getWCLCharacter',
   async ({ name, serverSlug, serverRegion }, { dispatch }) => {
-    const { character } = await getApi(
-      `/api/wcl/character?name=${name}&serverSlug=${serverSlug}&serverRegion=${serverRegion}`,
-    );
+    const character = await WCLGetCharacter(WCLClient.client, {
+      name,
+      serverSlug,
+      serverRegion,
+    });
 
     if (!!character) {
       dispatch(
@@ -39,42 +46,78 @@ export const getWCLCharacter = createAsyncThunk<
   },
 );
 
-export const getWCLCharactersWithEncounterRankings = createAsyncThunk<
-  WCLCharacter[],
+export const getWCLReportWithFights = createAsyncThunk<
+  WCLReport,
   {
-    encounterID: number;
-    characters: WCLCharacterQueryWithSpec[];
+    code: string;
+  } & ThunkArg,
+  ThunkApiConfig
+>('wcl/getWCLReportWithFights', async ({ code }, { dispatch }) => {
+  const reportWithFights = await WCLGetReportWithFights(WCLClient.client, code);
+
+  dispatch(setReportWithFights(reportWithFights));
+
+  return reportWithFights;
+});
+
+export const getWCLCharactersEncounterRankings = createAsyncThunk<
+  void,
+  {
+    encounterId: number;
+    difficulty: number;
+    partitions: number[];
   } & ThunkArg,
   ThunkApiConfig
 >(
-  'wcl/getWCLCharactersWithEncounterRankings',
-  async ({ encounterID, characters }, { dispatch }) => {
-    const raid = WowRaids.find((r) =>
-      r.encounters.some((e) => e.id === encounterID),
-    );
+  'wcl/getWCLCharactersEncounterRankings',
+  async ({ encounterId, difficulty, partitions }, { dispatch, getState }) => {
+    const rosterList = selectRosterInUseListWithWCLCharacter(getState());
+    if (!rosterList.length) return;
 
-    const { characters: charactersWithEncounterRankings } = await postApi(
-      '/api/wcl/characters',
-      {
-        encounterRankings: [
-          {
-            encounterID,
-            difficulty: 5,
-            partition: raid?.partition,
+    const charactersWithEncounterRankings =
+      await WCLGetCharactersEncounterRankings(
+        WCLClient.client,
+        rosterList.map((rosterCharacter) => rosterCharacter.rosterCharacter),
+        encounterId,
+        difficulty,
+        partitions,
+      );
+
+    Object.entries(charactersWithEncounterRankings).forEach(
+      ([key, encounterRankings]) => {
+        dispatch(
+          setCharacterEncounterRanking({
+            characterKey: key,
+            encounterRankings,
+          }),
+        );
+        Object.entries(encounterRankings).forEach(
+          ([encounterRankingsKey, encounterRanking]) => {
+            const bestRank = [...encounterRanking.ranks].sort(
+              (a, b) => b.amount - a.amount,
+            )[0];
+            const character =
+              selectWCLCharacterByInternalIdCharacterKey(key)(getState());
+
+            if (!bestRank || !character) return;
+
+            const { partition } =
+              getDataFromEncouterRankingKey(encounterRankingsKey);
+            dispatch(
+              addBestLogsFightsSelected(
+                encounterRankingRankToKey(
+                  character,
+                  encounterId,
+                  difficulty,
+                  ~~partition,
+                  bestRank,
+                ),
+              ),
+            );
           },
-        ],
-        characters: characters.map((c) => ({
-          name: c.name,
-          serverSlug: c.serverSlug,
-          serverRegion: c.serverRegion,
-          specName: getSpecNameById(c.specID),
-        })),
+        );
       },
     );
-
-    dispatch(setCharacters(charactersWithEncounterRankings));
-
-    return charactersWithEncounterRankings;
   },
 );
 
@@ -102,20 +145,6 @@ export const getWCLReport = createAsyncThunk<
   );
 
   return report as WCLReport;
-});
-
-export const getWCLReportWithFights = createAsyncThunk<
-  void,
-  {
-    code: string;
-  } & ThunkArg,
-  ThunkApiConfig
->('wcl/getWCLReportWithFights', async ({ code }, { dispatch }) => {
-  const report = await postApi('/api/wcl/reportWithFights', {
-    code: code,
-  });
-
-  dispatch(setReportWithFights(report));
 });
 
 export const getWCLReports = createAsyncThunk<

@@ -1,4 +1,4 @@
-import { WCLReport, WCLReportFight } from '@/wcl/wcl';
+import { WCLReport, WCLReportFight } from '@/wcl/types';
 import { WowRaids } from '@/wow/raid';
 import { Flex } from 'antd';
 import ViewAddReportTableCellPullsEncounter from './encounter';
