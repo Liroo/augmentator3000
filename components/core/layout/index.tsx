@@ -1,6 +1,7 @@
 'use client';
 
-import { Typography } from 'antd';
+import { WarningOutlined } from '@ant-design/icons';
+import { Tooltip, Typography } from 'antd';
 import WCLCredentials from 'components/block/WCLCredentials';
 import RegionSelect from 'components/block/regionSelect';
 import initAmplitude from 'services/amplitude';
@@ -23,6 +24,20 @@ export default function CoreLayout({ children }: Props) {
 
       <div className="absolute right-0 top-0 z-10">
         <RegionSelect />
+      </div>
+
+      <div className="absolute left-0 top-0 z-10">
+        <Tooltip
+          title="Work in progress. This will be ready for TWW."
+          placement="bottomRight"
+        >
+          <div className="ml-[40px] mt-[50px] flex cursor-pointer select-none items-center">
+            <WarningOutlined size={40} />
+            <Typography.Title level={5} className="!mb-0 ml-[4px]">
+              Disclaimer
+            </Typography.Title>
+          </div>
+        </Tooltip>
       </div>
 
       <WCLCredentials />
