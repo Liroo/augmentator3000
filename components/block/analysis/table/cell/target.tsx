@@ -10,6 +10,7 @@ import {
   selectWCLRegion,
 } from 'flux/wcl/selector';
 import { getClassById } from 'game/classes';
+import { useEffect } from 'react';
 import { analysisSetupToKey, rosterCharacterToKey } from 'utils/key';
 
 const RenderCharacterName = ({ value }: { value: string }) => {
@@ -28,12 +29,14 @@ type Props = {
   row: AnalysisTableRow;
   rowIndex: number;
   index: number;
+  disabled?: boolean;
 };
 
 export default function AnalysisTableCellTimeTarget({
   row,
   rowIndex,
   index,
+  disabled = false,
 }: Props) {
   const entry = row.entries[index];
   const dispatch = useAppDispatch();
@@ -54,19 +57,27 @@ export default function AnalysisTableCellTimeTarget({
   );
   const priority = useAppSelector(selectAnalysisPriorityByKey(key));
 
-  if (!WCLCharacter) return null;
-
-  const characterClass = getClassById(WCLCharacter?.classID);
+  useEffect(() => {
+    if (!entry && priority[index] !== '') {
+      dispatch(
+        setPriorityCharacters({
+          key,
+          characters: new Array(6).fill(''),
+        }),
+      );
+    }
+  }, [entry, priority]);
 
   return (
     <div className="flex items-center justify-start">
       <Select
+        disabled={disabled}
         allowClear
         style={{
           width: '100%',
         }}
         variant="borderless"
-        value={entry.priority ? entry.characterKey : ''}
+        value={entry?.priority ? entry?.characterKey : ''}
         options={[
           { value: '', label: 'default' },
           ...roster.map(({ rosterCharacter }) => ({
@@ -75,10 +86,14 @@ export default function AnalysisTableCellTimeTarget({
           })),
         ]}
         onChange={(value) => {
+          const newPriority = priority.map((p, i) => {
+            if (p === value) return '';
+            return i === index ? value : p;
+          });
           dispatch(
             setPriorityCharacters({
               key,
-              characters: priority.map((p, i) => (i === index ? value : p)),
+              characters: newPriority,
             }),
           );
         }}
@@ -86,7 +101,8 @@ export default function AnalysisTableCellTimeTarget({
           <RenderCharacterName value={props.value as string} />
         )}
         labelRender={({ value }) => {
-          if (value === '')
+          if (value === '') {
+            if (!entry) return null;
             return (
               <Typography.Text>
                 {new Intl.NumberFormat('en-US', {
@@ -94,12 +110,14 @@ export default function AnalysisTableCellTimeTarget({
                   compactDisplay: 'short',
                 }).format(entry.average)}{' '}
                 -{' '}
-                <span className={`classID-${characterClass?.id}`}>
-                  {WCLCharacter.name}
+                <span
+                  className={`classID-${getClassById(WCLCharacter?.classID as number)?.id}`}
+                >
+                  {WCLCharacter?.name}
                 </span>
               </Typography.Text>
             );
-          else return <RenderCharacterName value={value as string} />;
+          } else return <RenderCharacterName value={value as string} />;
         }}
       />
     </div>

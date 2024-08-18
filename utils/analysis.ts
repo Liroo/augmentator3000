@@ -47,11 +47,20 @@ export const applyPrioritiesToEntries = (
     const fromIndex = newEntries.findIndex(
       (entry) => entry.characterKey === key,
     );
-    if (fromIndex === -1) return;
 
-    const element = newEntries[fromIndex];
-    newEntries.splice(fromIndex, 1);
-    newEntries.splice(index, 0, element);
+    if (fromIndex >= 0) {
+      const element = newEntries[fromIndex];
+      newEntries.splice(fromIndex, 1);
+      newEntries.splice(index, 0, element);
+    } else {
+      newEntries.splice(index, 0, {
+        characterKey: key,
+        total: 0,
+        average: 0,
+        count: 0,
+        priority: true,
+      });
+    }
 
     return;
   });
