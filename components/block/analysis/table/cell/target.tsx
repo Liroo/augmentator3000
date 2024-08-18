@@ -29,6 +29,7 @@ type Props = {
   row: AnalysisTableRow;
   rowIndex: number;
   index: number;
+  isChild?: boolean;
   disabled?: boolean;
 };
 
@@ -36,6 +37,7 @@ export default function AnalysisTableCellTimeTarget({
   row,
   rowIndex,
   index,
+  isChild = false,
   disabled = false,
 }: Props) {
   const entry = row.entries[index];
@@ -110,7 +112,7 @@ export default function AnalysisTableCellTimeTarget({
                 {new Intl.NumberFormat('en-US', {
                   notation: 'compact',
                   compactDisplay: 'short',
-                }).format(entry.average)}{' '}
+                }).format(isChild ? entry.average : entry.total)}{' '}
                 -{' '}
                 <span
                   className={`classID-${getClassById(WCLCharacter?.classID as number)?.id}`}

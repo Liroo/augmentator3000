@@ -30,6 +30,7 @@ const columns: TableColumnsType<AnalysisTableRowParent> = [
           row={row}
           index={index}
           rowIndex={rowIndex}
+          isChild={!row.subEntries}
           disabled={!row.subEntries || (!prevRowEntry && index !== 0)}
         />
       );

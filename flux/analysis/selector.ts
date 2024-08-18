@@ -320,12 +320,8 @@ export const selectAnalysisTable = createSelector(
             total: 0,
             count: 0,
           };
-        parentRow.entries[entry.characterKey].total += entry.total;
-        parentRow.entries[entry.characterKey].count += entry.count;
-        parentRow.entries[entry.characterKey].average = Math.round(
-          parentRow.entries[entry.characterKey].total /
-            parentRow.entries[entry.characterKey].count,
-        );
+        parentRow.entries[entry.characterKey].total += entry.average;
+        parentRow.entries[entry.characterKey].average += entry.average;
       });
 
       // If we reach 5 subentries or the end of the damage data, we close the parent row
