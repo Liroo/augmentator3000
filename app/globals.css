@@ -24,14 +24,19 @@ body {
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
+  .no-scrollbar::-webkit-scrollbar * {
     display: none;
   }
   /* Hide scrollbar for IE, Edge and Firefox */
-  .no-scrollbar {
+  .no-scrollbar * {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+}
+
+.antd-select-inline .ant-select-selection-overflow {
+  flex-wrap: nowrap !important;
+  overflow-x: scroll !important;
 }
 
 /**
@@ -456,55 +461,55 @@ body {
 
 .class-death-knight,
 .classID-1 {
-  color: #c41f3b;
+  color: #c41f3b !important;
 }
 .class-demon-hunter,
 .classID-12 {
-  color: #a330c9;
+  color: #a330c9 !important;
 }
 .class-druid,
 .classID-2 {
-  color: #ff7d0a;
+  color: #ff7d0a !important;
 }
 .class-evoker,
 .classID-13 {
-  color: #33937f;
+  color: #33937f !important;
 }
 .class-hunter,
 .classID-3 {
-  color: #abd473;
+  color: #abd473 !important;
 }
 .class-mage,
 .classID-4 {
-  color: #40c7eb;
+  color: #40c7eb !important;
 }
 .class-monk,
 .classID-5 {
-  color: #00ff96;
+  color: #00ff96 !important;
 }
 .class-paladin,
 .classID-6 {
-  color: #f58cba;
+  color: #f58cba !important;
 }
 .class-priest,
 .classID-7 {
-  color: #ffffff;
+  color: #ffffff !important;
 }
 .class-rogue,
 .classID-8 {
-  color: #fff569;
+  color: #fff569 !important;
 }
 .class-shaman,
 .classID-9 {
-  color: #0070de;
+  color: #0070de !important;
 }
 .class-warlock,
 .classID-10 {
-  color: #8787ed;
+  color: #8787ed !important;
 }
 .class-warrior,
 .classID-11 {
-  color: #c79c6e;
+  color: #c79c6e !important;
 }
 
 .ant-collapse-header {

@@ -20,7 +20,7 @@ import {
 import {
   encounterRankingRankToKey,
   getDataFromEncouterRankingKey,
-} from 'utils/report';
+} from 'utils/key';
 import { addBestLogsFightsSelected } from '../plan/reducer';
 import { selectRosterInUseListWithWCLCharacter } from '../roster/selector';
 import { selectWCLCharacterByCharacterKey } from './selector';

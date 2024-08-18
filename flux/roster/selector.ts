@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { rosterCharacterToKey } from 'utils/roster';
+import { rosterCharacterToKey } from 'utils/key';
 import { RootState } from '../store';
 import { selectWCLRegion } from '../wcl/selector';
 
@@ -49,5 +49,6 @@ export const selectRosterInUseListWithWCLCharacter = createSelector(
           rosterCharacter,
           WCLCharacter,
         };
-      }),
+      })
+      .filter((c) => !!c.WCLCharacter),
 );

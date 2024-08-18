@@ -1,10 +1,25 @@
+import { RosterCharacter, RosterCharacterQuery } from 'flux/roster/types';
 import {
   WCLCharacter,
   WCLCharacterEncounterRanking,
   WCLReport,
   WCLReportFight,
 } from 'services/wcl/types';
-import { rosterCharacterToKey } from './roster';
+
+export const rosterCharacterToKey = (
+  player: RosterCharacter | RosterCharacterQuery,
+) => {
+  return `${player.name.toLowerCase()}-${player.serverSlug}-${player.serverRegion.toLowerCase()}`;
+};
+
+export const getDataFromRosterCharacterKey = (key: string) => {
+  const [name, serverSlug, serverRegion] = key.split('-');
+  return {
+    name,
+    serverSlug,
+    serverRegion,
+  };
+};
 
 export const reportFightToKey = (report: WCLReport, fight: WCLReportFight) => {
   return `${report.code}-${report.region}-${fight.encounterID}-${fight.difficulty}-${fight.id}`;
@@ -64,5 +79,22 @@ export const getDataFromEncouterRankingKey = (key: string) => {
     encounterId: Number(encounterId),
     difficulty: Number(difficulty),
     partition,
+  };
+};
+
+export const analysisSetupToKey = (
+  region: string,
+  encounterId: number,
+  difficulty: number,
+  index: number,
+) => `${region}-${encounterId}-${difficulty}-${index}`;
+
+export const getDataFromAnalysisSetup = (key: string) => {
+  const [region, encounterId, difficulty, index] = key.split('-');
+  return {
+    region,
+    encounterId: Number(encounterId),
+    difficulty: Number(difficulty),
+    index: Number(index),
   };
 };

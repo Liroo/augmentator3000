@@ -6,6 +6,7 @@ import { selectStatusByActionTypeIsLoading } from 'flux/status/selector';
 import { getWCLReportsFightsTable } from 'flux/wcl/action';
 import { resetReportWithDamageTableByEncounterIdAndDifficulty } from 'flux/wcl/reducer';
 import { useMemo } from 'react';
+import AnalysisForm from './form';
 import AnalysisTable from './table';
 
 export default function Analysis() {
@@ -86,6 +87,10 @@ export default function Analysis() {
       </div>
 
       <div className="mt-[12px]">
+        <AnalysisForm />
+      </div>
+
+      <div className="mt-[8px]">
         <AnalysisTable />
       </div>
     </div>

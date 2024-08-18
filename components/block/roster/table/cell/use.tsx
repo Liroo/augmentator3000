@@ -5,9 +5,10 @@ import { RosterCharacter } from 'flux/roster/types';
 
 interface Props {
   rosterCharacter: RosterCharacter;
+  canUse?: boolean;
 }
 
-export default function RosterTableCellUse({ rosterCharacter }: Props) {
+export default function RosterTableCellUse({ rosterCharacter, canUse }: Props) {
   const dispatch = useAppDispatch();
 
   const onClickCheckbox = () => {
@@ -16,7 +17,11 @@ export default function RosterTableCellUse({ rosterCharacter }: Props) {
 
   return (
     <div className="flex justify-center">
-      <Checkbox checked={rosterCharacter.use} onClick={onClickCheckbox} />
+      <Checkbox
+        checked={rosterCharacter.use}
+        onClick={onClickCheckbox}
+        disabled={!canUse}
+      />
     </div>
   );
 }

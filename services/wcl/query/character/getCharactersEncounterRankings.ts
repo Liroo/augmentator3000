@@ -2,8 +2,7 @@ import { RosterCharacter } from 'flux/roster/types';
 import Specs from 'game/specs';
 import { gql, GraphQLClient } from 'graphql-request';
 import { WCLCharacterEncounterRanking } from 'services/wcl/types';
-import { encounterRankingToKey } from 'utils/report';
-import { rosterCharacterToKey } from 'utils/roster';
+import { encounterRankingToKey, rosterCharacterToKey } from 'utils/key';
 
 export const WCLGetCharactersEncounterRankings = async function (
   WCLClient: GraphQLClient,

@@ -29,8 +29,11 @@ const columns: TableColumnsType<{
   {
     title: 'Use',
     key: 'use',
-    render: ({ rosterCharacter }) => (
-      <RosterTableCellUse rosterCharacter={rosterCharacter} />
+    render: ({ rosterCharacter, WCLCharacter }) => (
+      <RosterTableCellUse
+        rosterCharacter={rosterCharacter}
+        canUse={!!WCLCharacter}
+      />
     ),
     width: 50,
   },

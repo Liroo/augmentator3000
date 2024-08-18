@@ -5,7 +5,7 @@ import { getWCLCharacter } from 'flux/wcl/action';
 import { selectWCLRegion } from 'flux/wcl/selector';
 import { REALM_LIST } from 'game/realmList';
 import { logEvent } from 'services/amplitude/analytics';
-import { rosterCharacterToKey } from 'utils/roster';
+import { rosterCharacterToKey } from 'utils/key';
 
 export default function RosterForm() {
   const dispatch = useAppDispatch();

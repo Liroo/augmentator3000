@@ -1,19 +1,19 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectPlanState } from 'flux/plan/selector';
+import { selectPlanEncounterForm, selectPlanState } from 'flux/plan/selector';
 import { selectRosterInUseListWithWCLCharacter } from 'flux/roster/selector';
+import { RootState } from 'flux/store';
 import {
   WCLCharacterEncounterRanking,
   WCLReportFight,
 } from 'services/wcl/types';
 import { generateTimeRanges } from 'utils/analysis';
 import {
+  analysisSetupToKey,
   getDataFromEncouterRankingRankKey,
   getDataFromReportFightKey,
-} from 'utils/report';
-import {
   getDataFromRosterCharacterKey,
   rosterCharacterToKey,
-} from 'utils/roster';
+} from 'utils/key';
 import {
   selectWCLCharacters,
   selectWCLRegion,
@@ -25,6 +25,30 @@ import {
   AnalysisDamageDoneEntryParent,
   AnalysisTableRowParent,
 } from './types';
+
+export const selectAnalysisState = (state: RootState) => state.analysis;
+
+export const selectAnalysisExcludedBulk = createSelector(
+  [selectAnalysisState],
+  (analysisState) => analysisState.excludedBulk,
+);
+
+export const selectAnalysisMinimumFightDurationMinutes = createSelector(
+  [selectAnalysisState],
+  (analysisState) => analysisState.minimumFightDurationMinutes,
+);
+
+export const selectAnalysisExcludedByKey = (key: string) =>
+  createSelector(
+    [selectAnalysisState, selectRosterInUseListWithWCLCharacter],
+    (analysisState, roster) =>
+      (analysisState.excluded[key] || []).filter((characterKey) => {
+        return roster.find(
+          ({ rosterCharacter }) =>
+            rosterCharacterToKey(rosterCharacter) === characterKey,
+        );
+      }),
+  );
 
 // Complex selector that returns a dictionary of report codes with their fights selected
 export const selectAnalysisReportFights = createSelector(
@@ -148,9 +172,15 @@ export const selectAnalysisTable = createSelector(
   [
     selectAnalysisReportFights,
     selectWCLReportWithDamageTable,
+    selectAnalysisMinimumFightDurationMinutes,
     selectRosterInUseListWithWCLCharacter,
   ],
-  (reportFights, WCLReportWithDamageTable, rosterInUse) => {
+  (
+    reportFights,
+    WCLReportWithDamageTable,
+    minimumFightDuration,
+    rosterInUse,
+  ) => {
     // Get the longest fight duration to generate time ranges
     const longestFightDuration = Object.values(reportFights).reduce(
       (acc, report) =>
@@ -160,7 +190,10 @@ export const selectAnalysisTable = createSelector(
         }, acc),
       0,
     );
-    const timeRanges = generateTimeRanges(longestFightDuration, 0);
+    const timeRanges = generateTimeRanges(
+      Math.max(longestFightDuration, minimumFightDuration * 60 * 1000),
+      0,
+    );
 
     // Create a dictionary of characters in use
     const charactersInUse: { [characterKey: string]: boolean } = {};
@@ -169,9 +202,12 @@ export const selectAnalysisTable = createSelector(
     });
 
     // Create a dictionary of damage data
-    const damageData: AnalysisDamageDoneEntry[] = [
-      ...timeRanges,
-    ] as AnalysisDamageDoneEntry[];
+    const damageData: AnalysisDamageDoneEntry[] = timeRanges.map((tr) => ({
+      startTime: tr.startTime,
+      endTime: tr.endTime,
+      entries: {},
+      subEntries: [],
+    })) as AnalysisDamageDoneEntry[];
 
     // For each report fight, we will compute the damage done by each character
     Object.values(reportFights).forEach((report) => {
@@ -282,6 +318,44 @@ export const selectAnalysisTable = createSelector(
           entries: Object.values(subEntry.entries || {})
             .map((entry) => entry)
             .sort((a, b) => b.average - a.average),
+        })),
+      };
+
+      return tableRow;
+    });
+
+    return table;
+  },
+);
+
+export const selectAnalysisTableWithExcluded = createSelector(
+  [
+    selectAnalysisState,
+    selectAnalysisTable,
+    selectPlanEncounterForm,
+    selectWCLRegion,
+  ],
+  (analysisState, analysisTable, encounterForm, WCLRegion) => {
+    const table = analysisTable.map((parentRow, index) => {
+      const excludedKey = analysisSetupToKey(
+        WCLRegion,
+        encounterForm.encounterId,
+        encounterForm.difficulty,
+        index,
+      );
+      const excluded = analysisState.excluded[excludedKey] || [];
+      const tableRow: AnalysisTableRowParent = {
+        startTime: parentRow.startTime,
+        endTime: parentRow.endTime,
+        entries: parentRow.entries.filter(
+          (entry) => !excluded.includes(entry.characterKey),
+        ),
+        subEntries: parentRow.subEntries.map((subEntry) => ({
+          startTime: subEntry.startTime,
+          endTime: subEntry.endTime,
+          entries: subEntry.entries.filter(
+            (entry) => !excluded.includes(entry.characterKey),
+          ),
         })),
       };
 

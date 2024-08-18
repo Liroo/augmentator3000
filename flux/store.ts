@@ -11,6 +11,7 @@ import {
 } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import analysisSlice from './analysis/reducer';
 import authSlice from './auth/reducer';
 import listenerMiddleware from './listener';
 import planSlice from './plan/reducer';
@@ -57,6 +58,7 @@ export const makeStore = () => {
     [wclSlice.name]: wclSlice.reducer,
     [rosterSlice.name]: rosterSlice.reducer,
     [planSlice.name]: planSlice.reducer,
+    [analysisSlice.name]: analysisSlice.reducer,
   });
 
   const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

@@ -9,7 +9,7 @@ import specs from 'game/specs';
 import { useEffect } from 'react';
 import { logEvent } from 'services/amplitude/analytics';
 import { WCLReport, WCLReportPlayerDetails } from 'services/wcl/types';
-import { rosterCharacterToKey } from 'utils/roster';
+import { rosterCharacterToKey } from 'utils/key';
 
 interface Props {
   report: WCLReport;

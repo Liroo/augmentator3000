@@ -6,7 +6,7 @@ import {
   WCLReport,
   WCLReportFight,
 } from 'services/wcl/types';
-import { rosterCharacterToKey } from 'utils/roster';
+import { rosterCharacterToKey } from 'utils/key';
 
 export interface WCLState {
   region: Region;
