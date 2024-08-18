@@ -28,6 +28,18 @@ import {
 
 export const selectAnalysisState = (state: RootState) => state.analysis;
 
+export const selectDefaultTargets = createSelector(
+  [selectAnalysisState, selectRosterInUseListWithWCLCharacter],
+  (analysisState, rosterInUse) =>
+    analysisState.defaultTargets.map((target) => {
+      const character = rosterInUse.find(
+        ({ rosterCharacter }) =>
+          rosterCharacterToKey(rosterCharacter) === target,
+      );
+      return character;
+    }),
+);
+
 export const selectAnalysisExcludedBulk = createSelector(
   [selectAnalysisState],
   (analysisState) => analysisState.excludedBulk,

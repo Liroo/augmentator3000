@@ -12,6 +12,7 @@ export interface AnalysisState {
     [key: string]: (string | null)[];
   };
   minimumFightDurationMinutes: number;
+  defaultTargets: string[];
 }
 
 const initialState: AnalysisState = {
@@ -19,6 +20,7 @@ const initialState: AnalysisState = {
   excludedBulk: [],
   priority: {},
   minimumFightDurationMinutes: 1,
+  defaultTargets: new Array(4).fill(''),
 };
 
 const analysisSlice = createSlice({
@@ -58,6 +60,9 @@ const analysisSlice = createSlice({
         );
       });
     },
+    setDefaultTargets: (state, action: PayloadAction<string[]>) => {
+      state.defaultTargets = action.payload;
+    },
   },
 });
 
@@ -67,6 +72,7 @@ export const {
   setExcludedBulkCharacters,
   setPriorityCharacters,
   removeCharacterFromExcludedAndPriority,
+  setDefaultTargets,
 } = analysisSlice.actions;
 
 export default analysisSlice;
