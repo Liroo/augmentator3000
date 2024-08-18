@@ -4,6 +4,7 @@ import {
   WCLCharacter,
   WCLCharacterEncounterRanking,
   WCLReport,
+  WCLReportFight,
 } from 'services/wcl/types';
 import { rosterCharacterToKey } from 'utils/roster';
 
@@ -15,12 +16,17 @@ export interface WCLState {
   reportWithFights: {
     [code: string]: WCLReport;
   };
+
+  reportWithDamageTable: {
+    [key: string]: WCLReport;
+  };
 }
 
 const initialState: WCLState = {
   region: 'EU',
   characters: {},
   reportWithFights: {},
+  reportWithDamageTable: {},
 };
 
 const wclSlice = createSlice({
@@ -63,6 +69,30 @@ const wclSlice = createSlice({
         character.encounterRankings = {};
       });
     },
+    setReportWithDamageTable: (
+      state,
+      action: PayloadAction<{ key: string; report: WCLReport }>,
+    ) => {
+      state.reportWithDamageTable[action.payload.key] = action.payload.report;
+    },
+    resetReportWithDamageTableByEncounterIdAndDifficulty: (
+      state,
+      action: PayloadAction<{
+        encounterId: number;
+        difficulty: number;
+      }>,
+    ) => {
+      Object.entries(state.reportWithDamageTable).forEach(([key, report]) => {
+        if (
+          (report.fights as WCLReportFight[]).some(
+            (fight) =>
+              fight.encounterID === action.payload.encounterId &&
+              fight.difficulty === action.payload.difficulty,
+          )
+        )
+          delete state.reportWithDamageTable[key];
+      });
+    },
   },
 });
 
@@ -73,6 +103,8 @@ export const {
   setReportWithFights,
   removeReportWithFight,
   resetEncounterRankings,
+  setReportWithDamageTable,
+  resetReportWithDamageTableByEncounterIdAndDifficulty,
 } = wclSlice.actions;
 
 export default wclSlice;

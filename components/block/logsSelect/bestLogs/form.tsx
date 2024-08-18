@@ -1,4 +1,4 @@
-import { Button, Form, Select, Tooltip } from 'antd';
+import { Button, Form, Popconfirm, Select, Tooltip } from 'antd';
 import { useAppDispatch, useAppSelector } from 'flux/hooks';
 import { resetBestLogsFightsSelected } from 'flux/plan/reducer';
 import { selectPlanEncounterForm } from 'flux/plan/selector';
@@ -94,17 +94,21 @@ export default function LogsSelectBestLogsForm() {
           Refresh Best Logs for current encounter
         </Button>
       </Form>
-      <Button
-        type="primary"
-        danger
-        size="small"
-        onClick={() => {
+      <Popconfirm
+        title="Reset rankings"
+        description="Are you sure?"
+        onConfirm={() => {
           dispatch(resetBestLogsFightsSelected());
           dispatch(resetEncounterRankings());
         }}
+        okText="Yes"
+        cancelText="No"
+        placement="left"
       >
-        Reset rankings
-      </Button>
+        <Button danger size="small">
+          Reset rankings
+        </Button>
+      </Popconfirm>
     </div>
   );
 }

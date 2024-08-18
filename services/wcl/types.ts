@@ -63,22 +63,11 @@ export type WCLCharacter = {
   };
 } & WCLCharacterQueryWithSpec;
 
-export type WCLCharacterEncounterRankingsQuery = {
-  encounterID: number;
-  difficulty: number;
-  partition?: number;
-};
-
-export type WCLReportQuery = {
-  code: string;
-  startTime: number;
-  timeRanges: Array<{ startTime: number; endTime: number }>;
-};
-
 export type WCLReportTableEntry = {
   name: string;
+  serverSlug: string;
+  serverRegion: string;
   id: number;
-  guid: number;
   total: number;
 };
 
@@ -122,12 +111,10 @@ export type WCLReport = {
   playerDetails?: WCLReportPlayerDetails[];
   startTime?: number;
   tables?: {
-    [tableKey: string]: {
-      startTime: number;
-      endTime: number;
-      entries: WCLReportTableEntry[];
-    };
-  };
+    startTime: number;
+    endTime: number;
+    entries: WCLReportTableEntry[];
+  }[];
 
   fights?: WCLReportFight[];
 };

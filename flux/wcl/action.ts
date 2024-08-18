@@ -4,13 +4,19 @@ import { WCLReport } from 'services/wcl/types';
 import {
   setCharacter,
   setCharacterEncounterRanking,
+  setReportWithDamageTable,
   setReportWithFights,
 } from './reducer';
 
 import WCLClient from 'services/wcl/client';
 import { WCLGetCharacter } from 'services/wcl/query/character/getCharacter';
 import { WCLGetCharactersEncounterRankings } from 'services/wcl/query/character/getCharactersEncounterRankings';
+import { WCLGetReportDamageTable } from 'services/wcl/query/report/getReportTable';
 import { WCLGetReportWithFights } from 'services/wcl/query/report/getReportWithFights';
+import {
+  generateTimeRanges,
+  reportDamageTableFilterExpression,
+} from 'utils/analysis';
 import {
   encounterRankingRankToKey,
   getDataFromEncouterRankingKey,
@@ -117,3 +123,53 @@ export const getWCLCharactersEncounterRankings = createAsyncThunk<
     );
   },
 );
+
+export const getWCLReportFightTable = createAsyncThunk<
+  void,
+  {
+    reportCode: string;
+    fightId: number;
+    startTime: number;
+    endTime: number;
+  } & ThunkArg,
+  ThunkApiConfig
+>(
+  'wcl/getWCLReportFightTable',
+  async ({ reportCode, fightId, startTime, endTime }, { dispatch }) => {
+    const timeRanges = generateTimeRanges(endTime - startTime, startTime);
+
+    const reportDamageTable = await WCLGetReportDamageTable(
+      WCLClient.client,
+      reportCode,
+      fightId,
+      timeRanges,
+      reportDamageTableFilterExpression,
+    );
+
+    dispatch(
+      setReportWithDamageTable({
+        key: `${reportCode}-${fightId}`,
+        report: reportDamageTable,
+      }),
+    );
+  },
+);
+
+export const getWCLReportsFightsTable = createAsyncThunk<
+  void,
+  {
+    queries: {
+      reportCode: string;
+      fightId: number;
+      startTime: number;
+      endTime: number;
+    }[];
+  } & ThunkArg,
+  ThunkApiConfig
+>('wcl/getWCLReportsFightsTable', async ({ queries }, { dispatch }) => {
+  const promises = queries.map((query) =>
+    dispatch(getWCLReportFightTable(query as any)).unwrap(),
+  );
+
+  await Promise.all(promises);
+});

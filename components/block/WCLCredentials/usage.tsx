@@ -11,7 +11,8 @@ export default function WCLCredentialsUsage() {
         <a href="https://www.warcraftlogs.com/api/clients/" target="_blank">
           this link
         </a>
-        , create a new client, and then copy and paste your ClientID and
+        , create a new client (fill the name, use any url in the redirect field
+        then click create), and then copy and paste your ClientID and
         ClientSecret into my website.
       </p>
     </div>

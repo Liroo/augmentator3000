@@ -1,7 +1,10 @@
 import { findServerFromRegionAndName } from 'game/realmList';
 import { gql, GraphQLClient } from 'graphql-request';
-import { WCLFramgentReport } from 'services/wcl/fragment/report';
-import { WCLReportPlayerDetails } from 'services/wcl/types';
+import {
+  WCLFramgentReport,
+  WCLFramgentReportFight,
+} from 'services/wcl/fragment/report';
+import { WCLReport, WCLReportPlayerDetails } from 'services/wcl/types';
 
 export const WCLGetReportWithFights = async function (
   WCLClient: GraphQLClient,
@@ -9,29 +12,13 @@ export const WCLGetReportWithFights = async function (
 ) {
   const fightsQuery = gql`
       ${WCLFramgentReport}
+      ${WCLFramgentReportFight}
       query WCLGetReportWithFights {
       reportData {
         report(code: "${code}") {
           ...WCLFramgentReport
-          code
-          region {
-            slug
-          }
           fights {
-            id
-            difficulty
-            friendlyPlayers
-            bossPercentage
-            encounterID
-            startTime
-            endTime
-            fightPercentage
-            kill
-            name
-            phaseTransitions {
-              id
-              startTime
-            }
+            ...WCLFramgentReportFight
           }
           playerDetails(startTime: 0, endTime: 2147483647) # 0 to max int
         }
@@ -67,5 +54,5 @@ export const WCLGetReportWithFights = async function (
           };
         },
       ),
-  };
+  } as WCLReport;
 };

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Tooltip } from 'antd';
+import { Button, Form, Input, Popconfirm, Select, Tooltip } from 'antd';
 import { useAppDispatch, useAppSelector } from 'flux/hooks';
 import { rosterAddCharacter, rosterReset } from 'flux/roster/reducer';
 import { getWCLCharacter } from 'flux/wcl/action';
@@ -81,9 +81,18 @@ export default function RosterForm() {
         title="That will reset your current roster."
         placement="bottomLeft"
       >
-        <Button type="primary" danger size="small" onClick={onClickResetRoster}>
-          Reset roster
-        </Button>
+        <Popconfirm
+          title="Reset roster"
+          description="Are you sure?"
+          onConfirm={onClickResetRoster}
+          okText="Yes"
+          cancelText="No"
+          placement="left"
+        >
+          <Button danger size="small">
+            Reset roster
+          </Button>
+        </Popconfirm>
       </Tooltip>
     </div>
   );
