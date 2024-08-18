@@ -57,6 +57,8 @@ export default function AnalysisTableCellTimeTarget({
   );
   const priority = useAppSelector(selectAnalysisPriorityByKey(key));
 
+  // reset priority if there is no entry because this is likely a bug OR the user has deleted previous entry and try to fuck with me
+  // What are you trying to do with my website???!!??!!
   useEffect(() => {
     if (!entry && priority[index] !== '') {
       dispatch(
