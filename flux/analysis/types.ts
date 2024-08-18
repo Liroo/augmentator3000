@@ -20,6 +20,7 @@ export type AnalysisTableEntry = {
   average: number;
   count: number;
   total: number;
+  priority?: boolean;
 };
 
 export type AnalysisTableRow = TimeRange & {

@@ -1,3 +1,5 @@
+import { AnalysisTableEntry } from 'flux/analysis/types';
+
 // Ebon might duration in ms
 export const ebonMightDuration = 30000;
 export const ebonMightSplit = 5;
@@ -27,4 +29,32 @@ export const generateTimeRanges = (
     });
   }
   return timeRanges;
+};
+
+export const applyPrioritiesToEntries = (
+  priority: (string | null)[],
+  entries: AnalysisTableEntry[],
+) => {
+  const newEntries = entries.map((entry) => {
+    entry.priority = priority.includes(entry.characterKey);
+    return entry;
+  });
+
+  priority.forEach((key, index) => {
+    if (!key) return;
+
+    // find index of key in entries
+    const fromIndex = newEntries.findIndex(
+      (entry) => entry.characterKey === key,
+    );
+    if (fromIndex === -1) return;
+
+    const element = newEntries[fromIndex];
+    newEntries.splice(fromIndex, 1);
+    newEntries.splice(index, 0, element);
+
+    return;
+  });
+
+  return newEntries;
 };

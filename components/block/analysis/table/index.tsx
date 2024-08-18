@@ -1,5 +1,5 @@
 import { Table, TableColumnsType } from 'antd';
-import { selectAnalysisTableWithExcluded } from 'flux/analysis/selector';
+import { selectAnalysisTableWithExcludedAndPriority } from 'flux/analysis/selector';
 import { AnalysisTableRowParent } from 'flux/analysis/types';
 import { useAppSelector } from 'flux/hooks';
 import AnalysisTableCellTimeExcluded from './cell/excluded';
@@ -21,25 +21,29 @@ const columns: TableColumnsType<AnalysisTableRowParent> = [
   ...new Array(6).fill(0).map((_, index) => ({
     title: `Target ${index + 1}`,
     key: `target-${index}`,
-    render: (row: AnalysisTableRowParent) => (
-      <AnalysisTableCellTimeTarget row={row} index={index} />
+    render: (row: AnalysisTableRowParent, _: any, rowIndex: number) => (
+      <AnalysisTableCellTimeTarget
+        row={row}
+        index={index}
+        rowIndex={rowIndex}
+      />
     ),
     width: 160,
   })),
   {
     title: 'Excluded',
     key: 'excluded',
-    render: (row: AnalysisTableRowParent, _, index: number) =>
+    render: (row: AnalysisTableRowParent, _: any, rowIndex: number) =>
       !!row.subEntries ? (
-        <AnalysisTableCellTimeExcluded row={row} rowIndex={index} />
+        <AnalysisTableCellTimeExcluded row={row} rowIndex={rowIndex} />
       ) : null,
   },
 ];
 
 export default function AnalysisTable() {
-  const analysisTable = useAppSelector(selectAnalysisTableWithExcluded);
-
-  // console.log(analysisTable);
+  const analysisTable = useAppSelector(
+    selectAnalysisTableWithExcludedAndPriority,
+  );
 
   return (
     <Table<AnalysisTableRowParent>

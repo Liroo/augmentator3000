@@ -6,7 +6,7 @@ import {
   WCLCharacterEncounterRanking,
   WCLReportFight,
 } from 'services/wcl/types';
-import { generateTimeRanges } from 'utils/analysis';
+import { applyPrioritiesToEntries, generateTimeRanges } from 'utils/analysis';
 import {
   analysisSetupToKey,
   getDataFromEncouterRankingRankKey,
@@ -48,6 +48,25 @@ export const selectAnalysisExcludedByKey = (key: string) =>
             rosterCharacterToKey(rosterCharacter) === characterKey,
         );
       }),
+  );
+
+export const selectAnalysisPriorityByKey = (key: string) =>
+  createSelector(
+    [selectAnalysisState, selectRosterInUseListWithWCLCharacter],
+    (analysisState, roster) =>
+      (analysisState.priority[key] || new Array(6).fill('')).map(
+        (characterKey) => {
+          if (!characterKey) return '';
+
+          const characterExists = roster.find(
+            ({ rosterCharacter }) =>
+              rosterCharacterToKey(rosterCharacter) === characterKey,
+          );
+
+          if (characterExists) return characterKey;
+          return '';
+        },
+      ),
   );
 
 // Complex selector that returns a dictionary of report codes with their fights selected
@@ -356,6 +375,63 @@ export const selectAnalysisTableWithExcluded = createSelector(
           entries: subEntry.entries.filter(
             (entry) => !excluded.includes(entry.characterKey),
           ),
+        })),
+      };
+
+      return tableRow;
+    });
+
+    return table;
+  },
+);
+
+// To be honest, I don't even know what I'm doing anymore
+export const selectAnalysisTableWithExcludedAndPriority = createSelector(
+  [
+    selectAnalysisState,
+    selectAnalysisTableWithExcluded,
+    selectPlanEncounterForm,
+    selectWCLRegion,
+    selectRosterInUseListWithWCLCharacter,
+  ],
+  (
+    analysisState,
+    analysisTableWithExcluded,
+    encounterForm,
+    WCLRegion,
+    roserInUse,
+  ) => {
+    const table = analysisTableWithExcluded.map((parentRow, index) => {
+      const key = analysisSetupToKey(
+        WCLRegion,
+        encounterForm.encounterId,
+        encounterForm.difficulty,
+        index,
+      );
+
+      // Get priority for that index and make sure they exists
+      const priority = (
+        analysisState.priority[key] || new Array(6).fill('')
+      ).map((characterKey) => {
+        if (!characterKey) return null;
+
+        const character = roserInUse.find(
+          ({ rosterCharacter }) =>
+            rosterCharacterToKey(rosterCharacter) === characterKey,
+        );
+
+        if (character) return characterKey;
+        return null;
+      });
+
+      const tableRow: AnalysisTableRowParent = {
+        startTime: parentRow.startTime,
+        endTime: parentRow.endTime,
+        entries: applyPrioritiesToEntries(priority, parentRow.entries),
+        subEntries: parentRow.subEntries.map((subEntry) => ({
+          startTime: subEntry.startTime,
+          endTime: subEntry.endTime,
+          entries: applyPrioritiesToEntries(priority, subEntry.entries),
         })),
       };
 
