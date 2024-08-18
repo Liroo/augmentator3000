@@ -5,6 +5,7 @@ import {
   selectDefaultTargets,
 } from 'flux/analysis/selector';
 import { useAppDispatch, useAppSelector } from 'flux/hooks';
+import { RosterCharacter } from 'flux/roster/types';
 import { useMemo, useState } from 'react';
 import { getDataFromRosterCharacterKey, rosterCharacterToKey } from 'utils/key';
 import WaNoteTarget from './target';
@@ -49,7 +50,9 @@ lirAugEnd
     const newDefaultTargets = new Array(4).fill(null).map((_, i) => {
       if (i === index) return characterKey;
       return defautlTargets[i]?.rosterCharacter
-        ? rosterCharacterToKey(defautlTargets[i]?.rosterCharacter)
+        ? rosterCharacterToKey(
+            defautlTargets[i]?.rosterCharacter as RosterCharacter,
+          )
         : '';
     });
     dispatch(setDefaultTargets(newDefaultTargets));
