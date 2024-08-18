@@ -38,7 +38,9 @@ export default function LogsSelect() {
           children: (
             <>
               <Typography.Text>
-                Select best logs from your roster.
+                Select best logs from your roster. Note that if a report fight
+                is selected in the custom report, it will automatically analyse
+                every player in the fight.
               </Typography.Text>
               <Divider />
               <LogsSelectBestLogs />
