@@ -2,7 +2,7 @@ import { Select, Tooltip } from 'antd';
 import { useAppDispatch, useAppSelector } from 'flux/hooks';
 import { setRegion } from 'flux/wcl/reducer';
 import { selectWCLRegion } from 'flux/wcl/selector';
-import { Region, SUPPORTED_REGIONS } from 'game/regions';
+import { Region, ALL_REGIONS } from 'game/regions';
 import { logEvent } from 'services/amplitude/analytics';
 
 export default function RegionSelect() {
@@ -23,7 +23,7 @@ export default function RegionSelect() {
         <Select
           defaultValue={region}
           style={{ width: 70 }}
-          options={SUPPORTED_REGIONS.map((region) => ({
+          options={ALL_REGIONS.map((region) => ({
             value: region,
             label: region,
           }))}
