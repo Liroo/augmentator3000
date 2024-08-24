@@ -28,7 +28,7 @@ export default function CoreLayout({ children }: Props) {
 
       <div className="absolute left-0 top-0 z-10">
         <Tooltip
-          title="Work in progress. This will be ready for TWW. In any case, expect bugs as this is home made and mainly for personal use."
+          title="Website is subject to bugs. This is a fan project and is not affiliated with WarcraftLogs. For any issues or feature request, please contact me on discord: Liroo"
           placement="bottomRight"
         >
           <div className="ml-[40px] mt-[48px] flex cursor-pointer select-none items-center">
