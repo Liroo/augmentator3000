@@ -65,11 +65,13 @@ export default function CoreLayout({ children }: Props) {
 
         <div className="flex w-full justify-between">
           <Typography.Text>
-            The source code of this website is available{' '}
             <a href="https://github.com/Liroo/auganalyzer" target="_blank">
-              on github
+              Source code
+            </a>{' '}
+            |{' '}
+            <a href="https://buymeacoffee.com/liroo" target="_blank">
+              Buy me a ☕️
             </a>
-            .
           </Typography.Text>
           <Typography.Text>
             This website is not affiliated with WarcraftLogs.
