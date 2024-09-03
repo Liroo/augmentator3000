@@ -21,10 +21,10 @@ export interface Zone {
 }
 
 export const Raids = [
+  NerubarPalace, // tier 32
   VaultOfTheIncarnates, // tier 29
   Aberrus, // tier 30
   Amirdrassil, // tier 31
-  NerubarPalace, // tier 32
 ];
 
 export const getRaidByZoneId = (zoneId: number): Zone | undefined => {
