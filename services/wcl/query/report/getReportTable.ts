@@ -71,18 +71,22 @@ export const WCLGetReportDamageTable = async function (
     .filter(([key]) => key.startsWith('table_'))
     .map(([key, value]) => {
       const [_, startTime, endTime] = key.split('_');
-      const entries = (value as any).data.entries.map((entry: any) => {
-        const player = playerDetails.find(
-          (p) => p.id === entry.id,
-        ) as WCLReportPlayerDetails;
-        return {
-          name: player.name,
-          serverSlug: player.serverSlug,
-          serverRegion: region,
-          id: entry.id,
-          total: entry.total,
-        };
-      });
+      const entries = (value as any).data.entries
+        .map((entry: any) => {
+          const player = playerDetails.find(
+            (p) => p.id === entry.id,
+          ) as WCLReportPlayerDetails;
+
+          if (!player) return null;
+          return {
+            name: player.name,
+            serverSlug: player.serverSlug,
+            serverRegion: region,
+            id: entry.id,
+            total: entry.total,
+          };
+        })
+        .filter((e: any) => !!e);
 
       return {
         startTime: ~~startTime,
