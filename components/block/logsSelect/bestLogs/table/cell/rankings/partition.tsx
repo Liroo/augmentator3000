@@ -33,7 +33,8 @@ export default function LogsSelectBestLogsTableCellRankingsPartition({
     ),
   );
 
-  if (!encounterRankings || encounterRankings.ranks.length === 0) return null;
+  if (!encounterRankings || (encounterRankings.ranks || []).length === 0)
+    return null;
 
   return (
     <div className="flex whitespace-nowrap">
