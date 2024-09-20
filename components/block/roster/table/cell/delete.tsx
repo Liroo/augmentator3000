@@ -1,6 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { removeCharacterFromExcludedAndPriority } from 'flux/analysis/reducer';
 import { useAppDispatch } from 'flux/hooks';
+import { removeBestLogsFightsSelectedForCharacter } from 'flux/plan/reducer';
 import { rosterRemoveCharacter } from 'flux/roster/reducer';
 import { RosterCharacter } from 'flux/roster/types';
 import { logEvent } from 'services/amplitude/analytics';
@@ -18,6 +19,7 @@ export default function RosterTableCellDelete({ rosterCharacter }: Props) {
       className="flex cursor-pointer select-none items-center justify-center"
       onClick={() => {
         logEvent('home', 'roster-remove', { name: rosterCharacter.name });
+        dispatch(removeBestLogsFightsSelectedForCharacter(rosterCharacter));
         dispatch(
           removeCharacterFromExcludedAndPriority(
             rosterCharacterToKey(rosterCharacter),

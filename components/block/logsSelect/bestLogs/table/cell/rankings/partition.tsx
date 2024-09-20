@@ -41,7 +41,7 @@ export default function LogsSelectBestLogsTableCellRankingsPartition({
       <Typography.Text>
         {partition === 0 ? 'current partition' : `partition ${partition}`}
       </Typography.Text>
-      <div className="ml-[8px] flex gap-[4px]">
+      <div className="ml-[8px] flex flex-wrap gap-[4px]">
         {[...encounterRankings.ranks]
           .sort((a, b) => b.amount - a.amount)
           .map((rank) => {

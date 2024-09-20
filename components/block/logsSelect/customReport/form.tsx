@@ -28,7 +28,7 @@ export default function LogsSelectCustomReportForm() {
       dispatch(
         toggleCustomReportFightsSelected(
           (reportWithFights.fights || []).map(
-            (f) => `${reportWithFights.code}-${f.id}`,
+            (f) => `${reportWithFights.code}_${f.id}`,
           ),
         ),
       );

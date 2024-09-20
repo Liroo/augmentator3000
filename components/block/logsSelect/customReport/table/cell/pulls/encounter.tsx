@@ -1,6 +1,10 @@
 import { Tag, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from 'flux/hooks';
-import { toggleCustomReportFightsSelected } from 'flux/plan/reducer';
+import {
+  addCustomReportFightsSelected,
+  removeCustomReportFightsSelected,
+  toggleCustomReportFightsSelected,
+} from 'flux/plan/reducer';
 import { selectPlanCustomReportFightsSelectedByReportCode } from 'flux/plan/selector';
 import { Boss, getEncounterByEncounterId } from 'game/raids';
 import { useMemo } from 'react';
@@ -55,14 +59,19 @@ export default function LogsSelectCustomReportTableCellPullsEncounter({
     }));
   }, [fights]);
 
-  const dispatch = useAppDispatch();
-  const onToggleFights = (fightsIds: string[]) => {
-    dispatch(toggleCustomReportFightsSelected(fightsIds));
-  };
-
   const selectedFights = useAppSelector(
     selectPlanCustomReportFightsSelectedByReportCode(report.code),
   );
+
+  const dispatch = useAppDispatch();
+  const onToggleFight = (fightsIds: string) => {
+    dispatch(toggleCustomReportFightsSelected([fightsIds]));
+  };
+  const onToggleFights = (fightsIds: string[]) => {
+    if (fightsIds.some((fightId) => selectedFights.includes(fightId)))
+      dispatch(removeCustomReportFightsSelected(fightsIds));
+    else dispatch(addCustomReportFightsSelected(fightsIds));
+  };
 
   return (
     <div>
@@ -77,7 +86,7 @@ export default function LogsSelectCustomReportTableCellPullsEncounter({
             {item.phase > 0 && (
               <Typography.Text>Phase {item.phase}</Typography.Text>
             )}
-            <div className="flex gap-[4px]">
+            <div className="flex flex-wrap gap-[4px]">
               {item.fights.length > 1 && (
                 <Tag
                   className="cursor-pointer select-none"
@@ -110,7 +119,7 @@ export default function LogsSelectCustomReportTableCellPullsEncounter({
                         : 'default'
                     }
                     onClick={() => {
-                      onToggleFights([reportFightToKey(report, fight)]);
+                      onToggleFight(reportFightToKey(report, fight));
                     }}
                   >
                     <span className="text-[8px]">

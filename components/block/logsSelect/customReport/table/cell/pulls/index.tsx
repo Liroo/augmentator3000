@@ -28,7 +28,7 @@ export default function LogsSelectCustomReportTableCellPulls({
         )
           return acc;
 
-        const key = `${fight.encounterID}-${fight.difficulty}`;
+        const key = `${fight.encounterID}_${fight.difficulty}`;
         if (!acc[key]) acc[key] = [];
         (acc[key] as WCLReportFight[]).push(fight);
         return acc;
@@ -37,8 +37,8 @@ export default function LogsSelectCustomReportTableCellPulls({
     );
 
     const fightsArray = Object.entries(fights).map(([key, value]) => ({
-      encounterId: ~~key.split('-')[0],
-      difficulty: ~~key.split('-')[1],
+      encounterId: ~~key.split('_')[0],
+      difficulty: ~~key.split('_')[1],
       fights: value as WCLReportFight[],
     }));
 

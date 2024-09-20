@@ -243,7 +243,7 @@ export const selectAnalysisTable = createSelector(
     // For each report fight, we will compute the damage done by each character
     Object.values(reportFights).forEach((report) => {
       report.fights.forEach((fight) => {
-        const key = `${report.code}-${fight.id}`;
+        const key = `${report.code}_${fight.id}`;
         const reportDamageTable = WCLReportWithDamageTable[key];
 
         if (!reportDamageTable || !reportDamageTable.tables) return;

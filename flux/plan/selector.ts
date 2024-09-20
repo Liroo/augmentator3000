@@ -45,7 +45,8 @@ export const selectPlanCustomReportFightsSelectedByEncounterFormCount =
     [selectPlanState, selectWCLRegion],
     (planState, WCLRegion) =>
       planState.customReportFightsSelected.filter((f) => {
-        const [_, region, encounterId, difficulty] = f.split('-');
+        const [_, region, encounterId, difficulty] = f.split('_');
+
         return (
           region === WCLRegion &&
           encounterId === planState.encounterForm.encounterId.toString() &&
@@ -68,11 +69,13 @@ export const selectPlanBestLogsFightsSelectedByEncounterFormCount =
       );
     });
     const uniqueFights: string[] = [];
+    console.log(fightsSelected);
     fightsSelected.forEach((f) => {
       const { reportCode, fightId } = getDataFromEncouterRankingRankKey(f);
-      const key = `${reportCode}-${fightId}`;
+      const key = `${reportCode}_${fightId}`;
       if (!uniqueFights.includes(key)) uniqueFights.push(key);
     });
+    console.log(uniqueFights);
 
     return { total: fightsSelected.length, unique: uniqueFights.length };
   });

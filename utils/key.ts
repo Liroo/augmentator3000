@@ -9,11 +9,11 @@ import {
 export const rosterCharacterToKey = (
   player: RosterCharacter | RosterCharacterQuery,
 ) => {
-  return `${player.name.toLowerCase()}-${player.serverSlug}-${player.serverRegion.toLowerCase()}`;
+  return `${player.name.toLowerCase()}_${player.serverSlug}_${player.serverRegion.toLowerCase()}`;
 };
 
 export const getDataFromRosterCharacterKey = (key: string) => {
-  const [name, serverSlug, serverRegion] = key.split('-');
+  const [name, serverSlug, serverRegion] = key.split('_');
   return {
     name,
     serverSlug,
@@ -22,11 +22,11 @@ export const getDataFromRosterCharacterKey = (key: string) => {
 };
 
 export const reportFightToKey = (report: WCLReport, fight: WCLReportFight) => {
-  return `${report.code}-${report.region}-${fight.encounterID}-${fight.difficulty}-${fight.id}`;
+  return `${report.code}_${report.region}_${fight.encounterID}_${fight.difficulty}_${fight.id}`;
 };
 
 export const getDataFromReportFightKey = (key: string) => {
-  const [reportCode, region, encounterID, difficulty, id] = key.split('-');
+  const [reportCode, region, encounterID, difficulty, id] = key.split('_');
   return {
     reportCode,
     region,
@@ -87,10 +87,10 @@ export const analysisSetupToKey = (
   encounterId: number,
   difficulty: number,
   index: number,
-) => `${region}-${encounterId}-${difficulty}-${index}`;
+) => `${region}_${encounterId}_${difficulty}_${index}`;
 
 export const getDataFromAnalysisSetup = (key: string) => {
-  const [region, encounterId, difficulty, index] = key.split('-');
+  const [region, encounterId, difficulty, index] = key.split('_');
   return {
     region,
     encounterId: Number(encounterId),

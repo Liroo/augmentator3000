@@ -148,7 +148,7 @@ export const getWCLReportFightTable = createAsyncThunk<
 
     dispatch(
       setReportWithDamageTable({
-        key: `${reportCode}-${fightId}`,
+        key: `${reportCode}_${fightId}`,
         report: reportDamageTable,
       }),
     );

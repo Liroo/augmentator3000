@@ -1,6 +1,7 @@
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import CoreLayout from 'components/core/layout';
 import UIAntdTheme from 'components/ui/antd/theme';
+import UIUpdateAlert from 'components/ui/updateAlert';
 import type { Metadata } from 'next';
 import StoreProvider from '../providers/storeProvider';
 import './globals.css';
@@ -23,6 +24,7 @@ export default function RootLayout({
           <AntdRegistry>
             <StoreProvider>
               <CoreLayout>{children}</CoreLayout>
+              <UIUpdateAlert />
             </StoreProvider>
           </AntdRegistry>
         </UIAntdTheme>
