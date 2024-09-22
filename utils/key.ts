@@ -43,7 +43,7 @@ export const encounterRankingRankToKey = (
   partition: number,
   rank: WCLCharacterEncounterRanking['ranks'][0],
 ) => {
-  return `${rosterCharacterToKey(character)}_${encounterId}_${difficulty}_${partition}_${rank.report.code}_${rank.report.fightID}`;
+  return `${rosterCharacterToKey(character)}:${encounterId}:${difficulty}:${partition}:${rank.report.code}:${rank.report.fightID}`;
 };
 
 export const getDataFromEncouterRankingRankKey = (key: string) => {
@@ -54,7 +54,7 @@ export const getDataFromEncouterRankingRankKey = (key: string) => {
     partition,
     reportCode,
     fightId,
-  ] = key.split('_');
+  ] = key.split(':');
   return {
     characterKey,
     encounterId: Number(encounterId),
