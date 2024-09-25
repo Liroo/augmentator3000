@@ -171,7 +171,7 @@ export const selectAnalysisReportFights = createSelector(
         let rank: WCLCharacterEncounterRanking['ranks'][0] | undefined;
         const encounterRankings = Object.values(character.encounterRankings);
         for (const encounterRanking of encounterRankings) {
-          const tmpRank = encounterRanking.ranks.find(
+          const tmpRank = (encounterRanking.ranks || []).find(
             (r) => r.report.code === reportCode && r.report.fightID === fightId,
           );
 

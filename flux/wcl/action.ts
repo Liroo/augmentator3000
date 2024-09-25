@@ -97,7 +97,7 @@ export const getWCLCharactersEncounterRankings = createAsyncThunk<
         );
         Object.entries(encounterRankings).forEach(
           ([encounterRankingsKey, encounterRanking]) => {
-            const bestRank = [...encounterRanking.ranks].sort(
+            const bestRank = [...(encounterRanking.ranks || [])].sort(
               (a, b) => b.amount - a.amount,
             )[0];
             const character = selectWCLCharacterByCharacterKey(key)(getState());
