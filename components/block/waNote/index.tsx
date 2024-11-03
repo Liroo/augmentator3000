@@ -4,6 +4,7 @@ import {
   selectAnalysisTableWithExcludedAndPriority,
   selectDefaultTargets,
 } from 'flux/analysis/selector';
+import { selectCustomEbonMightTableWithExcludedAndPriority } from 'flux/customEbonMight/selector';
 import { useAppDispatch, useAppSelector } from 'flux/hooks';
 import { RosterCharacter } from 'flux/roster/types';
 import { useMemo, useState } from 'react';
@@ -16,6 +17,9 @@ export default function WaNote() {
   const [api, contextHolder] = notification.useNotification();
   const analysisTable = useAppSelector(
     selectAnalysisTableWithExcludedAndPriority,
+  );
+  const customAnalysisTable = useAppSelector(
+    selectCustomEbonMightTableWithExcludedAndPriority,
   );
   const [showNote, setShowNote] = useState<boolean>(false);
 
@@ -36,6 +40,17 @@ ${analysisTable
   })
   .join('\n')}
 lirAugEnd
+lirCustomAugStart
+${customAnalysisTable
+  .map((row) => {
+    return `${row.startTime}:${row.endTime} ${row.entries
+      .map((entry) => {
+        return `${getDataFromRosterCharacterKey(entry.characterKey).name}:${entry.priority ? '1' : '0'}:${Math.round(entry.average / 1000) || '0'}`;
+      })
+      .join(' ')}`;
+  })
+  .join('\n')}
+lirCustomAugEnd
     `;
   }, [analysisTable, defautlTargets]);
 
