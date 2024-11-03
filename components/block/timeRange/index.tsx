@@ -9,7 +9,7 @@ export default function TimeRange() {
       items={[
         {
           key: '1',
-          label: `⌚️ Custom Ebon Might? (NOT YET IMPLEMENTED IN THE WEAK AURA)`,
+          label: `⌚️ Custom Ebon Might?`,
           children: (
             <>
               <Typography.Text>
