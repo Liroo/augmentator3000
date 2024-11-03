@@ -45,7 +45,7 @@ ${customAnalysisTable
   .map((row) => {
     return `${row.startTime}:${row.endTime} ${row.entries
       .map((entry) => {
-        return `${getDataFromRosterCharacterKey(entry.characterKey).name}:${entry.priority ? '1' : '0'}:${Math.round(entry.average / 1000) || '0'}`;
+        return `${getDataFromRosterCharacterKey(entry.characterKey).name}:${entry.priority ? '1' : '0'}:${Math.round(entry.total / 1000) || '0'}`;
       })
       .join(' ')}`;
   })
