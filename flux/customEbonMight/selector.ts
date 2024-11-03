@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import {
-  AnalysisDamageDoneEntry,
+  AnalysisDamageDoneEntryParent,
   AnalysisTableRowParent,
 } from 'flux/analysis/types';
 import { selectPlanEncounterForm, selectPlanState } from 'flux/plan/selector';
@@ -210,11 +210,14 @@ export const selectCustomEbonMightTable = createSelector(
     });
 
     // Create a dictionary of damage data
-    const damageData: AnalysisDamageDoneEntry[] = timeRanges.map((tr) => ({
-      startTime: tr.startTime,
-      endTime: tr.endTime,
-      entries: {},
-    })) as AnalysisDamageDoneEntry[];
+    const damageData: AnalysisDamageDoneEntryParent[] = timeRanges.map(
+      (tr) => ({
+        startTime: tr.startTime,
+        endTime: tr.endTime,
+        entries: {},
+        subEntries: [],
+      }),
+    ) as AnalysisDamageDoneEntryParent[];
 
     // For each report fight, we will compute the damage done by each character
     Object.values(reportFights).forEach((report) => {
@@ -242,6 +245,22 @@ export const selectCustomEbonMightTable = createSelector(
 
           if (!damageDataIndex) return;
 
+          let subEntry = damageDataIndex.subEntries.find(
+            (se) =>
+              se.startTime === tableStartTime && se.endTime === tableEndTime,
+          );
+
+          if (!subEntry) {
+            damageDataIndex.subEntries.push({
+              startTime: tableStartTime,
+              endTime: tableEndTime,
+              entries: {},
+            });
+
+            subEntry =
+              damageDataIndex.subEntries[damageDataIndex.subEntries.length - 1];
+          }
+
           table.entries.forEach((tableEntry) => {
             // Remove entries with no total damage, it can be caused by an intermission or a death
             // but computing death damage will be bad in progress
@@ -256,21 +275,40 @@ export const selectCustomEbonMightTable = createSelector(
             )
               return;
 
-            if (!damageDataIndex.entries) damageDataIndex.entries = {};
-            if (!damageDataIndex.entries[characterKey])
-              damageDataIndex.entries[characterKey] = {
+            if (!subEntry.entries) subEntry.entries = {};
+            if (!subEntry.entries[characterKey])
+              subEntry.entries[characterKey] = {
                 characterKey,
                 average: 0,
                 total: 0,
                 count: 0,
               };
-            damageDataIndex.entries[characterKey].total += tableEntry.total;
-            damageDataIndex.entries[characterKey].count += 1;
-            damageDataIndex.entries[characterKey].average = Math.round(
-              damageDataIndex.entries[characterKey].total /
-                damageDataIndex.entries[characterKey].count,
+            subEntry.entries[characterKey].total += tableEntry.total;
+            subEntry.entries[characterKey].count += 1;
+            subEntry.entries[characterKey].average = Math.round(
+              subEntry.entries[characterKey].total /
+                subEntry.entries[characterKey].count,
             );
           });
+        });
+      });
+    });
+
+    // group every subEntries into their parent witout modifying the children
+    damageData.forEach((parent) => {
+      parent.subEntries.forEach((subEntry) => {
+        const subEntriesKeys = Object.keys(subEntry.entries);
+        subEntriesKeys.forEach((key) => {
+          if (!parent.entries[key]) {
+            parent.entries[key] = {
+              characterKey: key,
+              average: 0,
+              total: 0,
+              count: 0,
+            };
+          }
+
+          parent.entries[key].total += subEntry.entries[key].average;
         });
       });
     });
