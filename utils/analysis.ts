@@ -32,6 +32,25 @@ export const generateTimeRanges = (
   return timeRanges;
 };
 
+export const generatePossibleTimeRanges = (
+  max: number,
+  startTime: number = 0,
+): {
+  startTimeRanges: number[];
+  endTimeRanges: number[];
+} => {
+  const startTimeRanges = [];
+  const endTimeRanges = [];
+  for (let i = 0; i < max; i += ebonMightSubDuration) {
+    startTimeRanges.push((i === 0 ? i + delayStartTime : i) + startTime);
+    endTimeRanges.push(i + ebonMightSubDuration - 1 + startTime);
+  }
+  return {
+    startTimeRanges,
+    endTimeRanges,
+  };
+};
+
 export const applyPrioritiesToEntries = (
   priority: (string | null)[],
   entries: AnalysisTableEntry[],

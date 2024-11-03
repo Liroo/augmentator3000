@@ -6,6 +6,18 @@ import {
   WCLReportFight,
 } from 'services/wcl/types';
 
+export const encounterToKey = (encounterId: number, difficulty: number) => {
+  return `${encounterId}_${difficulty}`;
+};
+
+export const getDataFromEncounterKey = (key: string) => {
+  const [encounterId, difficulty] = key.split('_');
+  return {
+    encounterId: Number(encounterId),
+    difficulty: Number(difficulty),
+  };
+};
+
 export const rosterCharacterToKey = (
   player: RosterCharacter | RosterCharacterQuery,
 ) => {

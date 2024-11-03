@@ -45,8 +45,6 @@ export const WCLGetCharactersEncounterRankings = async function (
     }
   `;
 
-  console.log(query, characters, encounterRankings);
-
   const res = (await WCLClient.request(query)) as {
     characterData: {
       [characterIndex: string]: any;

@@ -13,6 +13,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import analysisSlice from './analysis/reducer';
 import authSlice from './auth/reducer';
+import customEbonMigthSlice from './customEbonMight/reducer';
 import listenerMiddleware from './listener';
 import planSlice from './plan/reducer';
 import rosterSlice from './roster/reducer';
@@ -59,6 +60,7 @@ export const makeStore = () => {
     [rosterSlice.name]: rosterSlice.reducer,
     [planSlice.name]: planSlice.reducer,
     [analysisSlice.name]: analysisSlice.reducer,
+    [customEbonMigthSlice.name]: customEbonMigthSlice.reducer,
   });
 
   const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

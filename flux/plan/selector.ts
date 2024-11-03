@@ -69,13 +69,11 @@ export const selectPlanBestLogsFightsSelectedByEncounterFormCount =
       );
     });
     const uniqueFights: string[] = [];
-    console.log(fightsSelected);
     fightsSelected.forEach((f) => {
       const { reportCode, fightId } = getDataFromEncouterRankingRankKey(f);
       const key = `${reportCode}_${fightId}`;
       if (!uniqueFights.includes(key)) uniqueFights.push(key);
     });
-    console.log(uniqueFights);
 
     return { total: fightsSelected.length, unique: uniqueFights.length };
   });

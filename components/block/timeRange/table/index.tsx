@@ -1,17 +1,26 @@
 import { Table, TableColumnsType } from 'antd';
-import { selectAnalysisTableWithExcludedAndPriority } from 'flux/analysis/selector';
 import { AnalysisTableRowParent } from 'flux/analysis/types';
+import { selectCustomEbonMightTableWithExcludedAndPriority } from 'flux/customEbonMight/selector';
 import { useAppSelector } from 'flux/hooks';
-import AnalysisTableCellTimeExcluded from './cell/excluded';
-import AnalysisTableCellTimeTarget from './cell/target';
-import AnalysisTableCellTimeRange from './cell/timeRange';
+import TimeRangeTableCellDelete from './cell/delete';
+import TimeRangeTableCellTimeExcluded from './cell/excluded';
+import TimeRangeTableCellTimeTarget from './cell/target';
+import TimeRangeTableCellTimeRange from './cell/timeRange';
 
 const columns: TableColumnsType<AnalysisTableRowParent> = [
+  {
+    title: '',
+    key: 'delete',
+    render: (_row: AnalysisTableRowParent, _: any, rowIndex: number) => (
+      <TimeRangeTableCellDelete rowIndex={rowIndex} />
+    ),
+    width: 50,
+  },
   {
     title: 'Time Range',
     key: 'timeRange',
     render: (row: AnalysisTableRowParent) => (
-      <AnalysisTableCellTimeRange
+      <TimeRangeTableCellTimeRange
         startTime={row.startTime}
         endTime={row.endTime}
       />
@@ -26,11 +35,10 @@ const columns: TableColumnsType<AnalysisTableRowParent> = [
       const prevRowEntry = row.entries[prevIndex];
 
       return (
-        <AnalysisTableCellTimeTarget
+        <TimeRangeTableCellTimeTarget
           row={row}
           index={index}
           rowIndex={rowIndex}
-          isChild={!row.subEntries}
           disabled={!row.subEntries || (!prevRowEntry && index !== 0)}
         />
       );
@@ -42,14 +50,14 @@ const columns: TableColumnsType<AnalysisTableRowParent> = [
     key: 'excluded',
     render: (row: AnalysisTableRowParent, _: any, rowIndex: number) =>
       !!row.subEntries ? (
-        <AnalysisTableCellTimeExcluded row={row} rowIndex={rowIndex} />
+        <TimeRangeTableCellTimeExcluded row={row} rowIndex={rowIndex} />
       ) : null,
   },
 ];
 
-export default function AnalysisTable() {
+export default function TimeRangeTable() {
   const analysisTable = useAppSelector(
-    selectAnalysisTableWithExcludedAndPriority,
+    selectCustomEbonMightTableWithExcludedAndPriority,
   );
 
   return (
@@ -60,9 +68,7 @@ export default function AnalysisTable() {
       columns={columns}
       dataSource={analysisTable}
       rowKey={(row) => `${row.startTime}-${row.endTime}`}
-      expandable={{
-        childrenColumnName: 'subEntries',
-      }}
+      className="mt-[12px]"
     />
   );
 }

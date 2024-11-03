@@ -4,6 +4,7 @@ import Analysis from 'components/block/analysis';
 import BossSelect from 'components/block/bossSelect';
 import LogsSelect from 'components/block/logsSelect';
 import Roster from 'components/block/roster';
+import TimeRange from 'components/block/timeRange';
 import WaNote from 'components/block/waNote';
 import CoreLogEventScreen from 'components/core/logEventScreen';
 import { selectAuthBearerToken } from 'flux/auth/selector';
@@ -21,6 +22,8 @@ export default function Home() {
       <BossSelect />
 
       <LogsSelect />
+
+      <TimeRange />
 
       <Analysis />
 

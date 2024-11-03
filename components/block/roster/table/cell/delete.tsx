@@ -1,5 +1,6 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { removeCharacterFromExcludedAndPriority } from 'flux/analysis/reducer';
+import { removeCharacterFromExcludedAndPriority as removeCharacterFromExcludedAndPriorityCustomEbonMight } from 'flux/customEbonMight/reducer';
 import { useAppDispatch } from 'flux/hooks';
 import { removeBestLogsFightsSelectedForCharacter } from 'flux/plan/reducer';
 import { rosterRemoveCharacter } from 'flux/roster/reducer';
@@ -20,6 +21,16 @@ export default function RosterTableCellDelete({ rosterCharacter }: Props) {
       onClick={() => {
         logEvent('home', 'roster-remove', { name: rosterCharacter.name });
         dispatch(removeBestLogsFightsSelectedForCharacter(rosterCharacter));
+        dispatch(
+          removeCharacterFromExcludedAndPriority(
+            rosterCharacterToKey(rosterCharacter),
+          ),
+        );
+        dispatch(
+          removeCharacterFromExcludedAndPriorityCustomEbonMight(
+            rosterCharacterToKey(rosterCharacter),
+          ),
+        );
         dispatch(
           removeCharacterFromExcludedAndPriority(
             rosterCharacterToKey(rosterCharacter),

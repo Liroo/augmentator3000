@@ -3,7 +3,7 @@
 import { notification } from 'antd';
 import { useEffect } from 'react';
 
-const iteration = 2;
+const iteration = 3;
 
 export default function UIUpdateAlert() {
   const [api, contextHolder] = notification.useNotification();
