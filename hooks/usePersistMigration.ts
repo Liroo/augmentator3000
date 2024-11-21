@@ -19,4 +19,32 @@ export default function usePersistMigration() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encounterId]);
+
+  useEffect(() => {
+    const persistAugmentator3000Root = localStorage.getItem(
+      'persist:augmentator3000-root',
+    );
+    const persistAuth = localStorage.getItem('persist:auth');
+
+    if (persistAugmentator3000Root && persistAuth) {
+      window.indexedDB.open('localforage', 3).onsuccess = function (event) {
+        const db = event.target.result;
+        console.log(db);
+        const transaction = db.transaction('keyvaluepairs', 'readwrite');
+
+        const objectStore = transaction.objectStore('keyvaluepairs');
+        objectStore.put(
+          persistAugmentator3000Root,
+          'persist:augmentator3000-root',
+        );
+        objectStore.put(persistAuth, 'persist:auth');
+
+        transaction.oncomplete = function () {
+          localStorage.removeItem('persist:augmentator3000-root');
+          localStorage.removeItem('persist:auth');
+          window.location.reload();
+        };
+      };
+    }
+  }, []);
 }

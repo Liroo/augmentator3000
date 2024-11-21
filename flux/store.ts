@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import localforage from 'localforage';
 import {
   FLUSH,
   PAUSE,
@@ -10,7 +11,6 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import analysisSlice from './analysis/reducer';
 import authSlice from './auth/reducer';
 import customEbonMigthSlice from './customEbonMight/reducer';
@@ -35,9 +35,7 @@ const createNoopStorage = () => {
 };
 
 const storage =
-  typeof window !== 'undefined'
-    ? createWebStorage('local')
-    : createNoopStorage();
+  typeof window !== 'undefined' ? localforage : createNoopStorage();
 
 export const makeStore = () => {
   const rootPersistConfig = {
