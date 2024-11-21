@@ -28,8 +28,10 @@ export default function usePersistMigration() {
 
     if (persistAugmentator3000Root && persistAuth) {
       window.indexedDB.open('localforage', 3).onsuccess = function (event) {
-        const db = event.target.result;
-        console.log(db);
+        const db = (event?.target as any)?.result;
+        if (!db) {
+          return;
+        }
         const transaction = db.transaction('keyvaluepairs', 'readwrite');
 
         const objectStore = transaction.objectStore('keyvaluepairs');
@@ -39,7 +41,7 @@ export default function usePersistMigration() {
         );
         objectStore.put(persistAuth, 'persist:auth');
 
-        transaction.oncomplete = function () {
+        transaction.onsuccess = function () {
           localStorage.removeItem('persist:augmentator3000-root');
           localStorage.removeItem('persist:auth');
           window.location.reload();
