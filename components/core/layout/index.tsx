@@ -4,6 +4,7 @@ import { WarningOutlined } from '@ant-design/icons';
 import { Tooltip, Typography } from 'antd';
 import WCLCredentials from 'components/block/WCLCredentials';
 import RegionSelect from 'components/block/regionSelect';
+import localforage from 'localforage';
 import initAmplitude from 'services/amplitude';
 
 interface Props {
@@ -54,8 +55,9 @@ export default function CoreLayout({ children }: Props) {
           </Typography.Text>
           <Typography.Text
             className="cursor-pointer select-none"
-            onClick={() => {
+            onClick={async () => {
               localStorage.removeItem('persist:augmentator3000-root');
+              await localforage.removeItem('persist:augmentator3000-root');
               window.location.reload();
             }}
           >
