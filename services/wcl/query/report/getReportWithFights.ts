@@ -33,8 +33,10 @@ export const WCLGetReportWithFights = async function (
 
   const region = fightsRes.reportData.report.region.slug;
   let fights = fightsRes.reportData.report.fights.filter(
-    (f: any) => f.encounterID !== 0 && f.fightPercentage,
+    (f: any) => f.encounterID !== 0 && typeof f.fightPercentage === 'number',
   );
+
+  console.log(fights, fightsRes);
 
   return {
     ...fightsRes.reportData.report,
