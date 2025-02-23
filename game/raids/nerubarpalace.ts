@@ -13,7 +13,7 @@ export default {
   name: "Nerub'ar Palace",
   id: 38,
   icon: Zone38Png,
-  partition: 1,
+  partition: 0,
   encounters: [
     {
       name: 'Ulgrax the Devourer',

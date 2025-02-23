@@ -1,5 +1,6 @@
 import Aberrus from 'game/raids/aberrus';
 import Amirdrassil from 'game/raids/amirdrassil';
+import LiberationOfUndermine from 'game/raids/undermine';
 import VaultOfTheIncarnates from 'game/raids/vaultoftheincarnates';
 import { StaticImageData } from 'next/image';
 import NerubarPalace from './nerubarpalace';
@@ -21,6 +22,7 @@ export interface Zone {
 }
 
 export const Raids = [
+  LiberationOfUndermine, // tier 33
   NerubarPalace, // tier 32
   VaultOfTheIncarnates, // tier 29
   Aberrus, // tier 30
